@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<import-steps>
+
+ <import-step
+    id="Liege.urban.dataimport-liegeUrbawebImport"
+    handler="Liege.urban.dataimport.importer.importLiegeUrbaweb"
+    title="Urbaweb import for Liege">
+  Urbaweb import for Liege
+ </import-step>
+
+</import-steps>

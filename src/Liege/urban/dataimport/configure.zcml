@@ -1,0 +1,41 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="Liege.urban.dataimport">
+
+    <i18n:registerTranslations directory="locales" />
+
+    <!-- Zope2 initialization -->
+    <five:registerPackage package="." initialize=".initialize" />
+
+    <include package="Products.urban" />
+
+    <include package=".buildlicence" />
+
+    <!-- Register the installation GenericSetup extension profile -->
+    <genericsetup:registerProfile
+        name="default"
+        title="Liege.urban.dataimport"
+        directory="profiles/default"
+        description="Extension profile for Liege.urban.dataimport."
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <genericsetup:importStep
+        name="Liege.urban.dataimport-postInstall"
+        title="Liege.urban.dataimport post_install import step"
+        description="Post install import step from Liege.urban.dataimport"
+        handler=".setuphandlers.post_install">
+    </genericsetup:importStep>
+
+    <browser:page
+        name="dataimport-controlpanel"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        class=".settings.LiegeImporterControlPanel"
+        permission="zope2.View"
+    />
+
+</configure>

@@ -1,0 +1,20 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="Liege.urban.dataimport">
+
+    <adapter
+        for="Liege.urban.dataimport.buildlicence.importer.BuildlicenceImporter"
+        factory=".importer.LicencesValuesMapping"
+        provides="imio.urban.dataimport.interfaces.IValuesMapping"
+        name="values mapping"
+        />
+
+    <adapter
+        for="imio.urban.dataimport.interfaces.IImportSettingsForm"
+        factory=".settings.BuildlicenceImporterFromImportSettings"
+        provides="imio.urban.dataimport.access.interfaces.IAccessImporter"
+        name="liege buildlicence"
+        />
+
+</configure>

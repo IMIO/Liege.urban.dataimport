@@ -1,0 +1,4 @@
+include *.cfg *.rst *.in
+graft src/Liege/urban
+graft docs
+global-exclude *pyc
