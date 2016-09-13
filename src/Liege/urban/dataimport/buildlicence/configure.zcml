@@ -11,6 +11,13 @@
         />
 
     <adapter
+        for="Liege.urban.dataimport.interfaces.ILiegeBuildlicenceImporter"
+        factory=".importer.LiegeMapping"
+        provides="imio.urban.dataimport.interfaces.IObjectsMapping"
+        name="objects mapping"
+        />
+
+    <adapter
         for="imio.urban.dataimport.interfaces.IImportSettingsForm"
         factory=".settings.BuildlicenceImporterFromImportSettings"
         provides="imio.urban.dataimport.access.interfaces.IAccessImporter"

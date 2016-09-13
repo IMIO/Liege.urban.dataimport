@@ -2,7 +2,7 @@
 
 from zope.interface import implements
 
-from Liege.urban.dataimport.interfaces import ILiegeDataImporter
+from Liege.urban.dataimport.interfaces import ILiegeBuildlicenceImporter
 from Liege.urban.dataimport.buildlicence import objectsmapping, valuesmapping
 
 from imio.urban.dataimport.access.importer import AccessDataImporter
@@ -12,9 +12,9 @@ from imio.urban.dataimport.mapping import ValuesMapping, ObjectsMapping
 class BuildlicenceImporter(AccessDataImporter):
     """ """
 
-    implements(ILiegeDataImporter)
+    implements(ILiegeBuildlicenceImporter)
 
-    def __init__(self, db_name='P_tables.mdb', table_name='PermisUrba', key_column='NUMERO DE DOSSIER', savepoint_length=0):
+    def __init__(self, db_name='P_tables.mdb', table_name='PermisUrba', key_column='NUMDOSSIERBKP', savepoint_length=0):
         super(BuildlicenceImporter, self).__init__(db_name, table_name, key_column, savepoint_length)
 
 

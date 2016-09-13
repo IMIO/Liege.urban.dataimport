@@ -5,31 +5,21 @@ from imio.urban.dataimport.mapping import table
 VALUES_MAPS = {
 
 'type_map': table({
-'header'  : ['portal_type',         'foldercategory', 'abreviation'],
-'B'       : ['BuildLicence',        'uap',            ''],
-'U'       : ['',                    '',               'PU'],  # permis uniques, pas encore dans urban
-'Autre'   : ['MiscDemand',          'env',            'E'],  # ancien dossier environnement
-'Classe 1': ['EnvClassOne',         '',               'E1'],
-'Classe 2': ['EnvClassTwo',         '',               'E2'],
-'Classe 3': ['EnvClassThree',       '',               'E3'],
-'R'       : ['Declaration',         'dup',            'Decl'],
-'L'       : ['ParcelOutLicence',    '',               'PL'],
-'1'       : ['UrbanCertificateOne', '',               'CU2'],
-'2'       : ['UrbanCertificateTwo', '',               'CU1'],
-'A'       : ['MiscDemand',          'apct',           'DD'],
-'Z'       : ['MiscDemand',          'apct',           'DD'],
+'header'  : ['portal_type',  'foldercategory', 'abreviation'],
+'N'       : ['BuildLicence', 'pn',             'PU'],
+'U'       : ['BuildLicence', 'pu',             'U'],
+'M'       : ['',             '',               '127'],
+'I'       : ['BuildLicence', 'pi',             'PI'],
+'V'       : ['',             '',               'V'],
+'D'       : ['',             '',               'D'],
 }),
 
-# type de permis, se baser sur la colonne "Rec":
-# B: BuildLicence
-# R: Declaration
-# E: Environnement
-# L: ParcelOutLicence
-# U: Permis uniques
-# 1: Certificats d'urbanisme 1
-# 2: Certificats d'urbanisme 2
-# Z: MiscDemand
-
+'state_map': {
+    'autorisé': 'accepted',
+    'refusé': 'refused',
+    'sans suite': 'field_away',
+    'abandonné': 'abandoned',
+},
 
 'eventtype_id_map': table({
 'header'             : ['decision_event'],

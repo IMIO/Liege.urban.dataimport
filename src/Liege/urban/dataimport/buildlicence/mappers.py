@@ -5,6 +5,8 @@ from imio.urban.dataimport.access.mapper import AccessMapper as Mapper
 from imio.urban.dataimport.access.mapper import AccessPostCreationMapper as PostCreationMapper
 from imio.urban.dataimport.access.mapper import SubQueryMapper
 
+from imio.urban.dataimport.exceptions import NoObjectToCreateException
+
 from imio.urban.dataimport.factory import BaseFactory
 
 from plone import api
@@ -25,11 +27,6 @@ class LicenceFactory(BaseFactory):
 # mappers
 
 
-class PortalTypeMapper(Mapper):
-    def mapPortal_type(self, line):
-        return 'BuildLicence'
-
-
 class ReferenceMapper(PostCreationMapper):
     def mapReference(self, line, plone_object):
         shore_abbr = {
@@ -37,33 +34,44 @@ class ReferenceMapper(PostCreationMapper):
             'left': u'G',
             'center': u'C',
         }
-        shore = shore_abbr[plone_object.shore]
+        shore = shore_abbr.get(plone_object.shore, '')
 
-        ref = 'PU/{} {}'.format(self.getData('NUMERO DE DOSSIER'), shore)
+        ref = 'PU/{} {}'.format(self.getData('NUMDOSSIERBKP'), shore)
         return ref
 
 
-class CategoryMapper(Mapper):
+class TypeAndCategoryMapper(Mapper):
     """ """
+    def mapPortal_type(self, line):
+        type_value = self.getData('NORM_UNIK').upper()
+        portal_type = self.getValueMapping('type_map')[type_value]['portal_type']
+        if not portal_type:
+            self.logError(self, line, 'No portal type found for this type value', {'TYPE value': type_value})
+            raise NoObjectToCreateException
+        return portal_type
+
+    def mapFoldercategory(self, line):
+        type_value = self.getData('NORM_UNIK').upper()
+        foldercategory = self.getValueMapping('type_map')[type_value]['foldercategory']
+        return foldercategory
 
 
-class WorkTypeMapper(Mapper):
-    def mapWorktype(self, line):
-        worktype = self.getData('Code_220+')
-        return [worktype]
+class FolderCategoryMapper(Mapper):
+    """ """
+    def mapFoldercategorytownship(self, line):
+        return self.getData('CODE NAT TRAVAUX')
 
 
 class CompletionStateMapper(PostCreationMapper):
     def map(self, line, plone_object):
         self.line = line
-        state = ''
-        if self.getData('Autorisa') or self.getData('TutAutorisa'):
-            state = 'accepted'
-        elif self.getData('Refus') or self.getData('TutRefus'):
-            state = 'refused'
-        else:
-            return
         workflow_tool = api.portal.get_tool('portal_workflow')
+        raw_state = self.getData('COLLDECISION').lower()
+        if 'sans' in raw_state and 'suite' in raw_state:
+            raw_state = 'sans suite'
+        state_mapping = self.getValueMapping('state_map')
+        state = state_mapping.get(raw_state, '')
+
         workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
         workflow_id = workflow_def.getId()
         workflow_state = workflow_tool.getStatusOf(workflow_id, plone_object)

@@ -12,6 +12,7 @@
     <five:registerPackage package="." initialize=".initialize" />
 
     <include package="Products.urban" />
+    <include package="imio.urban.dataimport" />
 
     <include package=".buildlicence" />
 

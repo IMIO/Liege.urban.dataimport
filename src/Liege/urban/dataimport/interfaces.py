@@ -10,5 +10,5 @@ class ILiegeUrbanDataimportLayer(IDefaultPloneLayer):
     """ Marker interface that defines a Zope 3 browser layer."""
 
 
-class ILiegeDataImporter(IUrbanDataImporter):
+class ILiegeBuildlicenceImporter(IUrbanDataImporter):
     """ Marker interface for ILiege access importer """

@@ -3,8 +3,8 @@
 from imio.urban.dataimport.access.mapper import AccessSimpleMapper as SimpleMapper
 
 from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
-    PortalTypeMapper, ReferenceMapper, WorkTypeMapper, CompletionStateMapper, \
-    ErrorsMapper, CategoryMapper
+    TypeAndCategoryMapper, ReferenceMapper, CompletionStateMapper, ErrorsMapper, \
+    FolderCategoryMapper
 
 
 OBJECTS_NESTING = [
@@ -22,35 +22,34 @@ FIELDS_MAPPINGS = {
         'mappers': {
             SimpleMapper: (
                 {
-                    'from': 'NUMERO DE DOSSIER',
+                    'from': 'NUMDOSSIERBKP',
                     'to': 'id',
+                },
+                {
+                    'from': 'Objettrav',
+                    'to': 'licenceSubject',
                 },
             ),
 
-            PortalTypeMapper: {
-                'from': (),
-                'to': 'portal_type',
+            TypeAndCategoryMapper: {
+                'from': 'NORM_UNIK',
+                'to': ('portal_type', 'foldercategory'),
             },
 
-#            CategoryMapper: {
-#                'from': 'NORM_UNIK',
-#                'to': 'foldercategory',
-#            },
+            FolderCategoryMapper: {
+                'from': 'CODE NAT TRAVAUX',
+                'to': 'folderCategoryTownship',
+            },
 
             ReferenceMapper: {
-                'from': 'NUMERO DE DOSSIER',
+                'from': 'NUMDOSSIERBKP',
                 'to': 'reference',
             },
 
-#            WorkTypeMapper: {
-#                'from': 'Code_220+',
-#                'to': 'workType',
-#            },
-
-#            CompletionStateMapper: {
-#                'from': 'COLLDECISION',
-#                'to': (),  # <- no field to fill, its the workflow state that has to be changed
-#            },
+            CompletionStateMapper: {
+                'from': 'COLLDECISION',
+                'to': (),  # <- no field to fill, its the workflow state that has to be changed
+            },
 
             ErrorsMapper: {
                 'from': (),
