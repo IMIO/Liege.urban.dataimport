@@ -5,8 +5,8 @@ from imio.urban.dataimport.access.mapper import AccessSimpleMapper as SimpleMapp
 from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     TypeAndCategoryMapper, ReferenceMapper, CompletionStateMapper, ErrorsMapper, \
     FolderCategoryMapper, ContactFactory, ContactTitleMapper, ContactNameMapper, \
-    ContactSreetMapper, ContactIdMapper, LocalityMapper, CorporationIdMapper, \
-    CorporationNameMapper, CorporationFactory
+    ContactStreetMapper, ContactIdMapper, LocalityMapper, CorporationIdMapper, \
+    CorporationNameMapper, CorporationFactory, ArchitectMapper
 
 
 OBJECTS_NESTING = [
@@ -50,6 +50,11 @@ FIELDS_MAPPINGS = {
                 'to': 'reference',
             },
 
+            ArchitectMapper: {
+                'from': 'NUMARCHITECTE',
+                'to': 'architects',
+            },
+
             CompletionStateMapper: {
                 'from': 'COLLDECISION',
                 'to': (),  # <- no field to fill, its the workflow state that has to be changed
@@ -89,7 +94,7 @@ FIELDS_MAPPINGS = {
                 'to': ('name1', 'name2'),
             },
 
-            ContactSreetMapper: {
+            ContactStreetMapper: {
                 'from': 'ADRESSE DEMANDEUR',
                 'to': ('street', 'number'),
             },
@@ -122,7 +127,7 @@ FIELDS_MAPPINGS = {
                 'to': ('denomination', 'legalForm'),
             },
 
-            ContactSreetMapper: {
+            ContactStreetMapper: {
                 'from': 'ADRESSE DEMANDEUR',
                 'to': ('street', 'number'),
             },

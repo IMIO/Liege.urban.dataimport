@@ -65,6 +65,15 @@ class FolderCategoryMapper(Mapper):
         return self.getData('CODE NAT TRAVAUX')
 
 
+class ArchitectMapper(Mapper):
+    """ """
+
+    def mapArchitects(self, line):
+        archi_id = str(int(float(self.getData('NUMARCHITECTE'))))
+        archi = getattr(self.site.urban.architects, archi_id, None)
+        return archi
+
+
 class CompletionStateMapper(PostCreationMapper):
     def map(self, line, plone_object):
         self.line = line
@@ -224,7 +233,7 @@ class CorporationNameMapper(Mapper):
         return legal_form
 
 
-class ContactSreetMapper(Mapper):
+class ContactStreetMapper(Mapper):
     """ """
 
     regex = '(.*?)\s*,?\s*(\d.*)\s*\Z'
