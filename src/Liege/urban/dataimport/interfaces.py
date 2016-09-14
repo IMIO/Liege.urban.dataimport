@@ -11,4 +11,8 @@ class ILiegeUrbanDataimportLayer(IDefaultPloneLayer):
 
 
 class ILiegeBuildlicenceImporter(IUrbanDataImporter):
-    """ Marker interface for ILiege access importer """
+    """ Marker interface for ILiege buildlicence importer """
+
+
+class ILiegeArchitectsImporter(IUrbanDataImporter):
+    """ Marker interface for ILiege architects importer """
