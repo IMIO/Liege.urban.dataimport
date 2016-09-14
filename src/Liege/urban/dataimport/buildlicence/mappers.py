@@ -3,13 +3,16 @@
 from imio.urban.dataimport.access.mapper import AccessFinalMapper as FinalMapper
 from imio.urban.dataimport.access.mapper import AccessMapper as Mapper
 from imio.urban.dataimport.access.mapper import AccessPostCreationMapper as PostCreationMapper
-from imio.urban.dataimport.access.mapper import SubQueryMapper
 
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 
 from imio.urban.dataimport.factory import BaseFactory
 
 from plone import api
+
+from Products.CMFPlone.utils import normalizeString
+
+import re
 
 
 #
@@ -106,3 +109,164 @@ class ErrorsMapper(FinalMapper):
         error_trace = ''.join(error_trace)
 
         return '%s%s' % (error_trace, description)
+
+#
+# PERSON/CORPORATION CONTACT
+#
+
+# factory
+
+
+class ContactFactory(BaseFactory):
+    def getPortalType(self, container, **kwargs):
+        return 'Applicant'
+
+
+class CorporationFactory(BaseFactory):
+    def getPortalType(self, container, **kwargs):
+        return 'Corporation'
+
+# mappers
+
+
+class ContactIdMapper(Mapper):
+    """ """
+
+    def mapId(self, line):
+        raw_name = self.getData('NOM DU DEMANDEUR')
+        raw_title = self.getData('QUALITE')
+        if not raw_title:
+            raise NoObjectToCreateException
+
+        name = raw_name or raw_title
+        return normalizeString(self.site.portal_urban.generateUniqueId(name))
+
+
+class CorporationIdMapper(Mapper):
+    """ """
+
+    def mapId(self, line):
+        denomination = self.getData('NOM DU DEMANDEUR')
+        legal_form = self.getData('QUALITE')
+        if not denomination and not legal_form:
+            raise NoObjectToCreateException
+
+        name = denomination or legal_form
+        return normalizeString(self.site.portal_urban.generateUniqueId(name))
+
+
+class ContactTitleMapper(Mapper):
+    """ """
+
+    def mapPersontitle(self, line):
+        raw_title = self.getData('QUALITE').lower()
+        title_mapping = self.getValueMapping('person_title_map')
+        title = title_mapping.get(raw_title, None)
+        if not title:
+            raise NoObjectToCreateException
+        return title
+
+
+class ContactNameMapper(Mapper):
+    """ """
+
+    regex_1 = '([A-Z]+-?[A-Z]+)\s+([A-Z][a-z]+-?[a-z]*)\s*\Z'
+    regex_2 = '([A-Z][a-z]+-?[a-z]*)\s+([A-Z]+-?[A-Z]+)\s*\Z'
+
+    def mapName1(self, line):
+        raw_name = self.getData('NOM DU DEMANDEUR')
+        match = re.search(self.regex_1, raw_name)
+        if match:
+            name1 = match.group(1)
+            return name1
+
+        match = re.search(self.regex_2, raw_name)
+        if match:
+            name1 = match.group(2)
+            return name1
+
+        return raw_name
+
+    def mapName2(self, line):
+        raw_name = self.getData('NOM DU DEMANDEUR')
+        match = re.search(self.regex_1, raw_name)
+        if match:
+            name2 = match.group(2)
+            return name2
+
+        match = re.search(self.regex_2, raw_name)
+        if match:
+            name2 = match.group(1)
+            return name2
+
+        return ''
+
+
+class CorporationNameMapper(Mapper):
+    """ """
+
+    def mapDenomination(self, line):
+        denomination = self.getData('NOM DU DEMANDEUR')
+        legal_form = self.getData('QUALITE')
+
+        if not denomination and legal_form:
+            return legal_form
+
+        return denomination
+
+    def mapLegalform(self, line):
+        denomination = self.getData('NOM DU DEMANDEUR')
+        legal_form = self.getData('QUALITE')
+
+        if not denomination and legal_form:
+            return ''
+
+        return legal_form
+
+
+class ContactSreetMapper(Mapper):
+    """ """
+
+    regex = '(.*?)\s*,?\s*(\d.*)\s*\Z'
+
+    def mapStreet(self, line):
+        raw_addr = self.getData('ADRESSE DEMANDEUR')
+        match = re.search(self.regex, raw_addr)
+        if match:
+            street = match.group(1)
+            return street
+
+        return raw_addr
+
+    def mapNumber(self, line):
+        raw_addr = self.getData('ADRESSE DEMANDEUR')
+        match = re.search(self.regex, raw_addr)
+        if match:
+            number = match.group(2)
+            return number
+
+        return ''
+
+
+class LocalityMapper(Mapper):
+    """ """
+
+    regex = '(\d{4,4})\s+(\w.*)'
+
+    def mapZipcode(self, line):
+        raw_city = self.getData('CP LOCALITE DEM')
+        match = re.search(self.regex, raw_city)
+        if match:
+            zipcode = match.group(1)
+            return zipcode
+
+        return ''
+
+    def mapCity(self, line):
+        raw_city = self.getData('CP LOCALITE DEM')
+        match = re.search(self.regex, raw_city)
+        if match:
+            city = match.group(2)
+            return city
+
+        return raw_city

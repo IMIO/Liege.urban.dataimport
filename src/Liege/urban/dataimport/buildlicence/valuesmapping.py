@@ -47,13 +47,31 @@ VALUES_MAPS = {
     'EnvClassThree': 'ENVIRONNEMENT',
 },
 
-'titre_map': {
+'person_title_map': {
     'monsieur': 'mister',
+    'm.': 'mister',
+    'm': 'mister',
+    'dr': 'mister',
+    'me': 'mister',
+    'ms': 'misters',
+    'mrs': 'misters',
     'messieurs': 'misters',
     'madame': 'madam',
+    'mme': 'madam',
     'mesdames': 'ladies',
+    'mmes': 'ladies',
+    'mesdemoiselles': 'ladies',
     'mademoiselle': 'miss',
-    'monsieur et madame': 'madam_and_mister',
+    'melle': 'miss',
+    'ms et mmes': 'madam_and_mister',
+    'mr et mme': 'madam_and_mister',
+    'm. et mme': 'madam_and_mister',
+    'm. et mmes': 'madam_and_mister',
+    'm. et mme.': 'madam_and_mister',
+    'm. et melle': 'madam_and_mister',
+    'mme et m.': 'madam_and_mister',
+    'melle et m.': 'madam_and_mister',
+    'maître': 'master',
 },
 
 'externaldecisions_map': {
