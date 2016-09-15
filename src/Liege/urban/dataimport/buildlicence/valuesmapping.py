@@ -12,6 +12,7 @@ VALUES_MAPS = {
 'I'       : ['BuildLicence', 'pi',             'PI'],
 'V'       : ['',             '',               'V'],
 'D'       : ['',             '',               'D'],
+''        : ['',             '',               ''],
 }),
 
 'state_map': {

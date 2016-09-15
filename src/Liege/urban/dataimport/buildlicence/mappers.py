@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from DateTime import DateTime
+
 from imio.urban.dataimport.access.mapper import AccessFinalMapper as FinalMapper
 from imio.urban.dataimport.access.mapper import AccessMapper as Mapper
 from imio.urban.dataimport.access.mapper import AccessPostCreationMapper as PostCreationMapper
@@ -65,11 +67,25 @@ class FolderCategoryMapper(Mapper):
         return self.getData('CODE NAT TRAVAUX')
 
 
+class AnnoncedDelayMapper (Mapper):
+    """ """
+
+    def mapAnnonceddelay(self, line):
+        raw_delay = self.getData('Délai')
+        if raw_delay not in ['30', '70', '75', '115', '230']:
+            if raw_delay:
+                self.logError(self, line, 'annoncedDelay', {'delay': raw_delay})
+            return 'inconnu'
+        else:
+            return raw_delay + 'j'
+
+
 class ArchitectMapper(Mapper):
     """ """
 
     def mapArchitects(self, line):
-        archi_id = str(int(float(self.getData('NUMARCHITECTE'))))
+        raw_archi_id = self.getData('NUMARCHITECTE')
+        archi_id = raw_archi_id and str(int(float(raw_archi_id))) or ''
         archi = getattr(self.site.urban.architects, archi_id, None)
         return archi
 
@@ -105,16 +121,8 @@ class ErrorsMapper(FinalMapper):
                 data = error.data
                 if 'streets' in error.message:
                     error_trace.append('<p>adresse : %s</p>' % data['address'])
-                elif 'notaries' in error.message:
-                    error_trace.append('<p>notaire : %s %s %s</p>' % (data['title'], data['firstname'], data['name']))
-                elif 'architects' in error.message:
-                    error_trace.append('<p>architecte : %s</p>' % data['raw_name'])
-                elif 'geometricians' in error.message:
-                    error_trace.append('<p>géomètre : %s</p>' % data['raw_name'])
-                elif 'parcelling' in error.message:
-                    error_trace.append('<p>lotissement : %s %s, autorisé le %s</p>' % (data['approval date'], data['city'], data['auth_date']))
-                elif 'article' in error.message.lower():
-                    error_trace.append('<p>Articles de l\'enquête : %s</p>' % (data['articles']))
+                elif 'annoncedDelay' in error.message:
+                    error_trace.append('<p>Délai annoncé : %s</p>' % (data['delay']))
         error_trace = ''.join(error_trace)
 
         return '%s%s' % (error_trace, description)
@@ -279,3 +287,91 @@ class LocalityMapper(Mapper):
             return city
 
         return raw_city
+
+
+#
+# UrbanEvent base
+#
+
+# factory
+
+class UrbanEventFactory(BaseFactory):
+    """ """
+
+    def getPortalType(self, **kwargs):
+        return 'UrbanEvent'
+
+    def create(self, kwargs, container, line):
+        eventtype_uid = kwargs.pop('eventtype')
+        urban_event = container.createUrbanEvent(eventtype_uid, **kwargs)
+        return urban_event
+
+#mappers
+
+
+class EventTypeMapper(Mapper):
+    """ """
+
+    eventtype_id = ''  # to override
+
+    def mapEventtype(self, line):
+        licence = self.importer.current_containers_stack[-1]
+        urban_tool = api.portal.get_tool('portal_urban')
+        config = urban_tool.getUrbanConfig(licence)
+        return getattr(config.urbaneventtypes, self.eventtype_id).UID()
+
+
+#
+# UrbanEvent deposit
+#
+
+
+class DepositEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'depot-de-la-demande'
+
+
+class DepositDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('DEPOT')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(date) or None
+        return date
+
+
+#
+# UrbanEvent inquiry
+#
+
+
+class InquiryEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'enquete-publique'
+
+
+class InquiryStartDateMapper(Mapper):
+
+    def mapInvestigationstart(self, line):
+        date = self.getData('DébutPUB')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(date) or None
+        return date
+
+
+class InquiryEndDateMapper(Mapper):
+
+    def mapInvestigationend(self, line):
+        date = self.getData('FinPUB')
+        date = date and DateTime(date) or None
+        return date
+
+
+class InquiryExplainationDateMapper(Mapper):
+
+    def mapExplanationstartsdate(self, line):
+        date = self.getData('DateBU')
+        date = date and DateTime(date) or None
+        return date

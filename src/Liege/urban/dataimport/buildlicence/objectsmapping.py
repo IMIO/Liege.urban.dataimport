@@ -6,7 +6,9 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     TypeAndCategoryMapper, ReferenceMapper, CompletionStateMapper, ErrorsMapper, \
     FolderCategoryMapper, ContactFactory, ContactTitleMapper, ContactNameMapper, \
     ContactStreetMapper, ContactIdMapper, LocalityMapper, CorporationIdMapper, \
-    CorporationNameMapper, CorporationFactory, ArchitectMapper
+    CorporationNameMapper, CorporationFactory, ArchitectMapper, UrbanEventFactory, \
+    DepositEventMapper, DepositDateMapper, AnnoncedDelayMapper, InquiryEventMapper, \
+    InquiryStartDateMapper, InquiryEndDateMapper, InquiryExplainationDateMapper
 
 
 OBJECTS_NESTING = [
@@ -14,6 +16,8 @@ OBJECTS_NESTING = [
         'LICENCE', [
             ('PERSON CONTACT', []),
             ('CORPORATION CONTACT', []),
+            ('DEPOSIT EVENT', []),
+            ('INQUIRY EVENT', []),
         ],
     ),
 ]
@@ -40,14 +44,19 @@ FIELDS_MAPPINGS = {
                 'to': ('portal_type', 'foldercategory'),
             },
 
+            ReferenceMapper: {
+                'from': 'NUMDOSSIERBKP',
+                'to': 'reference',
+            },
+
             FolderCategoryMapper: {
                 'from': 'CODE NAT TRAVAUX',
                 'to': 'folderCategoryTownship',
             },
 
-            ReferenceMapper: {
-                'from': 'NUMDOSSIERBKP',
-                'to': 'reference',
+            AnnoncedDelayMapper: {
+                'from': 'Délai',
+                'to': 'annoncedDelay',
             },
 
             ArchitectMapper: {
@@ -122,6 +131,7 @@ FIELDS_MAPPINGS = {
                 'from': ('QUALITE', 'NOM DU DEMANDEUR'),
                 'to': 'id',
             },
+
             CorporationNameMapper: {
                 'from': ('QUALITE', 'NOM DU DEMANDEUR'),
                 'to': ('denomination', 'legalForm'),
@@ -136,6 +146,50 @@ FIELDS_MAPPINGS = {
                 'from': 'CP LOCALITE DEM',
                 'to': ('city', 'zipcode'),
             }
+        },
+    },
+
+    'DEPOSIT EVENT':
+    {
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            DepositEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            DepositDateMapper: {
+                'from': 'DEPOT',
+                'to': 'eventDate',
+            },
+        },
+    },
+
+    'INQUIRY EVENT':
+    {
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            InquiryEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            InquiryStartDateMapper: {
+                'from': 'DébutPUB',
+                'to': 'investigationStart',
+            },
+
+            InquiryEndDateMapper: {
+                'from': 'FinPUB',
+                'to': 'investigationEnd',
+            },
+
+            InquiryExplainationDateMapper: {
+                'from': 'DateBU',
+                'to': 'explanationStartSDate',
+            },
         },
     },
 }
