@@ -11,7 +11,8 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     InquiryStartDateMapper, InquiryEndDateMapper, InquiryExplainationDateMapper, \
     ClaimantTableMapper, ClaimantIdMapper, ClaimantTitleMapper, ClaimantNameMapper, \
     ClaimantStreetMapper, ClaimantLocalityMapper, ClaimantFactory, ClaimDateMapper, \
-    HabitationMapper, InquiryDetailsMapper, ArticleTextMapper
+    HabitationMapper, InquiryDetailsMapper, ArticleTextMapper, DecisionEventMapper, \
+    DecisionDateMapper, DecisionMapper
 
 
 OBJECTS_NESTING = [
@@ -22,6 +23,7 @@ OBJECTS_NESTING = [
         ('INQUIRY EVENT', [
             ('CLAIMANTS', []),
         ]),
+        ('DECISION COLLEGE EVENT', []),
     ],),
 ]
 
@@ -271,5 +273,27 @@ FIELDS_MAPPINGS = {
                 },
             },
         }
+    },
+
+    'DECISION COLLEGE EVENT':
+    {
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            DecisionEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            DecisionDateMapper: {
+                'from': 'COLLDEFINITIF1',
+                'to': 'decisionDate',
+            },
+
+            DecisionMapper: {
+                'from': 'COLLDECISION',
+                'to': 'investigationEnd',
+            },
+        },
     },
 }

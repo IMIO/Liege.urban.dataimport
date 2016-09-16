@@ -320,6 +320,8 @@ class UrbanEventFactory(BaseFactory):
 
     def create(self, kwargs, container, line):
         eventtype_uid = kwargs.pop('eventtype')
+        if 'eventDate' not in kwargs:
+            kwargs['eventDate'] = None
         urban_event = container.createUrbanEvent(eventtype_uid, **kwargs)
         return urban_event
 
@@ -537,3 +539,32 @@ class ClaimDateMapper(Mapper):
         date = self.getData('Date_reclam')
         date = date and DateTime(date) or None
         return date
+
+
+#
+# UrbanEvent college final decision
+#
+
+
+class DecisionEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'delivrance-du-permis-octroi-ou-refus'
+
+
+class DecisionDateMapper(Mapper):
+
+    def mapDecisiondate(self, line):
+        date = self.getData('COLLDEFINITIF1')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(date) or None
+        return date
+
+
+class DecisionMapper(Mapper):
+
+    def mapInvestigationend(self, line):
+        raw_decision = self.getData('COLLDECISION')
+        if 'autorisé' in raw_decision.lower():
+            return 'favorable'
+        return 'defavorable'

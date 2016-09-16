@@ -5,16 +5,16 @@ from zope.interface import implements
 from Liege.urban.dataimport.interfaces import ILiegeArchitectsImporter
 from Liege.urban.dataimport.architects import objectsmapping, valuesmapping
 
-from imio.urban.dataimport.access.importer import AccessDataImporter
+from imio.urban.dataimport.access.importer import AccessDataImporter as AccessImporter
 from imio.urban.dataimport.mapping import ValuesMapping, ObjectsMapping
 
 
-class ArchitectsImporter(AccessDataImporter):
+class ArchitectsImporter(AccessImporter):
     """ """
 
     implements(ILiegeArchitectsImporter)
 
-    def __init__(self, db_name='P_tables.mdb', table_name='PermisUrba', key_column='NUMDOSSIERBKP', savepoint_length=0):
+    def __init__(self, db_name='P_tables.mdb', table_name='T Architecte', key_column='Numéro', savepoint_length=0):
         super(ArchitectsImporter, self).__init__(db_name, table_name, key_column, savepoint_length)
 
 

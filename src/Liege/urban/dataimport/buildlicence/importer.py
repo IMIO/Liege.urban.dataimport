@@ -5,11 +5,11 @@ from zope.interface import implements
 from Liege.urban.dataimport.interfaces import ILiegeBuildlicenceImporter
 from Liege.urban.dataimport.buildlicence import objectsmapping, valuesmapping
 
-from imio.urban.dataimport.access.importer import AccessDataImporter
+from imio.urban.dataimport.access.importer import AccessDataImporter as AccessImporter
 from imio.urban.dataimport.mapping import ValuesMapping, ObjectsMapping
 
 
-class BuildlicenceImporter(AccessDataImporter):
+class BuildlicenceImporter(AccessImporter):
     """ """
 
     implements(ILiegeBuildlicenceImporter)
