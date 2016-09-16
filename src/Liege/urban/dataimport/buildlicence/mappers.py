@@ -315,9 +315,6 @@ class LocalityMapper(Mapper):
 class UrbanEventFactory(BaseFactory):
     """ """
 
-    def getPortalType(self, **kwargs):
-        return 'UrbanEvent'
-
     def create(self, kwargs, container, line):
         eventtype_uid = kwargs.pop('eventtype')
         if 'eventDate' not in kwargs:
@@ -334,6 +331,8 @@ class EventTypeMapper(Mapper):
     eventtype_id = ''  # to override
 
     def mapEventtype(self, line):
+        if not self.eventtype_id:
+            return
         licence = self.importer.current_containers_stack[-1]
         urban_tool = api.portal.get_tool('portal_urban')
         config = urban_tool.getUrbanConfig(licence)
@@ -539,6 +538,88 @@ class ClaimDateMapper(Mapper):
         date = self.getData('Date_reclam')
         date = date and DateTime(date) or None
         return date
+
+
+#
+# Opinion request urban events
+#
+
+# factory
+
+
+class OpinionRequestEventFactory(UrbanEventFactory):
+
+    def create(self, kwargs, container, line):
+        if not kwargs:
+            return None
+        title = kwargs.pop('Title')
+        if kwargs['eventtype']:
+            return super(OpinionRequestEventFactory, self).create(kwargs, container, line)
+
+        kwargs['eventtype'] = 'config-opinion-request'
+        opinion_event = super(OpinionRequestEventFactory, self).create(kwargs, container, line)
+        opinion_event.setTitle(title)
+
+        return opinion_event
+
+# mappers
+
+
+class OpinionRequestMapper(MultiLinesSecondaryTableMapper):
+    """ """
+
+
+class OpinionEventTypeMapper(EventTypeMapper):
+    """ """
+    eventtype_id = ''
+
+
+class OpinionIdMapper(Mapper):
+
+    def mapId(self, line):
+        return normalizeString(self.getData('Nom_service'))
+
+
+class OpinionTitleMapper(Mapper):
+
+    def mapTitle(self, line):
+        return 'Demande d\'avis (%s)' % self.getData('Nom_service')
+
+
+class OpinionTransmitDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('Date demande')
+        date = date and DateTime(date) or None
+        return date
+
+    def mapTransmitdate(self, line):
+        date = self.getData('Date demande')
+        date = date and DateTime(date) or None
+        return date
+
+
+class OpinionReceiptDateMapper(Mapper):
+
+    def mapReceiptdate(self, line):
+        date = self.getData('Date réception')
+        date = date and DateTime(date) or None
+        return date
+
+
+class OpinionMapper(Mapper):
+
+    def mapExternaldecision(self, line):
+        raw_decision = self.getData('Service_avis')
+        decision = self.getValueMapping('externaldecisions_map').get(raw_decision, 'non-determine')
+        return decision
+
+    def mapOpiniontext(self, line):
+        raw_decision = self.getData('Service_avis')
+        decision = self.getValueMapping('externaldecisions_map').get(raw_decision, None)
+        if decision:
+            return '<p></p>'
+        return '<p>%s</p>' % raw_decision
 
 
 #

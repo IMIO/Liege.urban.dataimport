@@ -22,32 +22,6 @@ VALUES_MAPS = {
     'abandonné': 'abandoned',
 },
 
-'eventtype_id_map': table({
-'header'             : ['decision_event'],
-'BuildLicence'       : ['delivrance-du-permis-octroi-ou-refus'],
-'ParcelOutLicence'   : ['delivrance-du-permis-octroi-ou-refus'],
-'Declaration'        : ['deliberation-college'],
-'UrbanCertificateOne': ['octroi-cu1'],
-'UrbanCertificateTwo': ['octroi-cu2'],
-'MiscDemand'         : ['deliberation-college'],
-'EnvClassOne'        : ['decision'],
-'EnvClassTwo'        : ['desision'],
-'EnvClassThree'      : ['acceptation-de-la-demande'],
-}),
-
-'documents_map': {
-    'BuildLicence': 'URBA',
-    'UniqueLicence': 'PERMIS-UNIQUE',
-    'ParcelOutLicence': 'LOTISSEMENT',
-    'Declaration': 'REGISTRE-PU',
-    'UrbanCertificateOne': 'CU/1',
-    'UrbanCertificateTwo': 'CU/2',
-    'MiscDemand': 'AUTRE DOSSIER',
-    'EnvClassOne': 'ENVIRONNEMENT',
-    'EnvClassTwo': 'ENVIRONNEMENT',
-    'EnvClassThree': 'ENVIRONNEMENT',
-},
-
 'person_title_map': {
     'monsieur': 'mister',
     'm.': 'mister',
@@ -76,9 +50,13 @@ VALUES_MAPS = {
 },
 
 'externaldecisions_map': {
-    'F': 'favorable',
-    'FC': 'favorable-conditionnel',
-    'D': 'defavorable',
-    'RF': 'favorable-defaut',
+    'favorable': 'favorable',
+    'fav': 'favorable',
+    'favorable conditionnelle': 'favorable-conditionnel',
+    'favorable conditionnel': 'favorable-conditionnel',
+    'fav conditionnel': 'favorable-conditionnel',
+    'fav cond': 'favorable-conditionnel',
+    'défavorable': 'defavorable',
+    'réputé favorable par défaut': 'favorable-defaut',
 },
 }

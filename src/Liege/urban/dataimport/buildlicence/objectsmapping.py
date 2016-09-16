@@ -12,7 +12,9 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     ClaimantTableMapper, ClaimantIdMapper, ClaimantTitleMapper, ClaimantNameMapper, \
     ClaimantStreetMapper, ClaimantLocalityMapper, ClaimantFactory, ClaimDateMapper, \
     HabitationMapper, InquiryDetailsMapper, ArticleTextMapper, DecisionEventMapper, \
-    DecisionDateMapper, DecisionMapper
+    DecisionDateMapper, DecisionMapper, OpinionRequestEventFactory, OpinionRequestMapper, \
+    OpinionEventTypeMapper, OpinionTransmitDateMapper, OpinionReceiptDateMapper, \
+    OpinionMapper, OpinionTitleMapper, OpinionIdMapper
 
 
 OBJECTS_NESTING = [
@@ -23,6 +25,7 @@ OBJECTS_NESTING = [
         ('INQUIRY EVENT', [
             ('CLAIMANTS', []),
         ]),
+        ('OPINION REQUEST EVENT', []),
         ('DECISION COLLEGE EVENT', []),
     ],),
 ]
@@ -272,6 +275,49 @@ FIELDS_MAPPINGS = {
                     },
                 },
             },
+        }
+    },
+
+    'OPINION REQUEST EVENT':
+    {
+        'factory': [OpinionRequestEventFactory],
+
+        'mappers': {
+            OpinionRequestMapper: {
+                'table': 'TA Avis_services',
+                'KEYS': ('NUMERO DE DOSSIER', 'Avis_services'),
+                'mappers': {
+                    OpinionEventTypeMapper: {
+                        'from': 'Nom_service',
+                        'to': 'eventtype',
+                    },
+
+                    OpinionIdMapper: {
+                        'from': 'Nom_service',
+                        'to': 'id',
+                    },
+
+                    OpinionTitleMapper: {
+                        'from': 'Nom_service',
+                        'to': 'Title',
+                    },
+
+                    OpinionTransmitDateMapper: {
+                        'from': 'Date demande',
+                        'to': ('eventDate', 'transmitDate'),
+                    },
+
+                    OpinionReceiptDateMapper: {
+                        'from': 'Date réception',
+                        'to': 'receiptDate',
+                    },
+
+                    OpinionMapper: {
+                        'from': 'Service_avis',
+                        'to': ('externalDecision', 'opinionText'),
+                    },
+                },
+            }
         }
     },
 
