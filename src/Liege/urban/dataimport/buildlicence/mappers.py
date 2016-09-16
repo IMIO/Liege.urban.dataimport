@@ -5,6 +5,8 @@ from DateTime import DateTime
 from imio.urban.dataimport.access.mapper import AccessFinalMapper as FinalMapper
 from imio.urban.dataimport.access.mapper import AccessMapper as Mapper
 from imio.urban.dataimport.access.mapper import AccessPostCreationMapper as PostCreationMapper
+from imio.urban.dataimport.access.mapper import MultiLinesSecondaryTableMapper
+from imio.urban.dataimport.access.mapper import SecondaryTableMapper
 
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 
@@ -88,6 +90,21 @@ class ArchitectMapper(Mapper):
         archi_id = raw_archi_id and str(int(float(raw_archi_id))) or ''
         archi = getattr(self.site.urban.architects, archi_id, None)
         return archi
+
+
+class HabitationMapper(Mapper):
+    """ """
+
+    def mapNoapplication(self, line):
+        habitation_nbr = self.getData('NB_LOG')
+        habitation_nbr = habitation_nbr and int(habitation_nbr) or 0
+        return not bool(habitation_nbr)
+
+    def mapHabitationsafterlicence(self, line):
+        habitation_nbr = self.getData('NB_LOG')
+        if habitation_nbr != '0':
+            return habitation_nbr
+        return ''
 
 
 class CompletionStateMapper(PostCreationMapper):
@@ -373,5 +390,150 @@ class InquiryExplainationDateMapper(Mapper):
 
     def mapExplanationstartsdate(self, line):
         date = self.getData('DateBU')
+        date = date and DateTime(date) or None
+        return date
+
+
+class InquiryDetailsMapper(SecondaryTableMapper):
+    """
+    Additional claimants mapper
+    """
+
+
+class ArticleTextMapper(Mapper):
+    """ """
+
+    def mapInvestigationarticlestext(self, line):
+        return '<p>{}</p>'.format(self.getData('carac1', line))
+
+
+#
+# CLAIMANTS
+#
+
+# factory
+
+
+class ClaimantFactory(BaseFactory):
+    def getPortalType(self, container, **kwargs):
+        return 'Claimant'
+
+# mappers
+
+
+class ClaimantTableMapper(MultiLinesSecondaryTableMapper):
+    """
+    Additional claimants mapper
+    """
+
+
+class ClaimantIdMapper(Mapper):
+    """ """
+
+    def mapId(self, line):
+        name = self.getData('Reclamant')
+        if not name:
+            raise NoObjectToCreateException
+
+        return normalizeString(self.site.portal_urban.generateUniqueId(name))
+
+
+class ClaimantTitleMapper(Mapper):
+    """ """
+
+    def mapPersontitle(self, line):
+        raw_title = self.getData('civilite').lower()
+        title_mapping = self.getValueMapping('person_title_map')
+        title = title_mapping.get(raw_title, 'notitle')
+        return title
+
+
+class ClaimantNameMapper(Mapper):
+    """ """
+
+    regex_1 = '([A-Z]+-?[A-Z]+)\s+([A-Z][a-z]+-?[a-z]*)\s*\Z'
+    regex_2 = '([A-Z][a-z]+-?[a-z]*)\s+([A-Z]+-?[A-Z]+)\s*\Z'
+
+    def mapName1(self, line):
+        raw_name = self.getData('Reclamant')
+        match = re.search(self.regex_1, raw_name)
+        if match:
+            name1 = match.group(1)
+            return name1
+
+        match = re.search(self.regex_2, raw_name)
+        if match:
+            name1 = match.group(2)
+            return name1
+
+        return raw_name
+
+    def mapName2(self, line):
+        raw_name = self.getData('Reclamant')
+        match = re.search(self.regex_1, raw_name)
+        if match:
+            name2 = match.group(2)
+            return name2
+
+        match = re.search(self.regex_2, raw_name)
+        if match:
+            name2 = match.group(1)
+            return name2
+
+        return ''
+
+
+class ClaimantStreetMapper(Mapper):
+    """ """
+
+    regex = '(.*?)\s*,?\s*(\d.*)\s*\Z'
+
+    def mapStreet(self, line):
+        raw_addr = self.getData('adresse')
+        match = re.search(self.regex, raw_addr)
+        if match:
+            street = match.group(1)
+            return street
+
+        return raw_addr
+
+    def mapNumber(self, line):
+        raw_addr = self.getData('adresse')
+        match = re.search(self.regex, raw_addr)
+        if match:
+            number = match.group(2)
+            return number
+
+        return ''
+
+
+class ClaimantLocalityMapper(Mapper):
+    """ """
+
+    regex = '(\d{4,4})\s+(\w.*)'
+
+    def mapZipcode(self, line):
+        raw_city = self.getData('CP')
+        match = re.search(self.regex, raw_city)
+        if match:
+            zipcode = match.group(1)
+            return zipcode
+
+        return ''
+
+    def mapCity(self, line):
+        raw_city = self.getData('CP')
+        match = re.search(self.regex, raw_city)
+        if match:
+            city = match.group(2)
+            return city
+
+        return raw_city
+
+
+class ClaimDateMapper(Mapper):
+
+    def mapClaimdate(self, line):
+        date = self.getData('Date_reclam')
         date = date and DateTime(date) or None
         return date

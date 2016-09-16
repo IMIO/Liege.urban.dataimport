@@ -8,18 +8,21 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     ContactStreetMapper, ContactIdMapper, LocalityMapper, CorporationIdMapper, \
     CorporationNameMapper, CorporationFactory, ArchitectMapper, UrbanEventFactory, \
     DepositEventMapper, DepositDateMapper, AnnoncedDelayMapper, InquiryEventMapper, \
-    InquiryStartDateMapper, InquiryEndDateMapper, InquiryExplainationDateMapper
+    InquiryStartDateMapper, InquiryEndDateMapper, InquiryExplainationDateMapper, \
+    ClaimantTableMapper, ClaimantIdMapper, ClaimantTitleMapper, ClaimantNameMapper, \
+    ClaimantStreetMapper, ClaimantLocalityMapper, ClaimantFactory, ClaimDateMapper, \
+    HabitationMapper, InquiryDetailsMapper, ArticleTextMapper
 
 
 OBJECTS_NESTING = [
-    (
-        'LICENCE', [
-            ('PERSON CONTACT', []),
-            ('CORPORATION CONTACT', []),
-            ('DEPOSIT EVENT', []),
-            ('INQUIRY EVENT', []),
-        ],
-    ),
+    ('LICENCE', [
+        ('PERSON CONTACT', []),
+        ('CORPORATION CONTACT', []),
+        ('DEPOSIT EVENT', []),
+        ('INQUIRY EVENT', [
+            ('CLAIMANTS', []),
+        ]),
+    ],),
 ]
 
 FIELDS_MAPPINGS = {
@@ -36,6 +39,10 @@ FIELDS_MAPPINGS = {
                 {
                     'from': 'Objettrav',
                     'to': 'licenceSubject',
+                },
+                {
+                    'from': 'UPNumero',
+                    'to': 'referenceDGATLP',
                 },
             ),
 
@@ -62,6 +69,29 @@ FIELDS_MAPPINGS = {
             ArchitectMapper: {
                 'from': 'NUMARCHITECTE',
                 'to': 'architects',
+            },
+
+            InquiryDetailsMapper: {
+                'table': 'T Publicites',
+                'KEYS': ('NUMERO DE DOSSIER', 'DOSSIER'),
+                'mappers': {
+                    SimpleMapper: (
+                        {
+                            'from': 'carac2',
+                            'to': 'derogationDetails',
+                        },
+                    ),
+
+                    ArticleTextMapper: {
+                        'from': 'carac1',
+                        'to': 'investigationArticlesText',
+                    },
+                }
+            },
+
+            HabitationMapper: {
+                'from': 'NB_LOG',
+                'to': ('noApplication', 'habitationsAfterLicence'),
             },
 
             CompletionStateMapper: {
@@ -191,5 +221,55 @@ FIELDS_MAPPINGS = {
                 'to': 'explanationStartSDate',
             },
         },
+    },
+
+    'CLAIMANTS':
+    {
+        'factory': [ClaimantFactory],
+
+        'mappers': {
+            ClaimantTableMapper: {
+                'table': 'TA _reclamations',
+                'KEYS': ('NUMERO DE DOSSIER', 'Dossier'),
+                'mappers': {
+                    SimpleMapper: (
+                        {
+                            'from': 'societe',
+                            'to': 'society',
+                        },
+                    ),
+
+                    ClaimantIdMapper: {
+                        'from': 'Reclamant',
+                        'to': 'id',
+                    },
+
+                    ClaimantTitleMapper: {
+                        'from': 'civilite',
+                        'to': 'personTitle',
+                    },
+
+                    ClaimantNameMapper: {
+                        'from': 'Reclamant',
+                        'to': ('name1', 'name2'),
+                    },
+
+                    ClaimantStreetMapper: {
+                        'from': 'adresse',
+                        'to': ('street', 'number'),
+                    },
+
+                    ClaimantLocalityMapper: {
+                        'from': 'CP',
+                        'to': ('city', 'zipcode'),
+                    },
+
+                    ClaimDateMapper: {
+                        'from': 'Date_reclam',
+                        'to': 'claimDate',
+                    },
+                },
+            },
+        }
     },
 }
