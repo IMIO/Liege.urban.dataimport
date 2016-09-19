@@ -14,7 +14,7 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     HabitationMapper, InquiryDetailsMapper, ArticleTextMapper, DecisionEventMapper, \
     DecisionDateMapper, DecisionMapper, OpinionRequestEventFactory, OpinionRequestMapper, \
     OpinionEventTypeMapper, OpinionTransmitDateMapper, OpinionReceiptDateMapper, \
-    OpinionMapper, OpinionTitleMapper, OpinionIdMapper
+    OpinionMapper, OpinionTitleMapper, OpinionIdMapper, SolicitOpinionsMapper
 
 
 OBJECTS_NESTING = [
@@ -74,6 +74,13 @@ FIELDS_MAPPINGS = {
             ArchitectMapper: {
                 'from': 'NUMARCHITECTE',
                 'to': 'architects',
+            },
+
+            SolicitOpinionsMapper: {
+                'table': 'TA Avis_services',
+                'KEYS': ('NUMERO DE DOSSIER', 'Avis_services'),
+                'from': ('Nom_service', 'NUMERO DE DOSSIER'),
+                'to': 'solicitOpinionsTo',
             },
 
             InquiryDetailsMapper: {

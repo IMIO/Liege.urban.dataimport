@@ -7,6 +7,7 @@ from imio.urban.dataimport.access.mapper import AccessMapper as Mapper
 from imio.urban.dataimport.access.mapper import AccessPostCreationMapper as PostCreationMapper
 from imio.urban.dataimport.access.mapper import MultiLinesSecondaryTableMapper
 from imio.urban.dataimport.access.mapper import SecondaryTableMapper
+from imio.urban.dataimport.access.mapper import MultivaluedFieldSecondaryTableMapper
 
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 
@@ -92,6 +93,35 @@ class ArchitectMapper(Mapper):
         return archi
 
 
+class SolicitOpinionsMapper(MultivaluedFieldSecondaryTableMapper):
+    """
+    """
+
+    def mapSolicitopinionsto(self, line):
+        urban_tool = api.portal.get_tool('portal_urban')
+        event_types_path = '/'.join(urban_tool.buildlicence.urbaneventtypes.getPhysicalPath())
+        service_name = line[1].replace('.', '').replace('(', ' ').replace(')', ' ')
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog(Title=service_name, portal_type='OpinionRequestEventType', path=event_types_path)
+        if len(brains) == 1:
+            return [brains[0].getObject().id]
+        self.logError(self, line, 'solicitOpinionsTo', {'name': line[1]})
+        return []
+
+
+class InquiryDetailsMapper(SecondaryTableMapper):
+    """
+    Additional claimants mapper
+    """
+
+
+class ArticleTextMapper(Mapper):
+    """ """
+
+    def mapInvestigationarticlestext(self, line):
+        return '<p>{}</p>'.format(self.getData('carac1', line))
+
+
 class HabitationMapper(Mapper):
     """ """
 
@@ -140,6 +170,8 @@ class ErrorsMapper(FinalMapper):
                     error_trace.append('<p>adresse : %s</p>' % data['address'])
                 elif 'annoncedDelay' in error.message:
                     error_trace.append('<p>Délai annoncé : %s</p>' % (data['delay']))
+                elif 'solicitOpinionsTo' in error.message:
+                    error_trace.append('<p>Avis de service non sélectionné: %s</p>' % (data['name']))
         error_trace = ''.join(error_trace)
 
         return '%s%s' % (error_trace, description)
@@ -395,19 +427,6 @@ class InquiryExplainationDateMapper(Mapper):
         return date
 
 
-class InquiryDetailsMapper(SecondaryTableMapper):
-    """
-    Additional claimants mapper
-    """
-
-
-class ArticleTextMapper(Mapper):
-    """ """
-
-    def mapInvestigationarticlestext(self, line):
-        return '<p>{}</p>'.format(self.getData('carac1', line))
-
-
 #
 # CLAIMANTS
 #
@@ -569,9 +588,19 @@ class OpinionRequestMapper(MultiLinesSecondaryTableMapper):
     """ """
 
 
-class OpinionEventTypeMapper(EventTypeMapper):
+class OpinionEventTypeMapper(Mapper):
     """ """
-    eventtype_id = ''
+
+    def mapEventtype(self, line):
+        licence = self.importer.current_containers_stack[-1]
+        config = licence.getLicenceConfig()
+        event_types_path = '/'.join(config.urbaneventtypes.getPhysicalPath())
+        service_name = self.getData('Nom_service').replace('.', '').replace('(', ' ').replace(')', ' ')
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog(Title=service_name, portal_type='OpinionRequestEventType', path=event_types_path)
+        if len(brains) == 1:
+            return brains[0].getObject().id
+        return None
 
 
 class OpinionIdMapper(Mapper):
