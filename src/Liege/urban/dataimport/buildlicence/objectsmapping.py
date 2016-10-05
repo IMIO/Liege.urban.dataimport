@@ -14,7 +14,12 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     HabitationMapper, InquiryDetailsMapper, ArticleTextMapper, DecisionEventMapper, \
     DecisionDateMapper, DecisionMapper, OpinionRequestEventFactory, OpinionRequestMapper, \
     OpinionEventTypeMapper, OpinionTransmitDateMapper, OpinionReceiptDateMapper, \
-    OpinionMapper, OpinionTitleMapper, OpinionIdMapper, SolicitOpinionsMapper
+    OpinionMapper, OpinionTitleMapper, OpinionIdMapper, SolicitOpinionsMapper, \
+    TaskFactory, TaskTableMapper, TaskIdMapper, TaskDateMapper, TaskDescriptionMapper, \
+    NotificationDateMapper, FirstCollegeDateMapper, FirstCollegeEventMapper, \
+    SecondCollegeDateMapper, SecondCollegeEventMapper, FirstCollegeDecisionMapper, \
+    SecondCollegeDecisionMapper, OldAddressMapper, WorklocationsMapper, \
+    OldAddressNumberMapper
 
 
 OBJECTS_NESTING = [
@@ -26,7 +31,10 @@ OBJECTS_NESTING = [
             ('CLAIMANTS', []),
         ]),
         ('OPINION REQUEST EVENT', []),
+        ('FD FIRST COLLEGE EVENT', []),
+        ('FD SECOND COLLEGE EVENT', []),
         ('DECISION COLLEGE EVENT', []),
+#        ('TASKS', []),
     ],),
 ]
 
@@ -69,6 +77,22 @@ FIELDS_MAPPINGS = {
             AnnoncedDelayMapper: {
                 'from': 'Délai',
                 'to': 'annoncedDelay',
+            },
+
+            OldAddressMapper: {
+                'table': 'Rues',
+                'KEYS': ('Correspondance_adr', 'Numero'),
+                'mappers': {
+                    WorklocationsMapper: {
+                        'from': ('CODE_RUE', 'Localite', 'PARTICULE', 'RUE'),
+                        'to': 'workLocations',
+                    },
+                }
+            },
+
+            OldAddressNumberMapper: {
+                'from': ('NUM', 'Num2'),
+                'to': 'workLocations',
             },
 
             ArchitectMapper: {
@@ -328,6 +352,50 @@ FIELDS_MAPPINGS = {
         }
     },
 
+    'FD FIRST COLLEGE EVENT':
+    {
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            FirstCollegeEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            FirstCollegeDateMapper: {
+                'from': 'College2',
+                'to': 'eventDate',
+            },
+
+            FirstCollegeDecisionMapper: {
+                'from': 'College/Fav/Def',
+                'to': 'decision',
+            },
+        },
+    },
+
+    'FD SECOND COLLEGE EVENT':
+    {
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            SecondCollegeEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            SecondCollegeDateMapper: {
+                'from': 'College3',
+                'to': 'eventDate',
+            },
+
+            SecondCollegeDecisionMapper: {
+                'from': 'College/Fav/Def2',
+                'to': 'decision',
+            },
+        },
+    },
+
     'DECISION COLLEGE EVENT':
     {
         'factory': [UrbanEventFactory],
@@ -338,6 +406,11 @@ FIELDS_MAPPINGS = {
                 'to': 'eventtype',
             },
 
+            NotificationDateMapper: {
+                'from': 'notification',
+                'to': 'eventDate',
+            },
+
             DecisionDateMapper: {
                 'from': 'COLLDEFINITIF1',
                 'to': 'decisionDate',
@@ -345,8 +418,40 @@ FIELDS_MAPPINGS = {
 
             DecisionMapper: {
                 'from': 'COLLDECISION',
-                'to': 'investigationEnd',
+                'to': 'decision',
             },
+        },
+    },
+
+    'TASKS':
+    {
+        'factory': [TaskFactory],
+
+        'mappers': {
+            TaskTableMapper: {
+                'table': 'Courrier',
+                'KEYS': ('NUMERO DE DOSSIER', 'Dossier'),
+                'mappers': {
+                    SimpleMapper: (
+                        {
+                            'from': 'Objet',
+                            'to': 'title',
+                        },
+                    ),
+                    TaskIdMapper: {
+                        'from': 'numpiece',
+                        'to': 'id',
+                    },
+                    TaskDescriptionMapper: {
+                        'from': ('remarques', 'Destinataire', 'Expéditeur', 'Expédition'),
+                        'to': 'task_description',
+                    },
+                    TaskDateMapper: {
+                        'from': 'Date',
+                        'to': 'due_date',
+                    }
+                }
+            }
         },
     },
 }

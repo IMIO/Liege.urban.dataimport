@@ -2,7 +2,7 @@
 <object name="portal_controlpanel" meta_type="Plone Control Panel Tool"
    i18n:domain="Liege.urban.dataimport" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
- <configlet title="Liege agorawin import" action_id="Liege.urban.dataimport"
+ <configlet title="Liege licences data transfer" action_id="Liege.urban.dataimport"
     appId="Liege.urban.dataimport" category="Products" condition_expr=""
     url_expr="string:${portal_url}/@@dataimport-controlpanel"
     visible="True" i18n:attributes="title">
