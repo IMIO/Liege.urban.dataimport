@@ -13,6 +13,7 @@ from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
 
 from liege.urban.interfaces import IShore
+from liege.urban.services import address_service
 
 from plone import api
 
@@ -34,7 +35,8 @@ import re
 
 class LicenceFactory(BaseFactory):
     def getCreationPlace(self, factory_args):
-        path = '%s/urban/buildlicences' % self.site.absolute_url_path()
+        foldername = factory_args['portal_type'].lower()
+        path = '{}/urban/{}s'.format(self.site.absolute_url_path(), foldername)
         return self.site.restrictedTraverse(path)
 
 # mappers
@@ -175,7 +177,10 @@ class SolicitOpinionsMapper(MultivaluedFieldSecondaryTableMapper):
 
     def mapSolicitopinionsto(self, line):
         urban_tool = api.portal.get_tool('portal_urban')
-        event_types_path = '/'.join(urban_tool.buildlicence.urbaneventtypes.getPhysicalPath())
+        type_value = self.getData('NORM_UNIK', self.main_line).upper()
+        portal_type = self.getValueMapping('type_map')[type_value]['portal_type']
+        folderconfig = getattr(urban_tool, portal_type.lower())
+        event_types_path = '/'.join(folderconfig.urbaneventtypes.getPhysicalPath())
         service_name = line[1].replace('.', '').replace('(', ' ').replace(')', ' ')
         catalog = api.portal.get_tool('portal_catalog')
         brains = catalog(Title=service_name, portal_type='OpinionRequestEventType', path=event_types_path)
@@ -222,6 +227,14 @@ class CompletionStateMapper(PostCreationMapper):
             raw_state = 'sans suite'
         state_mapping = self.getValueMapping('state_map')
         state = state_mapping.get(raw_state, '')
+        if not state:
+            self.logError(
+                self,
+                line,
+                'unknown workflow state',
+                {'state': raw_state}
+            )
+            return
 
         workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
         workflow_id = workflow_def.getId()
@@ -248,6 +261,8 @@ class ErrorsMapper(FinalMapper):
                     error_trace.append('<p>Délai annoncé : %s</p>' % (data['delay']))
                 elif 'solicitOpinionsTo' in error.message:
                     error_trace.append('<p>Avis de service non sélectionné: %s</p>' % (data['name']))
+                elif 'workflow state' in error.message:
+                    error_trace.append('<p>état final: %s</p>' % (data['state']))
         error_trace = ''.join(error_trace)
 
         return '%s%s' % (error_trace, description)
@@ -415,10 +430,39 @@ class LocalityMapper(Mapper):
 
 
 #
+# Address point
+#
+
+# factory
+
+class AddressFactory(BaseFactory):
+    """ """
+
+    def create(self, kwargs, container, line):
+        address_factory = container.restrictedTraverse('@@create_address')
+        address = address_factory.create_address(**kwargs)
+        return address
+
+
+class AddressPointMapper(Mapper):
+
+    def map(self, line):
+        """
+        """
+        gid = self.getData('gidptadresse', line)
+        session = address_service.new_session()
+        address_record = session.query_address_by_gid(gid)
+        if address_record:
+            return address_record._asdict()
+        raise NoObjectToCreateException
+
+
+#
 # UrbanEvent base
 #
 
 # factory
+
 
 class UrbanEventFactory(BaseFactory):
     """ """
@@ -762,7 +806,7 @@ class FirstCollegeDecisionMapper(Mapper):
 
 class SecondCollegeEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'spp-fd'
+    eventtype_id = 'pp-fd'
 
 
 class SecondCollegeDateMapper(Mapper):

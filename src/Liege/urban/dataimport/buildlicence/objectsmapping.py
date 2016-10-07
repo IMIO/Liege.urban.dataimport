@@ -19,13 +19,15 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     NotificationDateMapper, FirstCollegeDateMapper, FirstCollegeEventMapper, \
     SecondCollegeDateMapper, SecondCollegeEventMapper, FirstCollegeDecisionMapper, \
     SecondCollegeDecisionMapper, OldAddressMapper, WorklocationsMapper, \
-    OldAddressNumberMapper
+    OldAddressNumberMapper, AddressFactory, AddressPointMapper
 
 
 OBJECTS_NESTING = [
     ('LICENCE', [
         ('PERSON CONTACT', []),
         ('CORPORATION CONTACT', []),
+        ('ADDRESS POINT', []),
+#        ('PARCELS', []),
         ('DEPOSIT EVENT', []),
         ('INQUIRY EVENT', [
             ('CLAIMANTS', []),
@@ -103,7 +105,7 @@ FIELDS_MAPPINGS = {
             SolicitOpinionsMapper: {
                 'table': 'TA Avis_services',
                 'KEYS': ('NUMERO DE DOSSIER', 'Avis_services'),
-                'from': ('Nom_service', 'NUMERO DE DOSSIER'),
+                'from': ('Nom_service', 'NUMERO DE DOSSIER', 'NORM_UNIK'),
                 'to': 'solicitOpinionsTo',
             },
 
@@ -210,6 +212,18 @@ FIELDS_MAPPINGS = {
 
             LocalityMapper: {
                 'from': 'CP LOCALITE DEM',
+                'to': ('city', 'zipcode'),
+            }
+        },
+    },
+
+    'ADDRESS POINT':
+    {
+        'factory': [AddressFactory],
+
+        'mappers': {
+            AddressPointMapper: {
+                'from': 'gidptadresse',
                 'to': ('city', 'zipcode'),
             }
         },
