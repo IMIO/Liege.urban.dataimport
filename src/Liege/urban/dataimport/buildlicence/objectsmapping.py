@@ -19,7 +19,8 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     NotificationDateMapper, FirstCollegeDateMapper, FirstCollegeEventMapper, \
     SecondCollegeDateMapper, SecondCollegeEventMapper, FirstCollegeDecisionMapper, \
     SecondCollegeDecisionMapper, OldAddressMapper, WorklocationsMapper, \
-    OldAddressNumberMapper, AddressFactory, AddressPointMapper
+    OldAddressNumberMapper, AddressFactory, AddressPointMapper, ParcelsMapper, \
+    CapakeyMapper
 
 
 OBJECTS_NESTING = [
@@ -27,7 +28,7 @@ OBJECTS_NESTING = [
         ('PERSON CONTACT', []),
         ('CORPORATION CONTACT', []),
         ('ADDRESS POINT', []),
-#        ('PARCELS', []),
+        ('PARCELS', []),
         ('DEPOSIT EVENT', []),
         ('INQUIRY EVENT', [
             ('CLAIMANTS', []),
@@ -224,8 +225,26 @@ FIELDS_MAPPINGS = {
         'mappers': {
             AddressPointMapper: {
                 'from': 'gidptadresse',
-                'to': ('city', 'zipcode'),
+                'to': (),
             }
+        },
+    },
+
+    'PARCELS':
+    {
+        'factory': [AddressFactory],
+
+        'mappers': {
+            ParcelsMapper: {
+                'table': 'PRUBA_CADASTRE',
+                'KEYS': ('NUMERO DE DOSSIER', 'NUMDOSSIER'),
+                'mappers': {
+                    CapakeyMapper: {
+                        'from': 'CAPAKEY',
+                        'to': 'capakey',
+                    }
+                }
+            },
         },
     },
 

@@ -263,7 +263,12 @@ class ErrorsMapper(FinalMapper):
                     error_trace.append('<p>Avis de service non sélectionné: %s</p>' % (data['name']))
                 elif 'workflow state' in error.message:
                     error_trace.append('<p>état final: %s</p>' % (data['state']))
-        error_trace = ''.join(error_trace)
+                elif 'invalid capakey' in error.message:
+                    error_trace.append(
+                        '<p>point addresse %s avec le capakey invalide %s </p>'
+                        % (data['address_point'], data['capakey'].encode('utf-8'))
+                    )
+        error_trace = '<br />'.join(error_trace)
 
         return '%s%s' % (error_trace, description)
 
@@ -439,8 +444,19 @@ class AddressFactory(BaseFactory):
     """ """
 
     def create(self, kwargs, container, line):
+        if not kwargs:
+            return None
         address_factory = container.restrictedTraverse('@@create_address')
-        address = address_factory.create_address(**kwargs)
+        try:
+            address = address_factory.create_address(**kwargs)
+        except:
+            self.logError(
+                self,
+                line,
+                'invalid capakey',
+                {'capakey': kwargs['capakey'], 'address_point': kwargs['address_point']}
+            )
+            return None
         return address
 
 
@@ -454,6 +470,24 @@ class AddressPointMapper(Mapper):
         address_record = session.query_address_by_gid(gid)
         if address_record:
             return address_record._asdict()
+        raise NoObjectToCreateException
+
+
+class ParcelsMapper(MultiLinesSecondaryTableMapper):
+    """
+     Parcels table join mapper
+    """
+
+
+class CapakeyMapper(Mapper):
+    """
+    """
+
+    def mapCapakey(self, line):
+        """ """
+        raw_capakey = self.getData('CAPAKEY')
+        if len(raw_capakey) == 17:
+            return raw_capakey
         raise NoObjectToCreateException
 
 
