@@ -211,11 +211,49 @@ class HabitationMapper(Mapper):
         habitation_nbr = habitation_nbr and int(habitation_nbr) or 0
         return not bool(habitation_nbr)
 
-    def mapHabitationsafterlicence(self, line):
-        habitation_nbr = self.getData('NB_LOG')
-        if habitation_nbr != '0':
-            return habitation_nbr
+    def mapAdditionalhabitationsasked(self, line):
+        habitation_nbr = self.getData('NB_LOG_AUTORISES')
+        if habitation_nbr and habitation_nbr != '0':
+            return int(habitation_nbr)
         return ''
+
+    def mapAdditionalhabitationsgiven(self, line):
+        habitation_nbr = self.getData('NB_LOG_AUTORISES')
+        if habitation_nbr and habitation_nbr != '0':
+            return int(habitation_nbr)
+        return ''
+
+    def mapHabitationsafterlicence(self, line):
+        habitation_nbr = self.getData('NB_LOG_DECLARES')
+        if habitation_nbr and habitation_nbr != '0':
+            return int(habitation_nbr)
+        return ''
+
+
+class DescriptionMapper(Mapper):
+    """ """
+
+    def mapDescription(self, line):
+        description = []
+
+        plans = self.getData('NOMBRE DE PLANS')
+        if plans:
+            description.append('<p>Nombre de plans: %s</p>' % str(int(float(plans))))
+
+        report = self.getData('Ajourne2')
+        if report:
+            description.append('<p>Ajourné: %s</p>' % report)
+
+        IB_date = self.getData('dateIB')
+        if IB_date:
+            description.append('<p>Date d\'inspection: %s</p>' % IB_date)
+
+        arch_date = self.getData('ARCH/Cad')
+        if arch_date:
+            description.append('<p>Date d\'archivage: %s</p>' % arch_date)
+
+        description = ''.join(description)
+        return description
 
 
 class CompletionStateMapper(PostCreationMapper):
@@ -268,7 +306,8 @@ class ErrorsMapper(FinalMapper):
                         '<p>point addresse %s avec le capakey invalide %s </p>'
                         % (data['address_point'], data['capakey'].encode('utf-8'))
                     )
-        error_trace = '<br />'.join(error_trace)
+            error_trace.append('<br />')
+        error_trace = ''.join(error_trace)
 
         return '%s%s' % (error_trace, description)
 
@@ -870,6 +909,18 @@ class SecondCollegeDecisionMapper(Mapper):
 class DecisionEventMapper(EventTypeMapper):
     """ """
     eventtype_id = 'delivrance-du-permis-octroi-ou-refus'
+
+
+class DecisionEventTitleMapper(PostCreationMapper):
+
+    def mapTitle(self, line, plone_object):
+        old_title = plone_object.Title()
+        decision_taker = self.getData('DecisionFinaleUP')
+        if decision_taker:
+            new_title = '{} ({})'.format(old_title, decision_taker)
+            return new_title
+        else:
+            return old_title
 
 
 class NotificationDateMapper(Mapper):

@@ -20,7 +20,7 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     SecondCollegeDateMapper, SecondCollegeEventMapper, FirstCollegeDecisionMapper, \
     SecondCollegeDecisionMapper, OldAddressMapper, WorklocationsMapper, \
     OldAddressNumberMapper, AddressFactory, AddressPointMapper, ParcelsMapper, \
-    CapakeyMapper
+    CapakeyMapper, DescriptionMapper, DecisionEventTitleMapper
 
 
 OBJECTS_NESTING = [
@@ -129,8 +129,18 @@ FIELDS_MAPPINGS = {
             },
 
             HabitationMapper: {
-                'from': 'NB_LOG',
-                'to': ('noApplication', 'habitationsAfterLicence'),
+                'from': ('NB_LOG', 'NB_LOG_AUTORISES', 'NB_LOG_DECLARES'),
+                'to': (
+                    'noApplication',
+                    'additionalHabitationsAsked',
+                    'additionalHabitationsGiven',
+                    'habitationsAfterLicence',
+                ),
+            },
+
+            DescriptionMapper: {
+                'from': ('NOMBRE DE PLANS', 'Ajourne2', 'dateIB', 'ARCH/Cad'),
+                'to': ('description',),
             },
 
             CompletionStateMapper: {
@@ -437,6 +447,11 @@ FIELDS_MAPPINGS = {
             DecisionEventMapper: {
                 'from': (),
                 'to': 'eventtype',
+            },
+
+            DecisionEventTitleMapper: {
+                'from': 'DecisionFinaleUP',
+                'to': 'title',
             },
 
             NotificationDateMapper: {

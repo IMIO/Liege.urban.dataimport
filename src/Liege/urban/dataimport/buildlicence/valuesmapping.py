@@ -26,6 +26,19 @@ VALUES_MAPS = {
     'abandonné': 'abandoned',
 },
 
+'eventtype_id_map': table({
+    'header'             : ['decision_event'],
+    'BuildLicence'       : ['delivrance-du-permis-octroi-ou-refus'],
+    'ParcelOutLicence'   : ['delivrance-du-permis-octroi-ou-refus'],
+    'Declaration'        : ['deliberation-college'],
+    'UrbanCertificateOne': ['octroi-cu1'],
+    'UrbanCertificateTwo': ['octroi-cu2'],
+    'MiscDemand'         : ['deliberation-college'],
+    'EnvClassOne'        : ['decision'],
+    'EnvClassTwo'        : ['desision'],
+    'EnvClassThree'      : ['acceptation-de-la-demande'],
+}),
+
 'person_title_map': {
     'monsieur': 'mister',
     'm.': 'mister',
@@ -40,8 +53,8 @@ VALUES_MAPS = {
     'mesdames': 'ladies',
     'mmes': 'ladies',
     'mesdemoiselles': 'ladies',
-    'mademoiselle': 'miss',
-    'melle': 'miss',
+    'mademoiselle': 'madam',
+    'melle': 'madam',
     'ms et mmes': 'madam_and_mister',
     'mr et mme': 'madam_and_mister',
     'm. et mme': 'madam_and_mister',
