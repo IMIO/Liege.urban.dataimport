@@ -23,7 +23,8 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     CapakeyMapper, DescriptionMapper, DecisionEventTitleMapper, SecondDepositEventMapper, \
     SecondDepositDateMapper, InspectionEventMapper, InspectionDateMapper, ArchiveTaskTitle, \
     ArchiveTaskIdMapper, ArchiveTaskDateMapper, DeclarationDecisionDateMapper, \
-    NotificationEventMapper, DeclarationNotificationDateMapper
+    NotificationEventMapper, DeclarationNotificationDateMapper, FDResponseEventMapper, \
+    FDTransmitDateMapper, FDAnswerReceiptDateMapper, FDOpinionMapper
 
 
 OBJECTS_NESTING = [
@@ -40,6 +41,7 @@ OBJECTS_NESTING = [
         ('OPINION REQUEST EVENT', []),
         ('FD FIRST COLLEGE EVENT', []),
         ('FD SECOND COLLEGE EVENT', []),
+        ('FD RESPONSE EVENT', []),
         ('BUILDLICENCE DECISION COLLEGE EVENT', []),
         ('DECLARATION DECISION COLLEGE EVENT', []),
         ('DECLARATION NOTIFICATION EVENT', []),
@@ -466,6 +468,35 @@ FIELDS_MAPPINGS = {
             SecondCollegeDecisionMapper: {
                 'from': 'College/Fav/Def2',
                 'to': 'decision',
+            },
+        },
+    },
+
+    'FD RESPONSE EVENT':
+    {
+        'allowed_containers': ['BuildLicence', 'Article127'],
+
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            FDResponseEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            FDTransmitDateMapper: {
+                'from': 'UP2',
+                'to': 'eventDate',
+            },
+
+            FDAnswerReceiptDateMapper: {
+                'from': 'UP3',
+                'to': 'receiptDate',
+            },
+
+            FDOpinionMapper: {
+                'from': 'Avis',
+                'to': ('externalDecision', 'opinionText'),
             },
         },
     },

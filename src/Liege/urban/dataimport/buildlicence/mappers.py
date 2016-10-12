@@ -926,6 +926,60 @@ class SecondCollegeDecisionMapper(Mapper):
             return 'defavorable'
         return 'favorable'
 
+#
+# FD answer
+#
+
+
+class FDResponseEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'transmis-2eme-dossier-rw'
+
+
+class FDTransmitDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('UP2')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(date) or None
+        return date
+
+
+class FDAnswerReceiptDateMapper(Mapper):
+
+    def mapReceiptdate(self, line):
+        date = self.getData('UP3')
+        date = date and DateTime(date) or None
+        return date
+
+
+class FDOpinionMapper(Mapper):
+
+    def mapExternaldecision(self, line):
+        raw_decision = self.getData('Avis')
+        opinion = raw_decision.lower()
+        if 'rép' in opinion or 'défau' in opinion:
+            return 'favorable-defaut'
+        elif 'défav' in opinion:
+            return 'defavorable'
+        elif 'favorable cond' in opinion or 'fav cond' in opinion:
+            return 'favorable-conditionnel'
+        elif opinion is 'fav' or opinion is 'fav.' or opinion is 'favorable':
+            return 'favorable'
+
+        self.logError(
+            self,
+            line,
+            'unknown FD opinion',
+            {'opinion': raw_decision}
+        )
+        return 'non-determine'
+
+    def mapOpiniontext(self, line):
+        raw_decision = self.getData('Avis')
+        return '<p>%s</p>' % raw_decision
+
 
 #
 # UrbanEvent college final decision
