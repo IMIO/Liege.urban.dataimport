@@ -11,7 +11,7 @@ VALUES_MAPS = {
 'M'       : ['Article127',   '',               '127'],
 'I'       : ['BuildLicence', 'pi',             'PI'],
 'V'       : ['Article127',   '',               'V'],
-'D'       : ['',             '',               'D'],
+'D'       : ['Declaration',  '',               'D'],
 ''        : ['',             '',               ''],
 }),
 
@@ -27,16 +27,10 @@ VALUES_MAPS = {
 },
 
 'eventtype_id_map': table({
-    'header'             : ['decision_event'],
-    'BuildLicence'       : ['delivrance-du-permis-octroi-ou-refus'],
-    'ParcelOutLicence'   : ['delivrance-du-permis-octroi-ou-refus'],
-    'Declaration'        : ['deliberation-college'],
-    'UrbanCertificateOne': ['octroi-cu1'],
-    'UrbanCertificateTwo': ['octroi-cu2'],
-    'MiscDemand'         : ['deliberation-college'],
-    'EnvClassOne'        : ['decision'],
-    'EnvClassTwo'        : ['desision'],
-    'EnvClassThree'      : ['acceptation-de-la-demande'],
+    'header'             : ['decision_event',                       'deposit_event',       'second_deposit_event'],
+    'BuildLicence'       : ['delivrance-du-permis-octroi-ou-refus', 'depot-de-la-demande', 'recepisse-art15-complement'],
+    'Article127'         : ['delivrance-du-permis-octroi-ou-refus', 'depot-de-la-demande', 'recepisse-art15-complement'],
+    'Declaration'        : ['deliberation-college',                 'depot-de-la-demande', 'depot-de-la-demande'],
 }),
 
 'person_title_map': {

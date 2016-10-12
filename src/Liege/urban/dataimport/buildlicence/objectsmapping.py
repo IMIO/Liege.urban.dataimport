@@ -20,7 +20,10 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     SecondCollegeDateMapper, SecondCollegeEventMapper, FirstCollegeDecisionMapper, \
     SecondCollegeDecisionMapper, OldAddressMapper, WorklocationsMapper, \
     OldAddressNumberMapper, AddressFactory, AddressPointMapper, ParcelsMapper, \
-    CapakeyMapper, DescriptionMapper, DecisionEventTitleMapper
+    CapakeyMapper, DescriptionMapper, DecisionEventTitleMapper, SecondDepositEventMapper, \
+    SecondDepositDateMapper, InspectionEventMapper, InspectionDateMapper, ArchiveTaskTitle, \
+    ArchiveTaskIdMapper, ArchiveTaskDateMapper, DeclarationDecisionDateMapper, \
+    NotificationEventMapper, DeclarationNotificationDateMapper
 
 
 OBJECTS_NESTING = [
@@ -30,14 +33,19 @@ OBJECTS_NESTING = [
         ('ADDRESS POINT', []),
         ('PARCELS', []),
         ('DEPOSIT EVENT', []),
+        ('SECOND DEPOSIT EVENT', []),
         ('INQUIRY EVENT', [
             ('CLAIMANTS', []),
         ]),
         ('OPINION REQUEST EVENT', []),
         ('FD FIRST COLLEGE EVENT', []),
         ('FD SECOND COLLEGE EVENT', []),
-        ('DECISION COLLEGE EVENT', []),
-#        ('TASKS', []),
+        ('BUILDLICENCE DECISION COLLEGE EVENT', []),
+        ('DECLARATION DECISION COLLEGE EVENT', []),
+        ('DECLARATION NOTIFICATION EVENT', []),
+        ('INSPECTION EVENT', []),
+        ('TASKS', []),
+        ('ARCHIVE TASK', []),
     ],),
 ]
 
@@ -68,7 +76,7 @@ FIELDS_MAPPINGS = {
             },
 
             ReferenceMapper: {
-                'from': 'NUMDOSSIERBKP',
+                'from': ('NUMDOSSIERBKP', 'NORM_UNIK'),
                 'to': 'reference',
             },
 
@@ -139,7 +147,7 @@ FIELDS_MAPPINGS = {
             },
 
             DescriptionMapper: {
-                'from': ('NOMBRE DE PLANS', 'Ajourne2', 'dateIB', 'ARCH/Cad'),
+                'from': ('NOMBRE DE PLANS', 'Ajourne2'),
                 'to': ('description',),
             },
 
@@ -234,7 +242,7 @@ FIELDS_MAPPINGS = {
 
         'mappers': {
             AddressPointMapper: {
-                'from': 'gidptadresse',
+                'from': ('gidptadresse', 'CAPAKEY'),
                 'to': (),
             }
         },
@@ -275,8 +283,27 @@ FIELDS_MAPPINGS = {
         },
     },
 
+    'SECOND DEPOSIT EVENT':
+    {
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            SecondDepositEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            SecondDepositDateMapper: {
+                'from': 'Date_accuse2',
+                'to': 'eventDate',
+            },
+        },
+    },
+
     'INQUIRY EVENT':
     {
+        'allowed_containers': ['BuildLicence', 'Article127'],
+
         'factory': [UrbanEventFactory],
 
         'mappers': {
@@ -397,6 +424,8 @@ FIELDS_MAPPINGS = {
 
     'FD FIRST COLLEGE EVENT':
     {
+        'allowed_containers': ['BuildLicence', 'Article127'],
+
         'factory': [UrbanEventFactory],
 
         'mappers': {
@@ -419,6 +448,8 @@ FIELDS_MAPPINGS = {
 
     'FD SECOND COLLEGE EVENT':
     {
+        'allowed_containers': ['BuildLicence', 'Article127'],
+
         'factory': [UrbanEventFactory],
 
         'mappers': {
@@ -439,8 +470,10 @@ FIELDS_MAPPINGS = {
         },
     },
 
-    'DECISION COLLEGE EVENT':
+    'BUILDLICENCE DECISION COLLEGE EVENT':
     {
+        'allowed_containers': ['BuildLicence', 'Article127'],
+
         'factory': [UrbanEventFactory],
 
         'mappers': {
@@ -467,6 +500,66 @@ FIELDS_MAPPINGS = {
             DecisionMapper: {
                 'from': 'COLLDECISION',
                 'to': 'decision',
+            },
+        },
+    },
+
+    'DECLARATION DECISION COLLEGE EVENT':
+    {
+        'allowed_containers': ['Declaration'],
+
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            DecisionEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            DecisionEventTitleMapper: {
+                'from': 'DecisionFinaleUP',
+                'to': 'title',
+            },
+
+            DeclarationDecisionDateMapper: {
+                'from': 'COLLDEFINITIF1',
+                'to': 'eventDate',
+            },
+        },
+    },
+
+    'DECLARATION NOTIFICATION EVENT':
+    {
+        'allowed_containers': ['Declaration'],
+
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            NotificationEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            DeclarationNotificationDateMapper: {
+                'from': 'notification',
+                'to': 'eventDate',
+            },
+        },
+    },
+
+    'INSPECTION EVENT':
+    {
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            InspectionEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            InspectionDateMapper: {
+                'from': 'dateIB',
+                'to': 'eventDate',
             },
         },
     },
@@ -499,6 +592,26 @@ FIELDS_MAPPINGS = {
                         'to': 'due_date',
                     }
                 }
+            }
+        },
+    },
+
+    'ARCHIVE TASK':
+    {
+        'factory': [TaskFactory],
+
+        'mappers': {
+            ArchiveTaskTitle: {
+                'from': (),
+                'to': 'title',
+            },
+            ArchiveTaskIdMapper: {
+                'from': 'numpiece',
+                'to': 'id',
+            },
+            ArchiveTaskDateMapper: {
+                'from': 'ARCH/Cad',
+                'to': 'due_date',
             }
         },
     },

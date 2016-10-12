@@ -47,7 +47,11 @@ class ReferenceMapper(PostCreationMapper):
         to_shore = queryAdapter(plone_object, IShore)
         shore = to_shore.display()
 
-        ref = 'PU/{} {}'.format(self.getData('NUMDOSSIERBKP'), shore)
+        type_value = self.getData('NORM_UNIK').upper()
+        row = self.getValueMapping('type_map').get(type_value, '')
+        abbr = row and row['abreviation'] or None
+
+        ref = '{}/{} {}'.format(abbr, self.getData('NUMDOSSIERBKP'), shore)
         return ref
 
 
@@ -212,7 +216,7 @@ class HabitationMapper(Mapper):
         return not bool(habitation_nbr)
 
     def mapAdditionalhabitationsasked(self, line):
-        habitation_nbr = self.getData('NB_LOG_AUTORISES')
+        habitation_nbr = self.getData('NB_LOG')
         if habitation_nbr and habitation_nbr != '0':
             return int(habitation_nbr)
         return ''
@@ -243,14 +247,6 @@ class DescriptionMapper(Mapper):
         report = self.getData('Ajourne2')
         if report:
             description.append('<p>Ajourné: %s</p>' % report)
-
-        IB_date = self.getData('dateIB')
-        if IB_date:
-            description.append('<p>Date d\'inspection: %s</p>' % IB_date)
-
-        arch_date = self.getData('ARCH/Cad')
-        if arch_date:
-            description.append('<p>Date d\'archivage: %s</p>' % arch_date)
 
         description = ''.join(description)
         return description
@@ -302,10 +298,10 @@ class ErrorsMapper(FinalMapper):
                 elif 'workflow state' in error.message:
                     error_trace.append('<p>état final: %s</p>' % (data['state']))
                 elif 'invalid capakey' in error.message:
-                    error_trace.append(
-                        '<p>point addresse %s avec le capakey invalide %s </p>'
-                        % (data['address_point'], data['capakey'].encode('utf-8'))
-                    )
+                    ptid = data['address_point']
+                    pt_msg = ptid and ' (point adresse %s)' % ptid or ''
+                    msg = '<p>capakey invalide %s%s</p>' % (data['capakey'], pt_msg)
+                    error_trace.append(msg)
             error_trace.append('<br />')
         error_trace = ''.join(error_trace)
 
@@ -493,7 +489,7 @@ class AddressFactory(BaseFactory):
                 self,
                 line,
                 'invalid capakey',
-                {'capakey': kwargs['capakey'], 'address_point': kwargs['address_point']}
+                {'capakey': str(kwargs['capakey']), 'address_point': kwargs.get('address_point', None)}
             )
             return None
         return address
@@ -509,6 +505,12 @@ class AddressPointMapper(Mapper):
         address_record = session.query_address_by_gid(gid)
         if address_record:
             return address_record._asdict()
+
+        # in case there's no address point try to use the capakey
+        capakey = self.getData('CAPAKEY', line)
+        if capakey:
+            return {'capakey': capakey}
+
         raise NoObjectToCreateException
 
 
@@ -561,7 +563,11 @@ class EventTypeMapper(Mapper):
         licence = self.importer.current_containers_stack[-1]
         urban_tool = api.portal.get_tool('portal_urban')
         config = urban_tool.getUrbanConfig(licence)
-        return getattr(config.urbaneventtypes, self.eventtype_id).UID()
+
+        event_id_mapping = self.getValueMapping('eventtype_id_map')[licence.portal_type]
+        eventtype_id = event_id_mapping.get(self.eventtype_id, self.eventtype_id)
+
+        return getattr(config.urbaneventtypes, eventtype_id).UID()
 
 
 #
@@ -571,13 +577,33 @@ class EventTypeMapper(Mapper):
 
 class DepositEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'depot-de-la-demande'
+    eventtype_id = 'deposit_event'
 
 
 class DepositDateMapper(Mapper):
 
     def mapEventdate(self, line):
         date = self.getData('DEPOT')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(date) or None
+        return date
+
+
+#
+# Second UrbanEvent deposit
+#
+
+
+class SecondDepositEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'second_deposit_event'
+
+
+class SecondDepositDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('Date_accuse2')
         if not date:
             raise NoObjectToCreateException
         date = date and DateTime(date) or None
@@ -908,7 +934,7 @@ class SecondCollegeDecisionMapper(Mapper):
 
 class DecisionEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'delivrance-du-permis-octroi-ou-refus'
+    eventtype_id = 'decision_event'
 
 
 class DecisionEventTitleMapper(PostCreationMapper):
@@ -931,9 +957,29 @@ class NotificationDateMapper(Mapper):
         return date
 
 
+class DeclarationNotificationDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('notification')
+        date = date and DateTime(date) or None
+        if not date:
+            raise NoObjectToCreateException
+        return date
+
+
 class DecisionDateMapper(Mapper):
 
     def mapDecisiondate(self, line):
+        date = self.getData('COLLDEFINITIF1')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(date) or None
+        return date
+
+
+class DeclarationDecisionDateMapper(Mapper):
+
+    def mapEventdate(self, line):
         date = self.getData('COLLDEFINITIF1')
         if not date:
             raise NoObjectToCreateException
@@ -948,6 +994,36 @@ class DecisionMapper(Mapper):
         if 'autorisé' in raw_decision.lower():
             return 'favorable'
         return 'defavorable'
+
+
+#
+# UrbanEvent notification
+#
+
+
+class NotificationEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'transmis-decision'
+
+
+#
+# UrbanEvent inspection
+#
+
+
+class InspectionEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'inspection-du-bati'
+
+
+class InspectionDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('dateIB')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(date) or None
+        return date
 
 
 #
@@ -1000,5 +1076,35 @@ class TaskDateMapper(Mapper):
 
     def mapDue_date(self, line):
         date = self.getData('Date')
+        date = date and datetime.strptime(date, '%x %X') or None
+        return date
+
+
+#
+# Archive Task (postit)
+#
+
+
+class ArchiveTaskTitle(Mapper):
+    """ """
+
+    def mapTitle(self, line):
+        return 'Archivage'
+
+
+class ArchiveTaskIdMapper(Mapper):
+    """ """
+
+    def mapId(self, line):
+        return 'archivage'
+
+
+class ArchiveTaskDateMapper(Mapper):
+    """ """
+
+    def mapDue_date(self, line):
+        date = self.getData('ARCH/Cad')
+        if not date:
+            raise NoObjectToCreateException
         date = date and datetime.strptime(date, '%x %X') or None
         return date
