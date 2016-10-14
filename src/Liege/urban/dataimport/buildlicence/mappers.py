@@ -175,6 +175,31 @@ class ArchitectMapper(Mapper):
         return archi
 
 
+class PEBMapper(Mapper):
+    """ """
+
+    def mapPebdetails(self, line):
+        """ """
+        details = []
+
+        columns = (
+            'PEB_dateengag',
+            'PEB_engag_comm',
+            'PEB_datefinal',
+            'PEB_final_comm',
+            'PEB_RW',
+            'PEB_dateEngageDem',
+            'PEB_dateEngageDemComm',
+        ),
+
+        for col_name in columns:
+            col_value = self.getData('PEB_dateEngageDem')
+            if col_value:
+                details.append('<p>%s</p>' % col_value)
+
+        return ''.join(details)
+
+
 class SolicitOpinionsMapper(MultivaluedFieldSecondaryTableMapper):
     """
     """
@@ -893,6 +918,10 @@ class FirstCollegeDateMapper(Mapper):
 class FirstCollegeDecisionMapper(Mapper):
 
     def mapDecision(self, line):
+        ajourne = self.getData('Ajourne2')
+        if ajourne:
+            return
+
         raw_decision = self.getData('College/Fav/Def').lower()
         if 'def' in raw_decision:
             return 'defavorable'
@@ -965,7 +994,7 @@ class FDOpinionMapper(Mapper):
             return 'defavorable'
         elif 'favorable cond' in opinion or 'fav cond' in opinion:
             return 'favorable-conditionnel'
-        elif opinion is 'fav' or opinion is 'fav.' or opinion is 'favorable':
+        elif opinion == 'fav' or opinion == 'fav.' or opinion == 'favorable':
             return 'favorable'
 
         self.logError(
@@ -1061,31 +1090,10 @@ class NotificationEventMapper(EventTypeMapper):
 
 
 #
-# UrbanEvent inspection
-#
-
-
-class InspectionEventMapper(EventTypeMapper):
-    """ """
-    eventtype_id = 'inspection-du-bati'
-
-
-class InspectionDateMapper(Mapper):
-
-    def mapEventdate(self, line):
-        date = self.getData('dateIB')
-        if not date:
-            raise NoObjectToCreateException
-        date = date and DateTime(date) or None
-        return date
-
-
-#
 # Tasks (postits)
 #
 
 # factory
-
 
 class TaskFactory(BaseFactory):
     """ """
@@ -1158,6 +1166,36 @@ class ArchiveTaskDateMapper(Mapper):
 
     def mapDue_date(self, line):
         date = self.getData('ARCH/Cad')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and datetime.strptime(date, '%x %X') or None
+        return date
+
+
+#
+# Inspection Task (postit)
+#
+
+
+class InspectionTaskTitle(Mapper):
+    """ """
+
+    def mapTitle(self, line):
+        return 'Transfert inspection bâti'
+
+
+class InspectionTaskIdMapper(Mapper):
+    """ """
+
+    def mapId(self, line):
+        return 'inspection-bati'
+
+
+class InspectionTaskDateMapper(Mapper):
+    """ """
+
+    def mapDue_date(self, line):
+        date = self.getData('dateIB')
         if not date:
             raise NoObjectToCreateException
         date = date and datetime.strptime(date, '%x %X') or None

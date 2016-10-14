@@ -8,10 +8,10 @@ VALUES_MAPS = {
 'header'  : ['portal_type',  'foldercategory', 'abreviation'],
 'N'       : ['BuildLicence', 'pn',             'PU'],
 'U'       : ['BuildLicence', 'pu',             'U'],
-'M'       : ['Article127',   '',               '127'],
+'M'       : ['',   '',               '127'],  # Article127
 'I'       : ['BuildLicence', 'pi',             'PI'],
-'V'       : ['Article127',   '',               'V'],
-'D'       : ['Declaration',  '',               'D'],
+'V'       : ['',   '',               'V'],  # Article127
+'D'       : ['',  '',               'D'],  # Declaration
 ''        : ['',             '',               ''],
 }),
 

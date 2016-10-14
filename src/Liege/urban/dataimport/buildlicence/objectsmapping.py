@@ -21,10 +21,11 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     SecondCollegeDecisionMapper, OldAddressMapper, WorklocationsMapper, \
     OldAddressNumberMapper, AddressFactory, AddressPointMapper, ParcelsMapper, \
     CapakeyMapper, DescriptionMapper, DecisionEventTitleMapper, SecondDepositEventMapper, \
-    SecondDepositDateMapper, InspectionEventMapper, InspectionDateMapper, ArchiveTaskTitle, \
+    SecondDepositDateMapper, InspectionTaskTitle, InspectionTaskIdMapper, ArchiveTaskTitle, \
     ArchiveTaskIdMapper, ArchiveTaskDateMapper, DeclarationDecisionDateMapper, \
     NotificationEventMapper, DeclarationNotificationDateMapper, FDResponseEventMapper, \
-    FDTransmitDateMapper, FDAnswerReceiptDateMapper, FDOpinionMapper
+    FDTransmitDateMapper, FDAnswerReceiptDateMapper, FDOpinionMapper, InspectionTaskDateMapper, \
+    PEBMapper
 
 
 OBJECTS_NESTING = [
@@ -45,9 +46,9 @@ OBJECTS_NESTING = [
         ('BUILDLICENCE DECISION COLLEGE EVENT', []),
         ('DECLARATION DECISION COLLEGE EVENT', []),
         ('DECLARATION NOTIFICATION EVENT', []),
-        ('INSPECTION EVENT', []),
         ('TASKS', []),
         ('ARCHIVE TASK', []),
+        ('INSPECTION TASK', []),
     ],),
 ]
 
@@ -111,6 +112,19 @@ FIELDS_MAPPINGS = {
             ArchitectMapper: {
                 'from': 'NUMARCHITECTE',
                 'to': 'architects',
+            },
+
+            PEBMapper: {
+                'from': (
+                    'PEB_dateengag',
+                    'PEB_engag_comm',
+                    'PEB_datefinal',
+                    'PEB_final_comm',
+                    'PEB_RW',
+                    'PEB_dateEngageDem',
+                    'PEB_dateEngageDemComm',
+                ),
+                'to': 'pebDetails',
             },
 
             SolicitOpinionsMapper: {
@@ -578,23 +592,6 @@ FIELDS_MAPPINGS = {
         },
     },
 
-    'INSPECTION EVENT':
-    {
-        'factory': [UrbanEventFactory],
-
-        'mappers': {
-            InspectionEventMapper: {
-                'from': (),
-                'to': 'eventtype',
-            },
-
-            InspectionDateMapper: {
-                'from': 'dateIB',
-                'to': 'eventDate',
-            },
-        },
-    },
-
     'TASKS':
     {
         'factory': [TaskFactory],
@@ -627,6 +624,26 @@ FIELDS_MAPPINGS = {
         },
     },
 
+    'INSPECTION TASK':
+    {
+        'factory': [TaskFactory],
+
+        'mappers': {
+            InspectionTaskTitle: {
+                'from': (),
+                'to': 'title',
+            },
+            InspectionTaskIdMapper: {
+                'from': (),
+                'to': 'id',
+            },
+            InspectionTaskDateMapper: {
+                'from': 'dateIB',
+                'to': 'due_date',
+            }
+        },
+    },
+
     'ARCHIVE TASK':
     {
         'factory': [TaskFactory],
@@ -637,7 +654,7 @@ FIELDS_MAPPINGS = {
                 'to': 'title',
             },
             ArchiveTaskIdMapper: {
-                'from': 'numpiece',
+                'from': (),
                 'to': 'id',
             },
             ArchiveTaskDateMapper: {
