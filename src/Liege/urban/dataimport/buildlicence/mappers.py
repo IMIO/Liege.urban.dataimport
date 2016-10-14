@@ -920,7 +920,7 @@ class FirstCollegeDecisionMapper(Mapper):
     def mapDecision(self, line):
         ajourne = self.getData('Ajourne2')
         if ajourne:
-            return
+            return []
 
         raw_decision = self.getData('College/Fav/Def').lower()
         if 'def' in raw_decision:
