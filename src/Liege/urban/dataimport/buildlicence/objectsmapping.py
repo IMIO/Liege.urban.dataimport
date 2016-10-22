@@ -456,7 +456,7 @@ FIELDS_MAPPINGS = {
             },
 
             FirstCollegeDecisionMapper: {
-                'from': 'College/Fav/Def',
+                'from': ('College/Fav/Def', 'Ajourne2'),
                 'to': 'decision',
             },
         },
