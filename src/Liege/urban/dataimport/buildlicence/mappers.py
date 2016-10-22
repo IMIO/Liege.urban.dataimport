@@ -208,6 +208,8 @@ class SolicitOpinionsMapper(MultivaluedFieldSecondaryTableMapper):
         urban_tool = api.portal.get_tool('portal_urban')
         type_value = self.getData('NORM_UNIK', self.main_line).upper()
         portal_type = self.getValueMapping('type_map')[type_value]['portal_type']
+        if not portal_type:
+            raise NoObjectToCreateException
         folderconfig = getattr(urban_tool, portal_type.lower())
         event_types_path = '/'.join(folderconfig.urbaneventtypes.getPhysicalPath())
         service_name = line[1].replace('.', '').replace('(', ' ').replace(')', ' ')
@@ -920,7 +922,7 @@ class FirstCollegeDecisionMapper(Mapper):
     def mapDecision(self, line):
         ajourne = self.getData('Ajourne2')
         if ajourne:
-            return
+            return []
 
         raw_decision = self.getData('College/Fav/Def').lower()
         if 'def' in raw_decision:
