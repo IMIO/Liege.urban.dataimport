@@ -1122,6 +1122,8 @@ class TaskDescriptionMapper(Mapper):
     """ """
 
     def mapTask_description(self, line):
+        foldermanager = self.getData('Gestionnaire')
+        foldermanager = foldermanager and '<p>Agent traitant: %s</p>' % foldermanager or ''
         observations = self.getData('remarques')
         observations = observations and '<p>Remarques: %s</p>' % observations or ''
         from_ = self.getData('Expéditeur')
@@ -1131,7 +1133,7 @@ class TaskDescriptionMapper(Mapper):
         expedition = self.getData('Expédition')
         expedition = expedition and '<p>Expédition: %s</p>' % expedition or ''
 
-        description = '{}{}{}{}'.format(observations, from_, to, expedition)
+        description = '{}{}{}{}{}'.format(foldermanager, observations, from_, to, expedition)
         return description.decode('utf-8')
 
 
