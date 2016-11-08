@@ -612,7 +612,7 @@ FIELDS_MAPPINGS = {
                         'to': 'id',
                     },
                     TaskDescriptionMapper: {
-                        'from': ('remarques', 'Destinataire', 'Expéditeur', 'Expédition'),
+                        'from': ('remarques', 'Destinataire', 'Expéditeur', 'Expédition', 'Gestionnaire'),
                         'to': 'task_description',
                     },
                     TaskDateMapper: {
