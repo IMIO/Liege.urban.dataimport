@@ -904,7 +904,7 @@ class OpinionMapper(Mapper):
 
 class FirstCollegeEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'pp-fd'
+    eventtype_id = 'transmis-2eme-dossier-rw'
 
 
 class FirstCollegeDateMapper(Mapper):
@@ -936,7 +936,7 @@ class FirstCollegeDecisionMapper(Mapper):
 
 class SecondCollegeEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'pp-fd'
+    eventtype_id = 'transmis-2eme-dossier-rw'
 
 
 class SecondCollegeDateMapper(Mapper):
@@ -1019,7 +1019,7 @@ class FDOpinionMapper(Mapper):
 
 class DecisionEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'decision_event'
+    eventtype_id = 'delivrance-du-permis-octroi-ou-refus'
 
 
 class DecisionEventTitleMapper(PostCreationMapper):
