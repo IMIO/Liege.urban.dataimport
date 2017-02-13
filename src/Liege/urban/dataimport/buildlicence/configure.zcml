@@ -5,6 +5,12 @@
 
     <adapter
         for="Liege.urban.dataimport.buildlicence.importer.BuildlicenceImporter"
+        factory=".splitter.LiegeImportSplitter"
+        provides="imio.urban.dataimport.interfaces.IImportSplitter"
+        />
+
+    <adapter
+        for="Liege.urban.dataimport.buildlicence.importer.BuildlicenceImporter"
         factory=".importer.LicencesValuesMapping"
         provides="imio.urban.dataimport.interfaces.IValuesMapping"
         name="values mapping"

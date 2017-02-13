@@ -14,8 +14,8 @@ class BuildlicenceImporter(AccessImporter):
 
     implements(ILiegeBuildlicenceImporter)
 
-    def __init__(self, db_name='P_tables.mdb', table_name='PermisUrba', key_column='NUMDOSSIERBKP', savepoint_length=0):
-        super(BuildlicenceImporter, self).__init__(db_name, table_name, key_column, savepoint_length)
+    def __init__(self, db_name='P_tables.mdb', table_name='PermisUrba', key_column='NUMDOSSIERBKP', **kwargs):
+        super(BuildlicenceImporter, self).__init__(db_name, table_name, key_column, **kwargs)
 
 
 class LiegeMapping(ObjectsMapping):
