@@ -119,7 +119,10 @@ class WorklocationsMapper(Mapper):
 
     def mapWorklocations(self, line):
         """ """
-        street_code = int(self.getData('CODE_RUE'))
+        raw_street_code = self.getData('CODE_RUE')
+        if not raw_street_code:
+            return []
+        street_code = int(raw_street_code)
         street = self.streets_by_code.get(street_code, None)
         street = street or self._create_street()
         return [{'street': street.UID(), 'number': ''}]
