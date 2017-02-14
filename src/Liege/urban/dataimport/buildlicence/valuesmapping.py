@@ -7,11 +7,11 @@ VALUES_MAPS = {
 'type_map': table({
 'header'  : ['portal_type',  'foldercategory', 'abreviation'],
 'N'       : ['BuildLicence', 'pn',             'PU'],
-'U'       : ['BuildLicence', 'pu',             'U'],
-'M'       : ['',   '',               '127'],  # Article127
-'I'       : ['BuildLicence', 'pi',             'PI'],
-'V'       : ['',   '',               'V'],  # Article127
-'D'       : ['',  '',               'D'],  # Declaration
+'U'       : ['', 'pu',             'U'],
+'M'       : ['Article127',   '',               'M'],  # Article127
+'I'       : ['', 'pi',             'PI'],
+'V'       : ['Article127',   '',               'V'],  # Article127
+'D'       : ['Declaration',  '',               'D'],  # Declaration
 ''        : ['',             '',               ''],
 }),
 

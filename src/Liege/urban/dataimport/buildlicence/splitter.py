@@ -24,5 +24,6 @@ class LiegeImportSplitter(object):
 
         depot_date = parser.parse(self.importer.getData('DEPOT', line))
         allowed_date = depot_date.year < 2014
+        allowed_type = self.importer.getData('NORM_UNIK', line) in ['D', 'N', 'M', 'V']
 
-        return allowed_divider and allowed_date
+        return allowed_divider and allowed_date and allowed_type

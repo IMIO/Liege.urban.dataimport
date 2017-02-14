@@ -1025,6 +1025,11 @@ class DecisionEventMapper(EventTypeMapper):
     eventtype_id = 'delivrance-du-permis-octroi-ou-refus'
 
 
+class DeclarationDecisionEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'deliberation-college'
+
+
 class DecisionEventTitleMapper(PostCreationMapper):
 
     def mapTitle(self, line, plone_object):
