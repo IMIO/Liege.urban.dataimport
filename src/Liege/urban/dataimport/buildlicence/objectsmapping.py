@@ -397,6 +397,8 @@ FIELDS_MAPPINGS = {
 
     'OPINION REQUEST EVENT':
     {
+        'allowed_containers': ['BuildLicence', 'Article127'],
+
         'factory': [OpinionRequestEventFactory],
 
         'mappers': {

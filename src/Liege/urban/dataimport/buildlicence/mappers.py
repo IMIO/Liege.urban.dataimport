@@ -215,7 +215,7 @@ class SolicitOpinionsMapper(MultivaluedFieldSecondaryTableMapper):
             raise NoObjectToCreateException
         folderconfig = getattr(urban_tool, portal_type.lower())
         event_types_path = '/'.join(folderconfig.urbaneventtypes.getPhysicalPath())
-        service_name = line[1].replace('.', '').replace('(', ' ').replace(')', ' ')
+        service_name = line[1].replace('.', '').replace('(', ' ').replace(')', ' ').replace('-', ' ')
         catalog = api.portal.get_tool('portal_catalog')
         brains = catalog(Title=service_name, portal_type='OpinionRequestEventType', path=event_types_path)
         if len(brains) == 1:
