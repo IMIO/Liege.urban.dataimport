@@ -16,6 +16,7 @@
 
     <include package=".architects" />
     <include package=".buildlicence" />
+    <include package=".archives" />
 
     <!-- Register the installation GenericSetup extension profile -->
     <genericsetup:registerProfile
