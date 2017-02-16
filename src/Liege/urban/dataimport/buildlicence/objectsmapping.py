@@ -25,7 +25,7 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     ArchiveTaskIdMapper, ArchiveTaskDateMapper, DeclarationDecisionDateMapper, \
     NotificationEventMapper, DeclarationNotificationDateMapper, FDResponseEventMapper, \
     FDTransmitDateMapper, FDAnswerReceiptDateMapper, FDOpinionMapper, InspectionTaskDateMapper, \
-    PEBMapper
+    PEBMapper, DeclarationDecisionEventMapper
 
 
 OBJECTS_NESTING = [
@@ -397,6 +397,8 @@ FIELDS_MAPPINGS = {
 
     'OPINION REQUEST EVENT':
     {
+        'allowed_containers': ['BuildLicence', 'Article127'],
+
         'factory': [OpinionRequestEventFactory],
 
         'mappers': {
@@ -556,7 +558,7 @@ FIELDS_MAPPINGS = {
         'factory': [UrbanEventFactory],
 
         'mappers': {
-            DecisionEventMapper: {
+            DeclarationDecisionEventMapper: {
                 'from': (),
                 'to': 'eventtype',
             },

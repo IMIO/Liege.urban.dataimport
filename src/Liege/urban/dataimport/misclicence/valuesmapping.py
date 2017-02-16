@@ -5,32 +5,33 @@ from imio.urban.dataimport.mapping import table
 VALUES_MAPS = {
 
 'type_map': table({
-'header'  : ['portal_type',  'foldercategory', 'abreviation'],
-'N'       : ['BuildLicence', 'pn',             'PU'],
-'U'       : ['', 'pu',             'U'],
-'M'       : ['Article127',   '',               'M'],  # Article127
-'I'       : ['', 'pi',             'PI'],
-'V'       : ['Article127',   '',               'V'],  # Article127
-'D'       : ['Declaration',  '',               'D'],  # Declaration
-''        : ['',             '',               ''],
+'header'  : ['portal_type',          'abreviation'],
+'AP'      : ['PreliminaryNotice',    'AP'],
+'CU'      : ['UrbanCertificateOne',  'CU1'],
+'PAT'     : ['PatrimonyCertificate', 'PAT'],
+'DUP'     : ['Declaration',          'D'],
+'ADEM'    : ['',                     ''],
+'AMEN'    : ['',                     ''],
+'AT'      : ['',                     ''],
+'DEM'     : ['',                     ''],
+'DIV'     : ['',                     ''],
+'DIM'     : ['',                     ''],
+'PAP'     : ['',                     ''],
+'TER'     : ['',                     ''],
 }),
 
 'state_map': {
-    'autorisé': 'accepted',
-    'recevable': 'accepted',
-    'refusé': 'refused',
-    'refusé tacite': 'refused',
-    'refusé par défaut': 'refused',
-    'irrecevable': 'refused',
-    'sans suite': 'field_away',
-    'abandonné': 'abandoned',
+    'Favorable': 'accepted',
+    'Défavorable': 'accepted',
 },
 
 'eventtype_id_map': table({
-    'header'             : ['decision_event',                       'deposit_event',       'second_deposit_event'],
-    'BuildLicence'       : ['delivrance-du-permis-octroi-ou-refus', 'depot-de-la-demande', 'recepisse-art15-complement'],
-    'Article127'         : ['delivrance-du-permis-octroi-ou-refus', 'depot-de-la-demande', 'recepisse-art15-complement'],
-    'Declaration'        : ['deliberation-college',                 'depot-de-la-demande', 'depot-de-la-demande'],
+    'header'               : ['decision_event',       'deposit_event'],
+    'UrbanCertificateTwo'  : ['copy_of_octroi-cu2',   'depot-de-la-demande'],
+    'UrbanCertificateOne'  : ['',                     'copy_of_depot-de-la-demande'],
+    'PreliminaryNotice'    : ['',                     'copy_of_depot-de-la-demande'],
+    'Declaration'          : ['',                     'depot-de-la-demande'],
+    'PatrimonyCertificate' : ['',                     'convocation'],
 }),
 
 'person_title_map': {

@@ -1,0 +1,33 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="Liege.urban.dataimport">
+
+    <adapter
+        for="Liege.urban.dataimport.archives.importer.ArchivesImporter"
+        factory=".splitter.LiegeImportSplitter"
+        provides="imio.urban.dataimport.interfaces.IImportSplitter"
+        />
+
+    <adapter
+        for="Liege.urban.dataimport.archives.importer.ArchivesImporter"
+        factory=".importer.ArchivesValuesMapping"
+        provides="imio.urban.dataimport.interfaces.IValuesMapping"
+        name="values mapping"
+        />
+
+    <adapter
+        for="Liege.urban.dataimport.interfaces.ILiegeArchivesImporter"
+        factory=".importer.LiegeArchivesMapping"
+        provides="imio.urban.dataimport.interfaces.IObjectsMapping"
+        name="objects mapping"
+        />
+
+    <adapter
+        for="imio.urban.dataimport.interfaces.IImportSettingsForm"
+        factory=".settings.ArchivesImporterFromImportSettings"
+        provides="imio.urban.dataimport.access.interfaces.IAccessImporter"
+        name="liege archives"
+        />
+
+</configure>

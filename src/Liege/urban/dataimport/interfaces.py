@@ -14,5 +14,13 @@ class ILiegeBuildlicenceImporter(IUrbanDataImporter):
     """ Marker interface for ILiege buildlicence importer """
 
 
+class ILiegeMisclicenceImporter(IUrbanDataImporter):
+    """ Marker interface for ILiege buildlicence importer """
+
+
+class ILiegeArchivesImporter(IUrbanDataImporter):
+    """ Marker interface for ILiege buildlicence importer """
+
+
 class ILiegeArchitectsImporter(IUrbanDataImporter):
     """ Marker interface for ILiege architects importer """
