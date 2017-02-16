@@ -7,6 +7,7 @@ from Liege.urban.dataimport.archives.mappers import LicenceSubjectMapper
 from Liege.urban.dataimport.archives.mappers import WorklocationsMapper
 from Liege.urban.dataimport.archives.mappers import StreetTableMapper
 from Liege.urban.dataimport.archives.mappers import StreetNumberMapper
+from Liege.urban.dataimport.archives.mappers import OldLocationMapper
 from Liege.urban.dataimport.archives.mappers import CompletionStateMapper
 from Liege.urban.dataimport.archives.mappers import ErrorsMapper
 from Liege.urban.dataimport.archives.mappers import ContactFactory
@@ -70,6 +71,11 @@ FIELDS_MAPPINGS = {
                 'to': (),
             },
 
+            OldLocationMapper: {
+                'from': ('Repère1', 'Repère1b', 'Repère3', 'AncienNomRue'),
+                'to': ('description'),
+            },
+
             CompletionStateMapper: {
                 'from': (),
                 'to': (),  # <- no field to fill, its the workflow state that has to be changed
@@ -112,7 +118,7 @@ FIELDS_MAPPINGS = {
             },
 
             DecisionDateMapper: {
-                'from': 'Date2',
+                'from': 'Date',
                 'to': 'eventDate',
             },
         },

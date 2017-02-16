@@ -72,6 +72,29 @@ class WorklocationsMapper(Mapper):
         return [{'street': street.UID(), 'number': ''}]
 
 
+class OldLocationMapper(Mapper):
+    """ """
+
+    def mapDescription(self, line):
+        description_lines = []
+
+        rep1 = self.getData('Repère1')
+        rep1b = self.getData('Repère1b')
+        rep3 = self.getData('Repère3')
+        if rep1 == rep1b:
+            location = self.getValueMapping('repere_map').get(rep1, rep1)
+            description_lines.append('<p>localité: {}</p>'.format(location))
+        else:
+            rep_line = '<p>repères: {}, {}, {}</p>'.format(rep1, rep1b, rep3)
+            description_lines.append(rep_line)
+
+        old_street_name = self.getData('AncienNomRue')
+        if old_street_name:
+            description_lines.append('<p>ancien nom de rue: {}</p>'.format(old_street_name))
+
+        return ''.join(description_lines) + '<br/>'
+
+
 class StreetNumberMapper(PostCreationMapper):
     """ """
 
@@ -114,6 +137,8 @@ class ErrorsMapper(FinalMapper):
                 data = error.data
                 if 'street' in error.message:
                     error_trace.append('<p>adresse : %s %s </p>' % (data['num'], data['address']))
+                if 'decision date' in error.message:
+                    error_trace.append('<p>date de la decision : %s </p>' % data['date'])
             error_trace.append('<br />')
         error_trace = ''.join(error_trace)
 
@@ -190,6 +215,11 @@ class DecisionEventMapper(EventTypeMapper):
 class DecisionDateMapper(Mapper):
 
     def mapEventdate(self, line):
-        date = self.getData('Date2')
-        date = date and DateTime(date) or None
+        date = self.getData('Date')
+        try:
+            date = date and DateTime(date) or None
+        except:
+            self.logError(self, line, 'decision date wrong format', {'date': date})
+        if not date:
+            raise NoObjectToCreateException
         return date

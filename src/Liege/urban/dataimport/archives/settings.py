@@ -21,8 +21,8 @@ class ArchivesImporterFromImportSettings(AccessImporterFromImportSettings):
 
         db_settings = {
             'db_name': 'Archives2013.mdb',
-            'table_name': 'Après 1977',
-            'key_column': 'Dossier',
+            'table_name': 'Global',
+            'key_column': 'Numéro',
         }
 
         settings.update(db_settings)
