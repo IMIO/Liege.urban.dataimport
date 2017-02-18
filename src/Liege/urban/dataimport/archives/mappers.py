@@ -119,7 +119,7 @@ class CompletionStateMapper(PostCreationMapper):
         workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
         workflow_id = workflow_def.getId()
         workflow_state = workflow_tool.getStatusOf(workflow_id, plone_object)
-        workflow_state['review_state'] = 'authorized'
+        workflow_state['review_state'] = 'accepted'
         workflow_tool.setStatusOf(workflow_id, plone_object, workflow_state.copy())
 
 
