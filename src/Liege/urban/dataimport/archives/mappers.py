@@ -222,4 +222,7 @@ class DecisionDateMapper(Mapper):
             self.logError(self, line, 'decision date wrong format', {'date': date})
         if not date:
             raise NoObjectToCreateException
+        if int(date.year()) > 2017:
+            new_date = '%s/%s/%s' % (str(int(date.year()) - 100), date.month(), date.day())
+            date = DateTime(new_date)
         return date
