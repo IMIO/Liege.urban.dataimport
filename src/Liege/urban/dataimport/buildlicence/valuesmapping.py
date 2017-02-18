@@ -22,8 +22,8 @@ VALUES_MAPS = {
     'refusé tacite': 'refused',
     'refusé par défaut': 'refused',
     'irrecevable': 'refused',
-    'sans suite': 'field_away',
-    'abandonné': 'abandoned',
+    'sans suite': 'retired',
+    'abandonné': 'retired',
 },
 
 'eventtype_id_map': table({
