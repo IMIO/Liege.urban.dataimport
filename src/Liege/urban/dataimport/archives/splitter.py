@@ -17,4 +17,7 @@ class LiegeImportSplitter(object):
 
     def allow(self, line):
         """ """
-        return True
+        folder_number = int(float(self.importer.getData('Numéro', line)))
+        allowed_divider = folder_number % self.divider == self.target
+
+        return allowed_divider
