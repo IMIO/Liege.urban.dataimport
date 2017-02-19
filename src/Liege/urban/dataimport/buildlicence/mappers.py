@@ -672,7 +672,10 @@ class InquiryStartDateMapper(Mapper):
         date = self.getData('DébutPUB')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        try:
+            date = date and DateTime(date) or None
+        except:
+            raise NoObjectToCreateException
         return date
 
 
@@ -680,7 +683,10 @@ class InquiryEndDateMapper(Mapper):
 
     def mapInvestigationend(self, line):
         date = self.getData('FinPUB')
-        date = date and DateTime(date) or None
+        try:
+            date = date and DateTime(date) or None
+        except:
+            raise NoObjectToCreateException
         return date
 
 
@@ -688,7 +694,10 @@ class InquiryExplainationDateMapper(Mapper):
 
     def mapExplanationstartsdate(self, line):
         date = self.getData('DateBU')
-        date = date and DateTime(date) or None
+        try:
+            date = date and DateTime(date) or None
+        except:
+            raise NoObjectToCreateException
         return date
 
 
