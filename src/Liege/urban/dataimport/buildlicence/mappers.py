@@ -1183,7 +1183,7 @@ class TaskDateMapper(Mapper):
 
     def mapDue_date(self, line):
         date = self.getData('Date')
-        date = date and datetime.strptime(date, '%x %X') or None
+        date = date and datetime.strptime(date, '%d/%m/%Y') or None
         return date
 
 
@@ -1213,7 +1213,7 @@ class ArchiveTaskDateMapper(Mapper):
         date = self.getData('ARCH/Cad')
         if not date:
             raise NoObjectToCreateException
-        date = date and datetime.strptime(date, '%x %X') or None
+        date = date and datetime.strptime(date, '%d/%m/%Y') or None
         return date
 
 
@@ -1243,5 +1243,8 @@ class InspectionTaskDateMapper(Mapper):
         date = self.getData('dateIB')
         if not date:
             raise NoObjectToCreateException
-        date = date and datetime.strptime(date, '%x %X') or None
+        try:
+            date = date and datetime.strptime(date, '%d/%m/%Y') or None
+        except:
+            import ipdb; ipdb.set_trace()
         return date
