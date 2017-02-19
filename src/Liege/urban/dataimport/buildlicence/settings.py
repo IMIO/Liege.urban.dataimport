@@ -20,8 +20,8 @@ class BuildlicenceImporterFromImportSettings(AccessImporterFromImportSettings):
         settings = super(BuildlicenceImporterFromImportSettings, self).get_importer_settings()
 
         db_settings = {
-            'db_name': 'P_tables.mdb',
-            'table_name': 'PermisUrba_2017-02-17',
+            'db_name': 'P_tables_IB.mdb',
+            'table_name': 'PermisUrba',
             'key_column': 'NUMDOSSIERBKP',
         }
 
