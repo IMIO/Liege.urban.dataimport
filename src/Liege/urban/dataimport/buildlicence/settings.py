@@ -21,7 +21,7 @@ class BuildlicenceImporterFromImportSettings(AccessImporterFromImportSettings):
 
         db_settings = {
             'db_name': 'P_tables.mdb',
-            'table_name': 'PermisUrba',
+            'table_name': 'PermisUrba_2017-02-17',
             'key_column': 'NUMDOSSIERBKP',
         }
 

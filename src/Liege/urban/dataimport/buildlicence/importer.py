@@ -14,7 +14,7 @@ class BuildlicenceImporter(AccessImporter):
 
     implements(ILiegeBuildlicenceImporter)
 
-    def __init__(self, db_name='P_tables.mdb', table_name='PermisUrba', key_column='NUMDOSSIERBKP', **kwargs):
+    def __init__(self, db_name='P_tables.mdb', table_name='PermisUrba_2017-2-17', key_column='NUMDOSSIERBKP', **kwargs):
         super(BuildlicenceImporter, self).__init__(db_name, table_name, key_column, **kwargs)
 
 

@@ -27,10 +27,10 @@ VALUES_MAPS = {
 },
 
 'eventtype_id_map': table({
-    'header'             : ['decision_event',                       'deposit_event',       'second_deposit_event'],
-    'BuildLicence'       : ['delivrance-du-permis-octroi-ou-refus', 'depot-de-la-demande', 'recepisse-art15-complement'],
-    'Article127'         : ['delivrance-du-permis-octroi-ou-refus', 'depot-de-la-demande', 'recepisse-art15-complement'],
-    'Declaration'        : ['deliberation-college',                 'depot-de-la-demande', 'depot-de-la-demande'],
+    'header'             : ['decision_event',                       'deposit_event',       'second_deposit_event',       'notification_event'],
+    'BuildLicence'       : ['delivrance-du-permis-octroi-ou-refus', 'depot-de-la-demande', 'recepisse-art15-complement', 'notification-de-la-decision'],
+    'Article127'         : ['delivrance-du-permis-octroi-ou-refus', 'depot-de-la-demande', 'recepisse-art15-complement', 'transmis-decision-aux-reclamants'],
+    'Declaration'        : ['deliberation-college',                 'depot-de-la-demande', 'depot-de-la-demande',        'transmis-decision'],
 }),
 
 'person_title_map': {

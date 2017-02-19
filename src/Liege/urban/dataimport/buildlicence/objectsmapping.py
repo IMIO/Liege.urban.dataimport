@@ -30,25 +30,26 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
 
 OBJECTS_NESTING = [
     ('LICENCE', [
-#        ('PERSON CONTACT', []),
-#        ('CORPORATION CONTACT', []),
-#        ('ADDRESS POINT', []),
-#        ('PARCELS', []),
-#        ('DEPOSIT EVENT', []),
-#        ('SECOND DEPOSIT EVENT', []),
-#        ('INQUIRY EVENT', [
-#            ('CLAIMANTS', []),
-#        ]),
-#        ('OPINION REQUEST EVENT', []),
-#        ('FD FIRST COLLEGE EVENT', []),
-#        ('FD SECOND COLLEGE EVENT', []),
-#        ('FD RESPONSE EVENT', []),
-#        ('BUILDLICENCE DECISION COLLEGE EVENT', []),
-#        ('DECLARATION DECISION COLLEGE EVENT', []),
-#        ('DECLARATION NOTIFICATION EVENT', []),
-#        ('TASKS', []),
-#        ('ARCHIVE TASK', []),
-#        ('INSPECTION TASK', []),
+        ('PERSON CONTACT', []),
+        ('CORPORATION CONTACT', []),
+        ('ADDRESS POINT', []),
+        ('PARCELS', []),
+        ('DEPOSIT EVENT', []),
+        ('SECOND DEPOSIT EVENT', []),
+        ('INQUIRY EVENT', [
+            ('CLAIMANTS', []),
+        ]),
+        ('OPINION REQUEST EVENT', []),
+        ('FD FIRST COLLEGE EVENT', []),
+        ('FD SECOND COLLEGE EVENT', []),
+        ('FD RESPONSE EVENT', []),
+        ('BUILDLICENCE DECISION COLLEGE EVENT', []),
+        ('BUILDLICENCE NOTIFICATION EVENT', []),
+        ('DECLARATION DECISION COLLEGE EVENT', []),
+        ('DECLARATION NOTIFICATION EVENT', []),
+        ('TASKS', []),
+        ('ARCHIVE TASK', []),
+        ('INSPECTION TASK', []),
     ],),
 ]
 
@@ -63,14 +64,14 @@ FIELDS_MAPPINGS = {
                     'from': 'NUMDOSSIERBKP',
                     'to': 'id',
                 },
-#                {
-#                    'from': 'Objettrav',
-#                    'to': 'licenceSubject',
-#                },
-#                {
-#                    'from': 'UPNumero',
-#                    'to': 'referenceDGATLP',
-#                },
+                {
+                    'from': 'Objettrav',
+                    'to': 'licenceSubject',
+                },
+                {
+                    'from': 'UPNumero',
+                    'to': 'referenceDGATLP',
+                },
             ),
 
             TypeAndCategoryMapper: {
@@ -78,104 +79,104 @@ FIELDS_MAPPINGS = {
                 'to': ('portal_type', 'foldercategory'),
             },
 
-#            ReferenceMapper: {
-#                'from': ('NUMDOSSIERBKP', 'NORM_UNIK'),
-#                'to': 'reference',
-#            },
+            ReferenceMapper: {
+                'from': ('NUMDOSSIERBKP', 'NORM_UNIK'),
+                'to': 'reference',
+            },
 
-#            FolderCategoryMapper: {
-#                'from': 'CODE NAT TRAVAUX',
-#                'to': 'folderCategoryTownship',
-#            },
+            FolderCategoryMapper: {
+                'from': 'CODE NAT TRAVAUX',
+                'to': 'folderCategoryTownship',
+            },
 
-#            AnnoncedDelayMapper: {
-#                'from': 'Délai',
-#                'to': 'annoncedDelay',
-#            },
+            AnnoncedDelayMapper: {
+                'from': 'Délai',
+                'to': 'annoncedDelay',
+            },
 
-#            OldAddressMapper: {
-#                'table': 'Rues',
-#                'KEYS': ('Correspondance_adr', 'Numero'),
-#                'mappers': {
-#                    WorklocationsMapper: {
-#                        'from': ('CODE_RUE', 'Localite', 'PARTICULE', 'RUE'),
-#                        'to': 'workLocations',
-#                    },
-#                }
-#            },
+            OldAddressMapper: {
+                'table': 'Rues',
+                'KEYS': ('Correspondance_adr', 'Numero'),
+                'mappers': {
+                    WorklocationsMapper: {
+                        'from': ('CODE_RUE', 'Localite', 'PARTICULE', 'RUE'),
+                        'to': 'workLocations',
+                    },
+                }
+            },
 
-#            OldAddressNumberMapper: {
-#                'from': ('NUM', 'Num2'),
-#                'to': 'workLocations',
-#            },
+            OldAddressNumberMapper: {
+                'from': ('NUM', 'Num2'),
+                'to': 'workLocations',
+            },
 
-#            ArchitectMapper: {
-#                'from': 'NUMARCHITECTE',
-#                'to': 'architects',
-#            },
+            ArchitectMapper: {
+                'from': 'NUMARCHITECTE',
+                'to': 'architects',
+            },
 
-#            PEBMapper: {
-#                'from': (
-#                    'PEB_dateengag',
-#                    'PEB_engag_comm',
-#                    'PEB_datefinal',
-#                    'PEB_final_comm',
-#                    'PEB_RW',
-#                    'PEB_dateEngageDem',
-#                    'PEB_dateEngageDemComm',
-#                ),
-#                'to': 'pebDetails',
-#            },
+            PEBMapper: {
+                'from': (
+                    'PEB_dateengag',
+                    'PEB_engag_comm',
+                    'PEB_datefinal',
+                    'PEB_final_comm',
+                    'PEB_RW',
+                    'PEB_dateEngageDem',
+                    'PEB_dateEngageDemComm',
+                ),
+                'to': 'pebDetails',
+            },
 
-#            SolicitOpinionsMapper: {
-#                'table': 'TA Avis_services',
-#                'KEYS': ('NUMERO DE DOSSIER', 'Avis_services'),
-#                'from': ('Nom_service', 'NUMERO DE DOSSIER', 'NORM_UNIK'),
-#                'to': 'solicitOpinionsTo',
-#            },
+            SolicitOpinionsMapper: {
+                'table': 'TA Avis_services',
+                'KEYS': ('NUMERO DE DOSSIER', 'Avis_services'),
+                'from': ('Nom_service', 'NUMERO DE DOSSIER', 'NORM_UNIK'),
+                'to': 'solicitOpinionsTo',
+            },
 
-#            InquiryDetailsMapper: {
-#                'table': 'T Publicites',
-#                'KEYS': ('NUMERO DE DOSSIER', 'DOSSIER'),
-#                'mappers': {
-#                    SimpleMapper: (
-#                        {
-#                            'from': 'carac2',
-#                            'to': 'derogationDetails',
-#                        },
-#                    ),
+            InquiryDetailsMapper: {
+                'table': 'T Publicites',
+                'KEYS': ('NUMERO DE DOSSIER', 'DOSSIER'),
+                'mappers': {
+                    SimpleMapper: (
+                        {
+                            'from': 'carac2',
+                            'to': 'derogationDetails',
+                        },
+                    ),
 
-#                    ArticleTextMapper: {
-#                        'from': 'carac1',
-#                        'to': 'investigationArticlesText',
-#                    },
-#                }
-#            },
+                    ArticleTextMapper: {
+                        'from': 'carac1',
+                        'to': 'investigationArticlesText',
+                    },
+                }
+            },
 
-#            HabitationMapper: {
-#                'from': ('NB_LOG', 'NB_LOG_AUTORISES', 'NB_LOG_DECLARES'),
-#                'to': (
-#                    'noApplication',
-#                    'additionalHabitationsAsked',
-#                    'additionalHabitationsGiven',
-#                    'habitationsAfterLicence',
-#                ),
-#            },
+            HabitationMapper: {
+                'from': ('NB_LOG', 'NB_LOG_AUTORISES', 'NB_LOG_DECLARES'),
+                'to': (
+                    'noApplication',
+                    'additionalHabitationsAsked',
+                    'additionalHabitationsGiven',
+                    'habitationsAfterLicence',
+                ),
+            },
 
-#            DescriptionMapper: {
-#                'from': ('NOMBRE DE PLANS', 'Ajourne2'),
-#                'to': ('description',),
-#            },
+            DescriptionMapper: {
+                'from': ('NOMBRE DE PLANS', 'Ajourne2'),
+                'to': ('description',),
+            },
 
             CompletionStateMapper: {
-                'from': 'COLLDECISION',
+                'from': ('Délai', 'Date_accuse2', 'COLLDEFINITIF1', 'notification', 'COLLDECISION'),
                 'to': (),  # <- no field to fill, its the workflow state that has to be changed
             },
 
-#            ErrorsMapper: {
-#                'from': (),
-#                'to': ('description',),  # log all the errors in the description field
-#            }
+            ErrorsMapper: {
+                'from': (),
+                'to': ('description',),  # log all the errors in the description field
+            }
         },
     },
 
@@ -534,19 +535,33 @@ FIELDS_MAPPINGS = {
                 'to': 'title',
             },
 
-            NotificationDateMapper: {
-                'from': 'notification',
-                'to': 'eventDate',
-            },
-
             DecisionDateMapper: {
                 'from': 'COLLDEFINITIF1',
-                'to': 'decisionDate',
+                'to': ('eventDate', 'decisionDate'),
             },
 
             DecisionMapper: {
                 'from': 'COLLDECISION',
                 'to': 'decision',
+            },
+        },
+    },
+
+    'BUILDLICENCE NOTIFICATION EVENT':
+    {
+        'allowed_containers': ['BuildLicence', 'Article127'],
+
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            NotificationEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            NotificationDateMapper: {
+                'from': 'notification',
+                'to': ('eventDate', 'transmitDate')
             },
         },
     },
@@ -589,7 +604,7 @@ FIELDS_MAPPINGS = {
 
             DeclarationNotificationDateMapper: {
                 'from': 'notification',
-                'to': 'eventDate',
+                'to': ('eventDate', 'transmitDate'),
             },
         },
     },

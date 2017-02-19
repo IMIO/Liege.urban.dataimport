@@ -286,7 +286,23 @@ class CompletionStateMapper(PostCreationMapper):
     def map(self, line, plone_object):
         self.line = line
         workflow_tool = api.portal.get_tool('portal_workflow')
-        raw_state = self.getData('COLLDECISION').lower()
+
+        annonced_delay = self.getData('Délai')
+        acknowldgement = self.getData('Date_accuse2')
+        decision_college = self.getData('COLLDEFINITIF1')
+        notification = self.getData('notification')
+        decision_choice = self.getData('COLLDECISION')
+
+        if (not annonced_delay or annonced_delay == '0') and not (notification or decision_college or decision_choice):
+            return 'checking_completion'
+
+        if acknowldgement and not (decision_college or notification or decision_choice):
+            return 'procedure_validated'
+
+        if decision_college and not decision_choice:
+            return 'decision_in_progress'
+
+        raw_state = decision_choice.lower()
         if 'sans' in raw_state and 'suite' in raw_state:
             raw_state = 'sans suite'
         state_mapping = self.getValueMapping('state_map')
@@ -1049,6 +1065,11 @@ class NotificationDateMapper(Mapper):
         date = date and DateTime(date) or None
         return date
 
+    def mapTransmitdate(self, line):
+        date = self.getData('notification')
+        date = date and DateTime(date) or None
+        return date
+
 
 class DeclarationNotificationDateMapper(Mapper):
 
@@ -1059,8 +1080,20 @@ class DeclarationNotificationDateMapper(Mapper):
             raise NoObjectToCreateException
         return date
 
+    def mapTransmitdate(self, line):
+        date = self.getData('notification')
+        date = date and DateTime(date) or None
+        return date
+
 
 class DecisionDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('COLLDEFINITIF1')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(date) or None
+        return date
 
     def mapDecisiondate(self, line):
         date = self.getData('COLLDEFINITIF1')
@@ -1096,7 +1129,7 @@ class DecisionMapper(Mapper):
 
 class NotificationEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'transmis-decision'
+    eventtype_id = 'notification_event'
 
 
 #
