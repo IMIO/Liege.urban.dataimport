@@ -163,15 +163,7 @@ class CompletionStateMapper(PostCreationMapper):
         workflow_tool = api.portal.get_tool('portal_workflow')
         raw_state = self.getData('COLLEGE_DECISION')
         state_mapping = self.getValueMapping('state_map')
-        state = state_mapping.get(raw_state, 'accepted')
-        if not state:
-            self.logError(
-                self,
-                line,
-                'unknown workflow state',
-                {'state': raw_state}
-            )
-            return
+        state = 'in_progress'
 
         workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
         workflow_id = workflow_def.getId()

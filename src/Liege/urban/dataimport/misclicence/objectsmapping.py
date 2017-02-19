@@ -18,7 +18,6 @@ from Liege.urban.dataimport.misclicence.mappers import LicenceFactory, \
 OBJECTS_NESTING = [
     ('LICENCE', [
         ('PERSON CONTACT', []),
-#        ('CORPORATION CONTACT', []),
         ('ADDRESS POINT', []),
         ('PARCELS', []),
         ('DEPOSIT EVENT', []),
