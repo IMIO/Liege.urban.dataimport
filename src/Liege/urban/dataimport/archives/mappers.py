@@ -10,6 +10,8 @@ from imio.urban.dataimport.config import IMPORT_FOLDER_PATH
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
 
+from dateutil import parser
+
 from plone import api
 
 from Products.CMFPlone.utils import normalizeString
@@ -171,18 +173,6 @@ class ContactIdMapper(Mapper):
 # UrbanEvent base
 #
 
-# factory
-
-
-class UrbanEventFactory(BaseFactory):
-    """ """
-
-    def create(self, kwargs, container, line):
-        eventtype_uid = kwargs.pop('eventtype')
-        if 'eventDate' not in kwargs:
-            kwargs['eventDate'] = None
-        urban_event = container.createUrbanEvent(eventtype_uid, **kwargs)
-        return urban_event
 
 #mappers
 
@@ -212,12 +202,12 @@ class DecisionEventMapper(EventTypeMapper):
     eventtype_id = 'delivrance-du-permis-octroi-ou-refus'
 
 
-class DecisionDateMapper(Mapper):
+class DecisionDateMapper(PostCreationMapper):
 
-    def mapEventdate(self, line):
+    def mapEventdate(self, line, plone_object):
         date = self.getData('Date')
         try:
-            date = date and DateTime(date) or None
+            date = date and DateTime(str(parser.parse(date, dayfirst=1))) or None
         except:
             self.logError(self, line, 'decision date wrong format', {'date': date})
         if not date:
@@ -226,3 +216,15 @@ class DecisionDateMapper(Mapper):
             new_date = '%s/%s/%s' % (str(int(date.year()) - 100), date.month(), date.day())
             date = DateTime(new_date)
         return date
+
+
+class EventCompletionStateMapper(PostCreationMapper):
+    def map(self, line, plone_object):
+        self.line = line
+        workflow_tool = api.portal.get_tool('portal_workflow')
+
+        workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
+        workflow_id = workflow_def.getId()
+        workflow_state = workflow_tool.getStatusOf(workflow_id, plone_object)
+        workflow_state['review_state'] = 'closed'
+        workflow_tool.setStatusOf(workflow_id, plone_object, workflow_state.copy())
