@@ -7,6 +7,7 @@ from imio.urban.dataimport.access.mapper import AccessMapper as Mapper
 from imio.urban.dataimport.access.mapper import AccessPostCreationMapper as PostCreationMapper
 from imio.urban.dataimport.access.mapper import SecondaryTableMapper
 from imio.urban.dataimport.config import IMPORT_FOLDER_PATH
+from imio.urban.dataimport.exceptions import NoFieldToMapException
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
 
@@ -173,6 +174,7 @@ class ContactIdMapper(Mapper):
 # UrbanEvent base
 #
 
+# factory
 
 #mappers
 
@@ -210,8 +212,9 @@ class DecisionDateMapper(PostCreationMapper):
             date = date and DateTime(str(parser.parse(date, dayfirst=1))) or None
         except:
             self.logError(self, line, 'decision date wrong format', {'date': date})
+            raise NoFieldToMapException
         if not date:
-            raise NoObjectToCreateException
+            raise NoFieldToMapException
         if int(date.year()) > 2017:
             new_date = '%s/%s/%s' % (str(int(date.year()) - 100), date.month(), date.day())
             date = DateTime(new_date)
