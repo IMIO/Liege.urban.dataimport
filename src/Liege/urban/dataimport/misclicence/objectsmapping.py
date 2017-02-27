@@ -11,7 +11,7 @@ from Liege.urban.dataimport.misclicence.mappers import LicenceFactory, \
     FirstCollegeDateMapper, FirstCollegeEventMapper, FirstCollegeDecisionMapper, \
     OldAddressMapper, WorklocationsMapper, DecisionMapper, \
     OldAddressNumberMapper, AddressFactory, AddressPointMapper, ParcelsMapper, \
-    CapakeyMapper, FDResponseEventMapper, \
+    CapakeyMapper, FDResponseEventMapper, EventCompletionStateMapper, \
     FDAnswerReceiptDateMapper, FDOpinionMapper
 
 
@@ -129,7 +129,7 @@ FIELDS_MAPPINGS = {
 
         'mappers': {
             AddressPointMapper: {
-                'from': ('idptadresse', 'capakey'),
+                'from': ('gidptadresse', 'capakey'),
                 'to': (),
             }
         },
@@ -167,6 +167,11 @@ FIELDS_MAPPINGS = {
                 'from': 'DEPOT',
                 'to': 'eventDate',
             },
+
+            EventCompletionStateMapper: {
+                'from': (),
+                'to': (),  # <- no field to fill, its the workflow state that has to be changed
+            },
         },
     },
 
@@ -190,6 +195,11 @@ FIELDS_MAPPINGS = {
             FirstCollegeDecisionMapper: {
                 'from': 'APRREC_ADM',
                 'to': 'decision',
+            },
+
+            EventCompletionStateMapper: {
+                'from': (),
+                'to': (),  # <- no field to fill, its the workflow state that has to be changed
             },
         },
     },
@@ -215,6 +225,11 @@ FIELDS_MAPPINGS = {
                 'from': 'AVIS_FD',
                 'to': ('externalDecision', 'opinionText'),
             },
+
+            EventCompletionStateMapper: {
+                'from': (),
+                'to': (),  # <- no field to fill, its the workflow state that has to be changed
+            },
         },
     },
 
@@ -238,7 +253,12 @@ FIELDS_MAPPINGS = {
             DecisionMapper: {
                 'from': 'COLLEGE_DECISION',
                 'to': 'decision',
-            }
+            },
+
+            EventCompletionStateMapper: {
+                'from': (),
+                'to': (),  # <- no field to fill, its the workflow state that has to be changed
+            },
         },
     },
 

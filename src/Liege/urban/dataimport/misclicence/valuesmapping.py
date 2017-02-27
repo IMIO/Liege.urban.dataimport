@@ -22,7 +22,7 @@ VALUES_MAPS = {
 
 'state_map': {
     'Favorable': 'accepted',
-    'Défavorable': 'accepted',
+    'Défavorable': 'refused',
 },
 
 'eventtype_id_map': table({
