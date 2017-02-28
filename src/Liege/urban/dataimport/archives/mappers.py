@@ -10,8 +10,7 @@ from imio.urban.dataimport.config import IMPORT_FOLDER_PATH
 from imio.urban.dataimport.exceptions import NoFieldToMapException
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
-
-from dateutil import parser
+from imio.urban.dataimport.utils import parse_date
 
 from plone import api
 
@@ -209,7 +208,7 @@ class DecisionDateMapper(PostCreationMapper):
     def mapEventdate(self, line, plone_object):
         date = self.getData('Date')
         try:
-            date = date and DateTime(str(parser.parse(date, dayfirst=1))) or None
+            date = date and parse_date(date) or None
         except:
             self.logError(self, line, 'decision date wrong format', {'date': date})
             raise NoFieldToMapException
