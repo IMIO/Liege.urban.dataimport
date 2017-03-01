@@ -55,8 +55,11 @@ class PortalTypeMapper(Mapper):
         type_value = self.getData('Type_trav').upper()
         row = self.getValueMapping('type_map').get(type_value, None)
         portal_type = row and row['portal_type'] or None
-        if portal_type == 'UrbanCertificateOne' and self.getData('COLLEGE_DECISION'):
-            portal_type = 'UrbanCertificateTwo'
+        if portal_type == 'UrbanCertificateOne':
+            subject = self.getData('Objettrav').lower()
+            is_cu2 = self.getData('COLLEGE_DECISION') or 'cu2' in subject or 'cu 2' in subject
+            if is_cu2:
+                portal_type = 'UrbanCertificateTwo'
 
         if not portal_type:
             raise NoObjectToCreateException
