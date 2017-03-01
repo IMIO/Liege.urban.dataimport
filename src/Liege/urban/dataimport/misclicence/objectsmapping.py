@@ -268,7 +268,7 @@ FIELDS_MAPPINGS = {
 
         'mappers': {
             TaskTableMapper: {
-                'table': 'Courrier',
+                'table': 'T Courr_affdiv',
                 'KEYS': ('DOSSIER', 'Dossier'),
                 'mappers': {
                     SimpleMapper: (
@@ -282,7 +282,7 @@ FIELDS_MAPPINGS = {
                         'to': 'id',
                     },
                     TaskDescriptionMapper: {
-                        'from': ('remarques', 'Destinataire', 'Expéditeur', 'Expédition', 'Gestionnaire'),
+                        'from': ('Remarques', 'Destinataire', 'Expéditeur', 'Expédition', 'Gestionnaire'),
                         'to': 'task_description',
                     },
                     TaskDateMapper: {

@@ -584,7 +584,7 @@ class TaskDescriptionMapper(Mapper):
     def mapTask_description(self, line):
         foldermanager = self.getData('Gestionnaire')
         foldermanager = foldermanager and '<p>Agent traitant: %s</p>' % foldermanager or ''
-        observations = self.getData('remarques')
+        observations = self.getData('Remarques')
         observations = observations and '<p>Remarques: %s</p>' % observations or ''
         from_ = self.getData('Expéditeur')
         from_ = from_ and '<p>Expéditeur: %s</p>' % from_ or ''
