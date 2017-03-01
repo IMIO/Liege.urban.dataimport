@@ -213,10 +213,18 @@ class ContactFactory(BaseFactory):
     def getPortalType(self, container, **kwargs):
         return 'Applicant'
 
+    def objectAlreadyExists(self, object_args, container):
+        contact = [obj for obj in container.objectValues() if obj.portal_type == 'Applicant']
+        return contact and contact[0] or None
+
 
 class CorporationFactory(BaseFactory):
     def getPortalType(self, container, **kwargs):
         return 'Corporation'
+
+    def objectAlreadyExists(self, object_args, container):
+        contact = [obj for obj in container.objectValues() if obj.portal_type == 'Corporation']
+        return contact and contact[0] or None
 
 # mappers
 
