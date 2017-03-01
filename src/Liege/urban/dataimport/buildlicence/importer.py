@@ -5,17 +5,19 @@ from zope.interface import implements
 from Liege.urban.dataimport.interfaces import ILiegeBuildlicenceImporter
 from Liege.urban.dataimport.buildlicence import objectsmapping, valuesmapping
 
-from imio.urban.dataimport.access.importer import AccessDataImporter as AccessImporter
+from imio.urban.dataimport.csv.importer import CSVDataImporter as CSVImporter
 from imio.urban.dataimport.mapping import ValuesMapping, ObjectsMapping
 
 
-class BuildlicenceImporter(AccessImporter):
+class BuildlicenceImporter(CSVImporter):
     """ """
 
     implements(ILiegeBuildlicenceImporter)
 
-    def __init__(self, db_name='P_tables_IB.mdb', table_name='PermisUrba', key_column='NUMDOSSIERBKP', **kwargs):
-        super(BuildlicenceImporter, self).__init__(db_name, table_name, key_column, **kwargs)
+    delimiter = ';'
+
+    def __init__(self, csv_filename='PermisUrba2', key_column='NUMDOSSIERBKP', **kwargs):
+        super(BuildlicenceImporter, self).__init__(csv_filename, key_column, **kwargs)
 
 
 class LiegeMapping(ObjectsMapping):

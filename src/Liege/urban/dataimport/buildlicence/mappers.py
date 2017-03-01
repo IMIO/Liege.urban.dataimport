@@ -3,12 +3,12 @@
 from DateTime import DateTime
 from datetime import datetime
 
-from imio.urban.dataimport.access.mapper import AccessFinalMapper as FinalMapper
-from imio.urban.dataimport.access.mapper import AccessMapper as Mapper
-from imio.urban.dataimport.access.mapper import AccessPostCreationMapper as PostCreationMapper
-from imio.urban.dataimport.access.mapper import MultiLinesSecondaryTableMapper
-from imio.urban.dataimport.access.mapper import SecondaryTableMapper
-from imio.urban.dataimport.access.mapper import MultivaluedFieldSecondaryTableMapper
+from imio.urban.dataimport.csv.mapper import CSVFinalMapper as FinalMapper
+from imio.urban.dataimport.csv.mapper import CSVMapper as Mapper
+from imio.urban.dataimport.csv.mapper import CSVPostCreationMapper as PostCreationMapper
+from imio.urban.dataimport.csv.mapper import MultiLinesSecondaryTableMapper
+from imio.urban.dataimport.csv.mapper import SecondaryTableMapper
+from imio.urban.dataimport.csv.mapper import MultivaluedFieldSecondaryTableMapper
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
 
@@ -98,8 +98,8 @@ class OldAddressMapper(SecondaryTableMapper):
 class WorklocationsMapper(Mapper):
     """ """
 
-    def __init__(self, importer, args, table_name):
-        super(WorklocationsMapper, self).__init__(importer, args, table_name)
+    def __init__(self, importer, args, csv_filename):
+        super(WorklocationsMapper, self).__init__(importer, args, csv_filename=csv_filename)
         catalog = api.portal.get_tool('portal_catalog')
 
         streets_by_code = {}
@@ -160,7 +160,7 @@ class OldAddressNumberMapper(PostCreationMapper):
 
         addr = addr[0]
         num = self.getData('NUM')
-        num = num and str(int(float(num)))
+        num = num and str(int(float(num.replace(',', '.'))))
         num2 = self.getData('Num2')
         num2 = num2 and ', {}'.format(num2) or ''
         number = '{}{}'.format(num, num2)
@@ -173,7 +173,7 @@ class ArchitectMapper(Mapper):
 
     def mapArchitects(self, line):
         raw_archi_id = self.getData('NUMARCHITECTE')
-        archi_id = raw_archi_id and str(int(float(raw_archi_id))) or ''
+        archi_id = raw_archi_id and str(int(float(raw_archi_id.replace(',', '.')))) or ''
         archi = getattr(self.site.urban.architects, archi_id, None)
         return archi
 
@@ -272,7 +272,7 @@ class DescriptionMapper(Mapper):
 
         plans = self.getData('NOMBRE DE PLANS')
         if plans:
-            description.append('<p>Nombre de plans: %s</p>' % str(int(float(plans))))
+            description.append('<p>Nombre de plans: %s</p>' % str(int(float(plans.replace(',', '.')))))
 
         report = self.getData('Ajourne2')
         if report:
@@ -1165,7 +1165,7 @@ class TaskIdMapper(Mapper):
     """ """
 
     def mapId(self, line):
-        return str(int(float(self.getData('numpiece'))))
+        return str(int(float(self.getData('numpiece').replace(',', '.'))))
 
 
 class TaskDescriptionMapper(Mapper):

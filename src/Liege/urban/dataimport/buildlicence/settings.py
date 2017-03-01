@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from imio.urban.dataimport.access.settings import AccessImporterFromImportSettings
+from imio.urban.dataimport.csv.settings import CSVImporterFromImportSettings
 
 from Liege.urban.dataimport.buildlicence.importer import BuildlicenceImporter
 
 
-class BuildlicenceImporterFromImportSettings(AccessImporterFromImportSettings):
+class BuildlicenceImporterFromImportSettings(CSVImporterFromImportSettings):
     """ """
 
     def __init__(self, settings_form, importer_class=BuildlicenceImporter):
@@ -20,8 +20,7 @@ class BuildlicenceImporterFromImportSettings(AccessImporterFromImportSettings):
         settings = super(BuildlicenceImporterFromImportSettings, self).get_importer_settings()
 
         db_settings = {
-            'db_name': 'P_tables_IB.mdb',
-            'table_name': 'PermisUrba',
+            'csv_filename': 'PermisUrba2',
             'key_column': 'NUMDOSSIERBKP',
         }
 

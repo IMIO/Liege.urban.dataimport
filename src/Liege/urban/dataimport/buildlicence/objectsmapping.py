@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from imio.urban.dataimport.access.mapper import AccessSimpleMapper as SimpleMapper
+from imio.urban.dataimport.csv.mapper import CSVSimpleMapper as SimpleMapper
 
 from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     TypeAndCategoryMapper, ReferenceMapper, CompletionStateMapper, ErrorsMapper, \
