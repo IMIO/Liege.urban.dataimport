@@ -310,12 +310,9 @@ class LocalityMapper(Mapper):
     regex = '(\d{4,4})\s+(\w.*)'
 
     def mapZipcode(self, line):
-        raw_city = self.getData('CODE POSTAL22')
-        match = re.search(self.regex, raw_city)
-        if match:
-            zipcode = match.group(1)
-            return zipcode
-
+        raw_zipcode = self.getData('CODE POSTAL22')
+        if raw_zipcode:
+            return str(int(float(raw_zipcode)))
         return ''
 
     def mapCity(self, line):
