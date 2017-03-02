@@ -10,8 +10,8 @@ from Liege.urban.dataimport.misclicence.mappers import LicenceFactory, \
     TaskFactory, TaskTableMapper, TaskIdMapper, TaskDateMapper, TaskDescriptionMapper, \
     FirstCollegeDateMapper, FirstCollegeEventMapper, FirstCollegeDecisionMapper, \
     OldAddressMapper, WorklocationsMapper, DecisionMapper, \
-    OldAddressNumberMapper, AddressFactory, AddressPointMapper, ParcelsMapper, \
-    CapakeyMapper, FDResponseEventMapper, EventCompletionStateMapper, \
+    OldAddressNumberMapper, AddressFactory, AddressPointMapper, \
+    FDResponseEventMapper, EventCompletionStateMapper, \
     FDAnswerReceiptDateMapper, FDOpinionMapper
 
 
@@ -19,7 +19,6 @@ OBJECTS_NESTING = [
     ('LICENCE', [
         ('PERSON CONTACT', []),
         ('ADDRESS POINT', []),
-        ('PARCELS', []),
         ('DEPOSIT EVENT', []),
         ('CU FIRST COLLEGE EVENT', []),
         ('FD RESPONSE EVENT', []),
@@ -47,7 +46,7 @@ FIELDS_MAPPINGS = {
             },
 
             PortalTypeMapper: {
-                'from': ('Type_trav', 'COLLEGE_DECISION'),
+                'from': ('Type_trav', 'Objettrav', 'COLLEGE_DECISION'),
                 'to': 'portal_type',
             },
 
@@ -129,26 +128,8 @@ FIELDS_MAPPINGS = {
 
         'mappers': {
             AddressPointMapper: {
-                'from': ('gidptadresse', 'capakey'),
+                'from': ('idptadresse', 'capakey', 'Numero', 'Correspondance_rue'),
                 'to': (),
-            }
-        },
-    },
-
-    'PARCELS':
-    {
-        'factory': [AddressFactory],
-
-        'mappers': {
-            ParcelsMapper: {
-                'table': 'PRUBA_CADASTRE',
-                'KEYS': ('DOSSIER', 'NUMDOSSIER'),
-                'mappers': {
-                    CapakeyMapper: {
-                        'from': 'CAPAKEY',
-                        'to': 'capakey',
-                    }
-                }
             },
         },
     },

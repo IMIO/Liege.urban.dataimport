@@ -367,37 +367,32 @@ class AddressPointMapper(Mapper):
     def map(self, line):
         """
         """
-        gid = self.getData('gidptadresse', line)
-        session = address_service.new_session()
-        address_record = session.query_address_by_gid(gid)
-        if address_record:
-            return address_record._asdict()
+        legnum = self.getData('idptadresse', line)
+        if legnum and legnum != '0':
+            session = address_service.new_session()
+            address_record = session.query_address_by_legnum(legnum)
+            if address_record:
+                return address_record._asdict()
 
         # in case there's no address point try to use the capakey
         capakey = self.getData('capakey', line)
-        if capakey:
-            return {'capakey': capakey}
+        if capakey and legnum != '0':
+            address_args = {'capakey': capakey}
+            licence = self.importer.current_containers_stack[-1]
+            addr = licence.getWorkLocations()
+            if addr:
+                addr = addr[0]
+                address_args['street_number'] = addr['number']
+                catalog = api.portal.get_tool('portal_catalog')
+                street_brains = catalog(UID=addr['street'])
+                if street_brains:
+                    street = street_brains[0].getObject()
+                    address_args['street_name'] = street.getStreetName()
+                    address_args['street_code'] = street.getStreetCode()
+
+            return address_args
 
         raise NoObjectToCreateException
-
-
-class ParcelsMapper(MultiLinesSecondaryTableMapper):
-    """
-     Parcels table join mapper
-    """
-
-
-class CapakeyMapper(Mapper):
-    """
-    """
-
-    def mapCapakey(self, line):
-        """ """
-        raw_capakey = self.getData('CAPAKEY')
-        if len(raw_capakey) == 17:
-            return raw_capakey
-        raise NoObjectToCreateException
-
 
 #
 # UrbanEvent base
@@ -586,7 +581,11 @@ class TaskIdMapper(Mapper):
     """ """
 
     def mapId(self, line):
-        return str(int(float(self.getData('numpiece'))))
+        licence = self.importer.current_containers_stack[-1]
+        raw_task_id = self.getData('numpiece') or 0.0
+        while str(int(float(raw_task_id))) in licence.objectIds():
+            raw_task_id = float(raw_task_id) + 1.0
+        return str(int(float(raw_task_id)))
 
 
 class TaskDescriptionMapper(Mapper):

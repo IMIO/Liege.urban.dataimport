@@ -20,7 +20,7 @@ class MisclicenceImporterFromImportSettings(AccessImporterFromImportSettings):
         settings = super(MisclicenceImporterFromImportSettings, self).get_importer_settings()
 
         db_settings = {
-            'db_name': 'P_tables.mdb',
+            'db_name': 'P_tables_IB.mdb',
             'table_name': 'T Aff Diverses',
             'key_column': 'DOSSIER',
         }
