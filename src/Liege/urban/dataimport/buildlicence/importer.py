@@ -16,7 +16,7 @@ class BuildlicenceImporter(CSVImporter):
 
     delimiter = ';'
 
-    def __init__(self, csv_filename='PermisUrba2', key_column='NUMDOSSIERBKP', **kwargs):
+    def __init__(self, csv_filename='PermisUrba', key_column='NUMDOSSIERBKP', **kwargs):
         super(BuildlicenceImporter, self).__init__(csv_filename, key_column, **kwargs)
 
 

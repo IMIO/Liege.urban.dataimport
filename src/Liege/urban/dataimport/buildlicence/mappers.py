@@ -1071,11 +1071,15 @@ class NotificationDateMapper(Mapper):
 
     def mapEventdate(self, line):
         date = self.getData('notification')
+        if not date:
+            raise NoObjectToCreateException
         date = date and DateTime(date) or None
         return date
 
     def mapTransmitdate(self, line):
         date = self.getData('notification')
+        if not date:
+            raise NoObjectToCreateException
         date = date and DateTime(date) or None
         return date
 
@@ -1091,6 +1095,8 @@ class DeclarationNotificationDateMapper(Mapper):
 
     def mapTransmitdate(self, line):
         date = self.getData('notification')
+        if not date:
+            raise NoObjectToCreateException
         date = date and DateTime(date) or None
         return date
 
