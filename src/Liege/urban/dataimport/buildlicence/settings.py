@@ -20,7 +20,7 @@ class BuildlicenceImporterFromImportSettings(CSVImporterFromImportSettings):
         settings = super(BuildlicenceImporterFromImportSettings, self).get_importer_settings()
 
         db_settings = {
-            'csv_filename': 'PermisUrba2',
+            'csv_filename': 'PermisUrba',
             'key_column': 'NUMDOSSIERBKP',
         }
 

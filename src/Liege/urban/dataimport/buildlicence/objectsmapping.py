@@ -5,7 +5,7 @@ from imio.urban.dataimport.csv.mapper import CSVSimpleMapper as SimpleMapper
 from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     TypeAndCategoryMapper, ReferenceMapper, CompletionStateMapper, ErrorsMapper, \
     FolderCategoryMapper, ContactFactory, ContactTitleMapper, ContactNameMapper, \
-    ContactStreetMapper, ContactIdMapper, LocalityMapper, CorporationIdMapper, \
+    ContactStreetMapper, LocalityMapper, \
     CorporationNameMapper, CorporationFactory, ArchitectMapper, UrbanEventFactory, \
     DepositEventMapper, DepositDateMapper, AnnoncedDelayMapper, InquiryEventMapper, \
     InquiryStartDateMapper, InquiryEndDateMapper, InquiryExplainationDateMapper, \
@@ -25,7 +25,7 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     ArchiveTaskIdMapper, ArchiveTaskDateMapper, DeclarationDecisionDateMapper, \
     NotificationEventMapper, DeclarationNotificationDateMapper, FDResponseEventMapper, \
     FDTransmitDateMapper, FDAnswerReceiptDateMapper, FDOpinionMapper, InspectionTaskDateMapper, \
-    PEBMapper, DeclarationDecisionEventMapper
+    PEBMapper, DeclarationDecisionEventMapper, ApplicantMapper
 
 
 OBJECTS_NESTING = [
@@ -183,73 +183,82 @@ FIELDS_MAPPINGS = {
     'PERSON CONTACT':
     {
         'factory': [ContactFactory],
-
         'mappers': {
-            SimpleMapper: (
-                {
-                    'from': 'NUM_TEL_DEMANDEUR',
-                    'to': 'phone',
+            ApplicantMapper: {
+                'table': 'DEMANDEURS_PURBA',
+                'KEYS': ('NUMDOSSIERBKP', 'NUMDOSSIER'),
+                'mappers': {
+                    SimpleMapper: (
+                        {
+                            'from': 'id',
+                            'to': 'id',
+                        },
+                        {
+                            'from': 'NUMTELDEM',
+                            'to': 'phone',
+                        },
+                    ),
+
+                    ContactTitleMapper: {
+                        'from': 'QUALITE',
+                        'to': 'personTitle',
+                    },
+
+                    ContactNameMapper: {
+                        'from': 'NOMDEMANDEUR',
+                        'to': ('name1', 'name2'),
+                    },
+
+                    ContactStreetMapper: {
+                        'from': 'ADRESSEDEMANDEUR',
+                        'to': ('street', 'number'),
+                    },
+
+                    LocalityMapper: {
+                        'from': 'CPLOCALITEDEM',
+                        'to': ('city', 'zipcode'),
+                    }
                 },
-            ),
-
-            ContactIdMapper: {
-                'from': ('QUALITE', 'NOM DU DEMANDEUR'),
-                'to': 'id',
             },
-
-            ContactTitleMapper: {
-                'from': 'QUALITE',
-                'to': 'personTitle',
-            },
-
-            ContactNameMapper: {
-                'from': 'NOM DU DEMANDEUR',
-                'to': ('name1', 'name2'),
-            },
-
-            ContactStreetMapper: {
-                'from': 'ADRESSE DEMANDEUR',
-                'to': ('street', 'number'),
-            },
-
-            LocalityMapper: {
-                'from': 'CP LOCALITE DEM',
-                'to': ('city', 'zipcode'),
-            }
         },
     },
+
 
     'CORPORATION CONTACT':
     {
         'factory': [CorporationFactory],
-
         'mappers': {
-            SimpleMapper: (
-                {
-                    'from': 'NUM_TEL_DEMANDEUR',
-                    'to': 'phone',
+            ApplicantMapper: {
+                'table': 'DEMANDEURS_PURBA',
+                'KEYS': ('NUMDOSSIERBKP', 'NUMDOSSIER'),
+                'mappers': {
+                    SimpleMapper: (
+                        {
+                            'from': 'id',
+                            'to': 'id',
+                        },
+                        {
+                            'from': 'NUMTELDEM',
+                            'to': 'phone',
+                        },
+                    ),
+
+                    CorporationNameMapper: {
+                        'from': ('QUALITE', 'NOMDEMANDEUR'),
+                        'to': ('denomination', 'legalForm'),
+                    },
+
+                    ContactStreetMapper: {
+                        'from': 'ADRESSEDEMANDEUR',
+                        'to': ('street', 'number'),
+                    },
+
+                    LocalityMapper: {
+                        'from': 'CPLOCALITEDEM',
+                        'to': ('city', 'zipcode'),
+                    }
                 },
-            ),
-
-            CorporationIdMapper: {
-                'from': ('QUALITE', 'NOM DU DEMANDEUR'),
-                'to': 'id',
             },
-
-            CorporationNameMapper: {
-                'from': ('QUALITE', 'NOM DU DEMANDEUR'),
-                'to': ('denomination', 'legalForm'),
-            },
-
-            ContactStreetMapper: {
-                'from': 'ADRESSE DEMANDEUR',
-                'to': ('street', 'number'),
-            },
-
-            LocalityMapper: {
-                'from': 'CP LOCALITE DEM',
-                'to': ('city', 'zipcode'),
-            }
         },
     },
 

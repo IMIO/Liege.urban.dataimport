@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from DateTime import DateTime
-from datetime import datetime
 
 from imio.urban.dataimport.csv.mapper import CSVFinalMapper as FinalMapper
 from imio.urban.dataimport.csv.mapper import CSVMapper as Mapper
@@ -11,6 +10,7 @@ from imio.urban.dataimport.csv.mapper import SecondaryTableMapper
 from imio.urban.dataimport.csv.mapper import MultivaluedFieldSecondaryTableMapper
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
+from imio.urban.dataimport.utils import parse_date
 
 from liege.urban.interfaces import IShore
 from liege.urban.services import address_service
@@ -357,6 +357,12 @@ class ErrorsMapper(FinalMapper):
 # PERSON/CORPORATION CONTACT
 #
 
+
+class ApplicantMapper(MultiLinesSecondaryTableMapper):
+    """
+    Applicant table join mapper
+    """
+
 # factory
 
 
@@ -370,32 +376,6 @@ class CorporationFactory(BaseFactory):
         return 'Corporation'
 
 # mappers
-
-
-class ContactIdMapper(Mapper):
-    """ """
-
-    def mapId(self, line):
-        raw_name = self.getData('NOM DU DEMANDEUR')
-        raw_title = self.getData('QUALITE')
-        if not raw_title:
-            raise NoObjectToCreateException
-
-        name = raw_name or raw_title
-        return normalizeString(self.site.portal_urban.generateUniqueId(name))
-
-
-class CorporationIdMapper(Mapper):
-    """ """
-
-    def mapId(self, line):
-        denomination = self.getData('NOM DU DEMANDEUR')
-        legal_form = self.getData('QUALITE')
-        if not denomination and not legal_form:
-            raise NoObjectToCreateException
-
-        name = denomination or legal_form
-        return normalizeString(self.site.portal_urban.generateUniqueId(name))
 
 
 class ContactTitleMapper(Mapper):
@@ -417,7 +397,7 @@ class ContactNameMapper(Mapper):
     regex_2 = '([A-Z][a-z]+-?[a-z]*)\s+([A-Z]+-?[A-Z]+)\s*\Z'
 
     def mapName1(self, line):
-        raw_name = self.getData('NOM DU DEMANDEUR')
+        raw_name = self.getData('NOMDEMANDEUR')
         match = re.search(self.regex_1, raw_name)
         if match:
             name1 = match.group(1)
@@ -431,7 +411,7 @@ class ContactNameMapper(Mapper):
         return raw_name
 
     def mapName2(self, line):
-        raw_name = self.getData('NOM DU DEMANDEUR')
+        raw_name = self.getData('NOMDEMANDEUR')
         match = re.search(self.regex_1, raw_name)
         if match:
             name2 = match.group(2)
@@ -449,8 +429,13 @@ class CorporationNameMapper(Mapper):
     """ """
 
     def mapDenomination(self, line):
-        denomination = self.getData('NOM DU DEMANDEUR')
+        denomination = self.getData('NOMDEMANDEUR')
         legal_form = self.getData('QUALITE')
+
+        title_mapping = self.getValueMapping('person_title_map')
+        title = title_mapping.get(legal_form, None)
+        if title:
+            raise NoObjectToCreateException
 
         if not denomination and legal_form:
             return legal_form
@@ -458,7 +443,7 @@ class CorporationNameMapper(Mapper):
         return denomination
 
     def mapLegalform(self, line):
-        denomination = self.getData('NOM DU DEMANDEUR')
+        denomination = self.getData('NOMDEMANDEUR')
         legal_form = self.getData('QUALITE')
 
         if not denomination and legal_form:
@@ -473,7 +458,7 @@ class ContactStreetMapper(Mapper):
     regex = '(.*?)\s*,?\s*(\d.*)\s*\Z'
 
     def mapStreet(self, line):
-        raw_addr = self.getData('ADRESSE DEMANDEUR')
+        raw_addr = self.getData('ADRESSEDEMANDEUR')
         match = re.search(self.regex, raw_addr)
         if match:
             street = match.group(1)
@@ -482,7 +467,7 @@ class ContactStreetMapper(Mapper):
         return raw_addr
 
     def mapNumber(self, line):
-        raw_addr = self.getData('ADRESSE DEMANDEUR')
+        raw_addr = self.getData('ADRESSEDEMANDEUR')
         match = re.search(self.regex, raw_addr)
         if match:
             number = match.group(2)
@@ -497,7 +482,7 @@ class LocalityMapper(Mapper):
     regex = '(\d{4,4})\s+(\w.*)'
 
     def mapZipcode(self, line):
-        raw_city = self.getData('CP LOCALITE DEM')
+        raw_city = self.getData('CPLOCALITEDEM')
         match = re.search(self.regex, raw_city)
         if match:
             zipcode = match.group(1)
@@ -506,7 +491,7 @@ class LocalityMapper(Mapper):
         return ''
 
     def mapCity(self, line):
-        raw_city = self.getData('CP LOCALITE DEM')
+        raw_city = self.getData('CPLOCALITEDEM')
         match = re.search(self.regex, raw_city)
         if match:
             city = match.group(2)
@@ -1199,7 +1184,7 @@ class TaskDateMapper(Mapper):
     def mapDue_date(self, line):
         date = self.getData('Date')
         try:
-            date = date and datetime.strptime(date, '%d/%m/%Y') or None
+            date = date and parse_date(date) or None
         except:
             raise NoObjectToCreateException
         return date
@@ -1232,7 +1217,7 @@ class ArchiveTaskDateMapper(Mapper):
         if not date:
             raise NoObjectToCreateException
         try:
-            date = date and datetime.strptime(date, '%d/%m/%Y') or None
+            date = date and parse_date(date) or None
         except:
             raise NoObjectToCreateException
         return date
@@ -1265,7 +1250,7 @@ class InspectionTaskDateMapper(Mapper):
         if not date:
             raise NoObjectToCreateException
         try:
-            date = date and datetime.strptime(date, '%d/%m/%Y') or None
+            date = date and parse_date(date) or None
         except:
             raise NoObjectToCreateException
         return date
