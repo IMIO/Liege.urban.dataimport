@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from DateTime import DateTime
-from datetime import datetime
 
 from imio.urban.dataimport.csv.mapper import CSVFinalMapper as FinalMapper
 from imio.urban.dataimport.csv.mapper import CSVMapper as Mapper
@@ -10,6 +9,7 @@ from imio.urban.dataimport.csv.mapper import MultiLinesSecondaryTableMapper
 from imio.urban.dataimport.csv.mapper import SecondaryTableMapper
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
+from imio.urban.dataimport.utils import parse_date
 
 from liege.urban.interfaces import IShore
 from liege.urban.services import address_service
@@ -614,7 +614,7 @@ class TaskDateMapper(Mapper):
     def mapDue_date(self, line):
         date = self.getData('Date')
         try:
-            date = date and datetime.strptime(date, '%d/%m/%Y') or None
+            date = date and parse_date(date) or None
         except:
             raise NoObjectToCreateException
         return date
