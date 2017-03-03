@@ -5,17 +5,19 @@ from zope.interface import implements
 from Liege.urban.dataimport.interfaces import ILiegeMisclicenceImporter
 from Liege.urban.dataimport.misclicence import objectsmapping, valuesmapping
 
-from imio.urban.dataimport.access.importer import AccessDataImporter as AccessImporter
+from imio.urban.dataimport.csv.importer import CSVDataImporter as CSVImporter
 from imio.urban.dataimport.mapping import ValuesMapping, ObjectsMapping
 
 
-class MisclicenceImporter(AccessImporter):
+class MisclicenceImporter(CSVImporter):
     """ """
 
     implements(ILiegeMisclicenceImporter)
 
-    def __init__(self, db_name='P_tables.mdb', table_name='T Aff Diverses', key_column='DOSSIER', **kwargs):
-        super(MisclicenceImporter, self).__init__(db_name, table_name, key_column, **kwargs)
+    delimiter = ';'
+
+    def __init__(self, csv_filename='T Aff Diverses', key_column='DOSSIER', **kwargs):
+        super(MisclicenceImporter, self).__init__(csv_filename, key_column, **kwargs)
 
 
 class LiegeMapping(ObjectsMapping):

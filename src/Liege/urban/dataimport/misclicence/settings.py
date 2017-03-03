@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from imio.urban.dataimport.access.settings import AccessImporterFromImportSettings
+from imio.urban.dataimport.csv.settings import CSVImporterFromImportSettings
 
 from Liege.urban.dataimport.misclicence.importer import MisclicenceImporter
 
 
-class MisclicenceImporterFromImportSettings(AccessImporterFromImportSettings):
+class MisclicenceImporterFromImportSettings(CSVImporterFromImportSettings):
     """ """
 
     def __init__(self, settings_form, importer_class=MisclicenceImporter):
@@ -20,8 +20,7 @@ class MisclicenceImporterFromImportSettings(AccessImporterFromImportSettings):
         settings = super(MisclicenceImporterFromImportSettings, self).get_importer_settings()
 
         db_settings = {
-            'db_name': 'P_tables_IB.mdb',
-            'table_name': 'T Aff Diverses',
+            'csv_filename': 'T Aff Diverses',
             'key_column': 'DOSSIER',
         }
 

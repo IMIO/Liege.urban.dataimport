@@ -3,11 +3,11 @@
 from DateTime import DateTime
 from datetime import datetime
 
-from imio.urban.dataimport.access.mapper import AccessFinalMapper as FinalMapper
-from imio.urban.dataimport.access.mapper import AccessMapper as Mapper
-from imio.urban.dataimport.access.mapper import AccessPostCreationMapper as PostCreationMapper
-from imio.urban.dataimport.access.mapper import MultiLinesSecondaryTableMapper
-from imio.urban.dataimport.access.mapper import SecondaryTableMapper
+from imio.urban.dataimport.csv.mapper import CSVFinalMapper as FinalMapper
+from imio.urban.dataimport.csv.mapper import CSVMapper as Mapper
+from imio.urban.dataimport.csv.mapper import CSVPostCreationMapper as PostCreationMapper
+from imio.urban.dataimport.csv.mapper import MultiLinesSecondaryTableMapper
+from imio.urban.dataimport.csv.mapper import SecondaryTableMapper
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
 
@@ -45,7 +45,7 @@ class IdMapper(Mapper):
     """ """
 
     def mapId(self, line):
-        return str(int(float(self.getData('DOSSIER'))))
+        return str(int(float(self.getData('DOSSIER').replace(',', '.'))))
 
 
 class PortalTypeMapper(Mapper):
@@ -79,7 +79,7 @@ class ReferenceMapper(PostCreationMapper):
         if plone_object.portal_type == 'UrbanCertificateTwo':
             abbr = 'CU2'
 
-        ref = '{}/{} {}'.format(abbr, str(int(float(self.getData('DOSSIER')))), shore)
+        ref = '{}/{} {}'.format(abbr, str(int(float(self.getData('DOSSIER').replace(',', '.')))), shore)
         return ref
 
 
@@ -90,8 +90,8 @@ class OldAddressMapper(SecondaryTableMapper):
 class WorklocationsMapper(Mapper):
     """ """
 
-    def __init__(self, importer, args, table_name):
-        super(WorklocationsMapper, self).__init__(importer, args, table_name)
+    def __init__(self, importer, args, csv_filename):
+        super(WorklocationsMapper, self).__init__(importer, args, csv_filename=csv_filename)
         catalog = api.portal.get_tool('portal_catalog')
 
         streets_by_code = {}
@@ -152,7 +152,7 @@ class OldAddressNumberMapper(PostCreationMapper):
 
         addr = addr[0]
         num = self.getData('NUM')
-        num = num and str(int(float(num)))
+        num = num and str(int(float(num.replace(',', '.'))))
         num2 = self.getData('Num2')
         num2 = num2 and ', {}'.format(num2) or ''
         number = '{}{}'.format(num, num2)
@@ -323,7 +323,7 @@ class LocalityMapper(Mapper):
     def mapZipcode(self, line):
         raw_zipcode = self.getData('CODE POSTAL22')
         if raw_zipcode:
-            return str(int(float(raw_zipcode)))
+            return str(int(float(raw_zipcode.replace(',', '.'))))
         return ''
 
     def mapCity(self, line):
@@ -367,16 +367,16 @@ class AddressPointMapper(Mapper):
     def map(self, line):
         """
         """
-        legnum = self.getData('idptadresse', line)
-        if legnum and legnum != '0':
+        gid = self.getData('gidptadresse', line)
+        if gid and gid != '0':
             session = address_service.new_session()
-            address_record = session.query_address_by_legnum(legnum)
+            address_record = session.query_address_by_gid(gid)
             if address_record:
                 return address_record._asdict()
 
         # in case there's no address point try to use the capakey
         capakey = self.getData('capakey', line)
-        if capakey and legnum != '0':
+        if capakey:  # dont use capakey when idptadresse is 0 because its always a wrong one!
             address_args = {'capakey': capakey}
             licence = self.importer.current_containers_stack[-1]
             addr = licence.getWorkLocations()
@@ -582,7 +582,8 @@ class TaskIdMapper(Mapper):
 
     def mapId(self, line):
         licence = self.importer.current_containers_stack[-1]
-        raw_task_id = self.getData('numpiece') or 0.0
+        raw_task_id = self.getData('numpiece') or '0.0'
+        raw_task_id = raw_task_id.replace(',', '.')
         while str(int(float(raw_task_id))) in licence.objectIds():
             raw_task_id = float(raw_task_id) + 1.0
         return str(int(float(raw_task_id)))
@@ -612,5 +613,8 @@ class TaskDateMapper(Mapper):
 
     def mapDue_date(self, line):
         date = self.getData('Date')
-        date = date and datetime.strptime(date, '%x %X') or None
+        try:
+            date = date and datetime.strptime(date, '%d/%m/%Y') or None
+        except:
+            raise NoObjectToCreateException
         return date

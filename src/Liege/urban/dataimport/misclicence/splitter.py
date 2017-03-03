@@ -22,7 +22,7 @@ class LiegeImportSplitter(object):
         folder_id = self.importer.getData('DOSSIER', line)
         allowed_divider = False
         if folder_id:
-            folder_number = int(float(folder_id))
+            folder_number = int(float(folder_id.replace(',', '.')))
             allowed_divider = folder_number > 3 and folder_number % self.divider == self.target
 
         depot_date = parser.parse(self.importer.getData('DEPOT', line), dayfirst=True)

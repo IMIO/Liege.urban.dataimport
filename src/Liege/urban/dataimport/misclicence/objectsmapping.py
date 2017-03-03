@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from imio.urban.dataimport.access.mapper import AccessSimpleMapper as SimpleMapper
+from imio.urban.dataimport.csv.mapper import CSVSimpleMapper as SimpleMapper
 
 from Liege.urban.dataimport.misclicence.mappers import LicenceFactory, \
     PortalTypeMapper, ReferenceMapper, CompletionStateMapper, ErrorsMapper, \
@@ -128,7 +128,7 @@ FIELDS_MAPPINGS = {
 
         'mappers': {
             AddressPointMapper: {
-                'from': ('idptadresse', 'capakey', 'Numero', 'Correspondance_rue'),
+                'from': ('gidptadresse', 'capakey', 'Numero', 'Correspondance_rue'),
                 'to': (),
             },
         },
