@@ -422,7 +422,7 @@ FIELDS_MAPPINGS = {
                     },
 
                     OpinionIdMapper: {
-                        'from': 'Nom_service',
+                        'from': ('Nom_service', 'Date demande', 'Date réception'),
                         'to': 'id',
                     },
 

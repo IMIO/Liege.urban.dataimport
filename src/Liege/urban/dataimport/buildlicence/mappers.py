@@ -865,7 +865,10 @@ class OpinionEventTypeMapper(Mapper):
 class OpinionIdMapper(Mapper):
 
     def mapId(self, line):
-        return normalizeString(self.getData('Nom_service'))
+        proposed_id = normalizeString(
+            self.getData('Nom_service') + self.getData('Date demande') + self.getData('Date réception')
+        )
+        return proposed_id
 
 
 class OpinionTitleMapper(Mapper):
