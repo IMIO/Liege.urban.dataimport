@@ -246,51 +246,6 @@ class ContactIdMapper(Mapper):
         return normalizeString(self.site.portal_urban.generateUniqueId(name))
 
 
-class ContactTitleMapper(Mapper):
-    """ """
-
-    def mapPersontitle(self, line):
-        raw_title = self.getData('QUALITE').lower()
-        title_mapping = self.getValueMapping('person_title_map')
-        title = title_mapping.get(raw_title, 'notitle')
-        return title
-
-
-class ContactNameMapper(Mapper):
-    """ """
-
-    regex_1 = '([A-Z]+-?[A-Z]+)\s+([A-Z][a-z]+-?[a-z]*)\s*\Z'
-    regex_2 = '([A-Z][a-z]+-?[a-z]*)\s+([A-Z]+-?[A-Z]+)\s*\Z'
-
-    def mapName1(self, line):
-        raw_name = self.getData('NOM DU DEMANDEUR')
-        match = re.search(self.regex_1, raw_name)
-        if match:
-            name1 = match.group(1)
-            return name1
-
-        match = re.search(self.regex_2, raw_name)
-        if match:
-            name1 = match.group(2)
-            return name1
-
-        return raw_name
-
-    def mapName2(self, line):
-        raw_name = self.getData('NOM DU DEMANDEUR')
-        match = re.search(self.regex_1, raw_name)
-        if match:
-            name2 = match.group(2)
-            return name2
-
-        match = re.search(self.regex_2, raw_name)
-        if match:
-            name2 = match.group(1)
-            return name2
-
-        return ''
-
-
 class ContactStreetMapper(Mapper):
     """ """
 
@@ -460,7 +415,7 @@ class DepositDateMapper(Mapper):
         date = self.getData('DEPOT')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -480,7 +435,7 @@ class FirstCollegeDateMapper(Mapper):
         date = self.getData('DATE_COLL_APPREC')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -507,7 +462,7 @@ class FDAnswerReceiptDateMapper(Mapper):
 
     def mapReceiptdate(self, line):
         date = self.getData('DATE_FD')
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -542,7 +497,7 @@ class DecisionDateMapper(Mapper):
 
     def mapEventdate(self, line):
         date = self.getData('DATE_COLL_DECIS')
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -600,7 +555,7 @@ class TaskDescriptionMapper(Mapper):
         from_ = self.getData('Expéditeur')
         from_ = from_ and '<p>Expéditeur: %s</p>' % from_ or ''
         to = self.getData('Destinataire')
-        to = to and '<p>Expéditeur: %s</p>' % to or ''
+        to = to and '<p>Destinataire: %s</p>' % to or ''
         expedition = self.getData('Expédition')
         expedition = expedition and '<p>Expédition: %s</p>' % expedition or ''
 

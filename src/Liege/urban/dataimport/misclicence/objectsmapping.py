@@ -4,7 +4,7 @@ from imio.urban.dataimport.csv.mapper import CSVSimpleMapper as SimpleMapper
 
 from Liege.urban.dataimport.misclicence.mappers import LicenceFactory, \
     PortalTypeMapper, ReferenceMapper, CompletionStateMapper, ErrorsMapper, \
-    ContactFactory, ContactTitleMapper, ContactNameMapper, IdMapper, \
+    ContactFactory, IdMapper, \
     ContactStreetMapper, ContactIdMapper, LocalityMapper, UrbanEventFactory, \
     DepositEventMapper, DepositDateMapper, DecisionEventMapper, DecisionDateMapper, \
     TaskFactory, TaskTableMapper, TaskIdMapper, TaskDateMapper, TaskDescriptionMapper, \
@@ -93,21 +93,15 @@ FIELDS_MAPPINGS = {
                     'from': 'TELDEMANDEUR',
                     'to': 'phone',
                 },
+                {
+                    'from': 'NOM DU DEMANDEUR',
+                    'to': 'name1',
+                },
             ),
 
             ContactIdMapper: {
                 'from': ('QUALITE', 'NOM DU DEMANDEUR'),
                 'to': 'id',
-            },
-
-            ContactTitleMapper: {
-                'from': 'QUALITE',
-                'to': 'personTitle',
-            },
-
-            ContactNameMapper: {
-                'from': 'NOM DU DEMANDEUR',
-                'to': ('name1', 'name2'),
             },
 
             ContactStreetMapper: {
