@@ -83,6 +83,18 @@ class ReferenceMapper(PostCreationMapper):
         return ref
 
 
+class CU1SubjectMapper(PostCreationMapper):
+
+    def mapDescription(self, line, plone_object):
+        old_description = plone_object.Description()
+        if plone_object.portal_type != 'UrbanCertificateOne':
+            return old_description
+
+        subject = self.getData('Objettrav')
+        description = "<p>objet: {}</p>{}".format(subject, old_description)
+        return description
+
+
 class OldAddressMapper(SecondaryTableMapper):
     """ """
 
@@ -101,6 +113,19 @@ class WorklocationsMapper(Mapper):
             code = street.getStreetCode()
             if code not in streets_by_code:
                 streets_by_code[code] = street
+
+        # handle case of disbaled streets by referencing an active street instead
+        disabled_street_brains = catalog(portal_type='Street', review_state='disabled', sort_on='id')
+        streets = [br.getObject() for br in disabled_street_brains]
+        for street in streets:
+            active_street = catalog(portal_type='Street', review_state='enabled', Title=street.getStreetName())
+            if len(active_street) != 1:
+                continue
+            active_street = active_street[0].getObject()
+            code = street.getStreetCode()
+            if code not in streets_by_code:
+                streets_by_code[code] = active_street
+
         self.streets_by_code = streets_by_code
 
         portal_urban = self.site.portal_urban

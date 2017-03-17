@@ -4,7 +4,7 @@ from imio.urban.dataimport.csv.mapper import CSVSimpleMapper as SimpleMapper
 
 from Liege.urban.dataimport.misclicence.mappers import LicenceFactory, \
     PortalTypeMapper, ReferenceMapper, CompletionStateMapper, ErrorsMapper, \
-    ContactFactory, IdMapper, \
+    ContactFactory, IdMapper, CU1SubjectMapper, \
     ContactStreetMapper, ContactIdMapper, LocalityMapper, UrbanEventFactory, \
     DepositEventMapper, DepositDateMapper, DecisionEventMapper, DecisionDateMapper, \
     TaskFactory, TaskTableMapper, TaskIdMapper, TaskDateMapper, TaskDescriptionMapper, \
@@ -53,6 +53,11 @@ FIELDS_MAPPINGS = {
             ReferenceMapper: {
                 'from': ('DOSSIER', 'Type_trav', 'COLLEGE_DECISION'),
                 'to': 'reference',
+            },
+
+            CU1SubjectMapper: {
+                'from': 'Objettrav',
+                'to': 'description',
             },
 
             OldAddressMapper: {
