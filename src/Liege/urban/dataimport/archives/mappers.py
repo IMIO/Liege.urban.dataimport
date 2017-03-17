@@ -60,6 +60,19 @@ class WorklocationsMapper(Mapper):
             code = street.getStreetCode()
             if code not in streets_by_code:
                 streets_by_code[code] = street
+
+        # handle case of disbaled streets by referencing an active street instead
+        disabled_street_brains = catalog(portal_type='Street', review_state='disabled', sort_on='id')
+        streets = [br.getObject() for br in disabled_street_brains]
+        for street in streets:
+            active_street = catalog(portal_type='Street', review_state='enabled', Title=street.getStreetName())
+            if len(active_street) != 1:
+                continue
+            active_street = active_street[0].getObject()
+            code = street.getStreetCode()
+            if code not in streets_by_code:
+                streets_by_code[code] = active_street
+
         self.streets_by_code = streets_by_code
 
     def mapWorklocations(self, line):
@@ -214,8 +227,8 @@ class DecisionDateMapper(PostCreationMapper):
             raise NoFieldToMapException
         if not date:
             raise NoFieldToMapException
-        if int(date.year()) > 2017:
-            new_date = '%s/%s/%s' % (str(int(date.year()) - 100), date.month(), date.day())
+        if int(date.year) > 2017:
+            new_date = '%s/%s/%s' % (str(int(date.year) - 100), date.month, date.day)
             date = DateTime(new_date)
         return date
 

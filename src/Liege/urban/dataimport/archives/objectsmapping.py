@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ #-*- coding: utf-8 -*-
 
 from imio.urban.dataimport.access.mapper import AccessSimpleMapper as SimpleMapper
 from imio.urban.dataimport.factory import UrbanEventFactory
@@ -20,7 +20,7 @@ from Liege.urban.dataimport.archives.mappers import EventCompletionStateMapper
 
 OBJECTS_NESTING = [
     ('LICENCE', [
-#        ('PERSON CONTACT', []),
+        ('PERSON CONTACT', []),
         ('BUILDLICENCE DECISION COLLEGE EVENT', []),
     ],),
 ]
@@ -36,51 +36,51 @@ FIELDS_MAPPINGS = {
                     'from': 'Numéro',
                     'to': 'id',
                 },
-#                {
-#                    'from': 'Dossier',
-#                    'to': 'reference',
-#                },
+                {
+                    'from': 'Dossier',
+                    'to': 'reference',
+                },
             ),
 
-#            LicenceSubjectMapper: {
-#                'table': 'TA Objets_arch',
-#                'KEYS': ('Nature Travaux', 'Code'),
-#                'mappers': {
-#                    SimpleMapper: (
-#                        {
-#                            'from': 'Objet_travaux',
-#                            'to': 'licenceSubject',
-#                        },
-#                    ),
-#                }
-#            },
+            LicenceSubjectMapper: {
+                'table': 'TA Objets_arch',
+                'KEYS': ('Nature Travaux', 'Code'),
+                'mappers': {
+                    SimpleMapper: (
+                        {
+                            'from': 'Objet_travaux',
+                            'to': 'licenceSubject',
+                        },
+                    ),
+                }
+            },
 
-#            StreetTableMapper: {
-#                'from': ('ref_rue', 'Code National de la rue', 'Code Postal', 'ADRESSE'),
-#                'table': 'Rues',
-#                'KEYS': ('ref_rue', 'Numero'),
-#                'mappers': {
-#                    WorklocationsMapper: {
-#                        'from': ('Code National de la rue', 'Code Postal', 'ADRESSE'),
-#                        'to': 'workLocations',
-#                    },
-#                }
-#            },
+            StreetTableMapper: {
+                'from': ('ref_rue', 'Code National de la rue', 'Code Postal', 'ADRESSE'),
+                'table': 'Rues',
+                'KEYS': ('ref_rue', 'Numero'),
+                'mappers': {
+                    WorklocationsMapper: {
+                        'from': ('Code National de la rue', 'Code Postal', 'ADRESSE'),
+                        'to': 'workLocations',
+                    },
+                }
+            },
 
-#            StreetNumberMapper: {
-#                'from': ('NumPol', 'Rue', 'Particule'),
-#                'to': (),
-#            },
+            StreetNumberMapper: {
+                'from': ('NumPol', 'Rue', 'Particule'),
+                'to': (),
+            },
 
-#            OldLocationMapper: {
-#                'from': ('Repère1', 'Repère1b', 'Repère3', 'AncienNomRue'),
-#                'to': ('description'),
-#            },
+            OldLocationMapper: {
+                'from': ('Repère1', 'Repère1b', 'Repère3', 'AncienNomRue'),
+                'to': ('description'),
+            },
 
-#            CompletionStateMapper: {
-#                'from': (),
-#                'to': (),  # <- no field to fill, its the workflow state that has to be changed
-#            },
+            CompletionStateMapper: {
+                'from': (),
+                'to': (),  # <- no field to fill, its the workflow state that has to be changed
+            },
 
             ErrorsMapper: {
                 'from': (),
