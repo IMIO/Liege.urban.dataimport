@@ -109,6 +109,19 @@ class WorklocationsMapper(Mapper):
             code = street.getStreetCode()
             if code not in streets_by_code:
                 streets_by_code[code] = street
+
+        # handle case of disbaled streets by referencing an active street instead
+        disabled_street_brains = catalog(portal_type='Street', review_state='disabled', sort_on='id')
+        streets = [br.getObject() for br in disabled_street_brains]
+        for street in streets:
+            active_street = catalog(portal_type='Street', review_state='enabled', Title=street.getStreetName())
+            if len(active_street) != 1:
+                continue
+            active_street = active_street[0].getObject()
+            code = street.getStreetCode()
+            if code not in streets_by_code:
+                streets_by_code[code] = active_street
+
         self.streets_by_code = streets_by_code
 
         portal_urban = self.site.portal_urban
@@ -217,7 +230,7 @@ class SolicitOpinionsMapper(MultivaluedFieldSecondaryTableMapper):
         event_types_path = '/'.join(folderconfig.urbaneventtypes.getPhysicalPath())
         service_name = line[1].replace('.', '').replace('(', ' ').replace(')', ' ').replace('-', ' ').strip()
         catalog = api.portal.get_tool('portal_catalog')
-        brains = catalog(Title=service_name, portal_type='OpinionRequestEventType', path=event_types_path)
+        brains = catalog(Title=service_name, portal_type='OpinionRequestEventType', path=event_types_path, review_state='enabled')
         if len(brains) == 1:
             return [brains[0].getObject().id]
         self.logError(self, line, 'solicitOpinionsTo', {'name': line[1]})
@@ -617,7 +630,7 @@ class DepositDateMapper(Mapper):
         date = self.getData('DEPOT')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -637,7 +650,7 @@ class SecondDepositDateMapper(Mapper):
         date = self.getData('Date_accuse2')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -658,7 +671,7 @@ class InquiryStartDateMapper(Mapper):
         if not date:
             raise NoObjectToCreateException
         try:
-            date = date and DateTime(date) or None
+            date = date and DateTime(parse_date(date)) or None
         except:
             raise NoObjectToCreateException
         return date
@@ -669,7 +682,7 @@ class InquiryEndDateMapper(Mapper):
     def mapInvestigationend(self, line):
         date = self.getData('FinPUB')
         try:
-            date = date and DateTime(date) or None
+            date = date and DateTime(parse_date(date)) or None
         except:
             raise NoObjectToCreateException
         return date
@@ -680,7 +693,7 @@ class InquiryExplainationDateMapper(Mapper):
     def mapExplanationstartsdate(self, line):
         date = self.getData('DateBU')
         try:
-            date = date and DateTime(date) or None
+            date = date and DateTime(parse_date(date)) or None
         except:
             raise NoObjectToCreateException
         return date
@@ -814,7 +827,7 @@ class ClaimDateMapper(Mapper):
 
     def mapClaimdate(self, line):
         date = self.getData('Date_reclam')
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -881,12 +894,12 @@ class OpinionTransmitDateMapper(Mapper):
 
     def mapEventdate(self, line):
         date = self.getData('Date demande')
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
     def mapTransmitdate(self, line):
         date = self.getData('Date demande')
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -894,7 +907,7 @@ class OpinionReceiptDateMapper(Mapper):
 
     def mapReceiptdate(self, line):
         date = self.getData('Date réception')
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -929,7 +942,7 @@ class FirstCollegeDateMapper(Mapper):
         date = self.getData('College2')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -961,7 +974,7 @@ class SecondCollegeDateMapper(Mapper):
         date = self.getData('College3')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -980,7 +993,7 @@ class SecondCollegeDecisionMapper(Mapper):
 
 class FDResponseEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'transmis-2eme-dossier-rw'
+    eventtype_id = 'demande-davis-au-fd'
 
 
 class FDTransmitDateMapper(Mapper):
@@ -989,7 +1002,7 @@ class FDTransmitDateMapper(Mapper):
         date = self.getData('UP2')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -997,7 +1010,7 @@ class FDAnswerReceiptDateMapper(Mapper):
 
     def mapReceiptdate(self, line):
         date = self.getData('UP3')
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -1061,14 +1074,14 @@ class NotificationDateMapper(Mapper):
         date = self.getData('notification')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
     def mapTransmitdate(self, line):
         date = self.getData('notification')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -1076,7 +1089,7 @@ class DeclarationNotificationDateMapper(Mapper):
 
     def mapEventdate(self, line):
         date = self.getData('notification')
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         if not date:
             raise NoObjectToCreateException
         return date
@@ -1085,7 +1098,7 @@ class DeclarationNotificationDateMapper(Mapper):
         date = self.getData('notification')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -1095,14 +1108,14 @@ class DecisionDateMapper(Mapper):
         date = self.getData('COLLDEFINITIF1')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
     def mapDecisiondate(self, line):
         date = self.getData('COLLDEFINITIF1')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
@@ -1112,7 +1125,7 @@ class DeclarationDecisionDateMapper(Mapper):
         date = self.getData('COLLDEFINITIF1')
         if not date:
             raise NoObjectToCreateException
-        date = date and DateTime(date) or None
+        date = date and DateTime(parse_date(date)) or None
         return date
 
 
