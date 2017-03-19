@@ -993,7 +993,15 @@ class SecondCollegeDecisionMapper(Mapper):
 
 class FDResponseEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'demande-davis-au-fd'
+
+    def mapEventtype(self, line):
+        licence = self.importer.current_containers_stack[-1]
+        if licence.portal_type == 'BuildLicence':
+            self.eventtype_id = 'demande-davis-au-fd'
+        else:
+            self.eventtype_id = 'copy_of_transmis-2eme-dossier-rw'
+
+        return super(FDResponseEventMapper, self).mapEventtype(line)
 
 
 class FDTransmitDateMapper(Mapper):
