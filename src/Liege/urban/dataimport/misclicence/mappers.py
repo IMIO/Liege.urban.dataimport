@@ -114,7 +114,7 @@ class WorklocationsMapper(Mapper):
             if code not in streets_by_code:
                 streets_by_code[code] = street
 
-        # handle case of disbaled streets by referencing an active street instead
+        # handle case of disabled streets by referencing an active street instead
         disabled_street_brains = catalog(portal_type='Street', review_state='disabled', sort_on='id')
         streets = [br.getObject() for br in disabled_street_brains]
         for street in streets:
