@@ -1159,6 +1159,51 @@ class NotificationEventMapper(EventTypeMapper):
 
 
 #
+# UrbanEvent recourse
+#
+
+
+class RecourseEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'copy_of_recours-decision-au-conseil-etat'
+
+
+class RecourseDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('Date')
+        date = date and DateTime(parse_date(date)) or None
+        return date
+
+
+class RecourseTransmitDateMapper(Mapper):
+
+    def mapTransmitdate(self, line):
+        date = self.getData('Expédition')
+        date = date and DateTime(parse_date(date)) or None
+        return date
+
+
+class RecourseDescriptionMapper(Mapper):
+    """ """
+
+    def mapDecisiontext(self, line):
+        foldermanager = self.getData('Gestionnaire')
+        foldermanager = foldermanager and '<p>Agent traitant: %s</p>' % foldermanager or ''
+        observations = self.getData('remarques')
+        observations = observations and '<p>Remarques: %s</p>' % observations or ''
+        from_ = self.getData('Expéditeur')
+        from_ = from_ and '<p>Expéditeur: %s</p>' % from_ or ''
+        to = self.getData('Destinataire')
+        to = to and '<p>Expéditeur: %s</p>' % to or ''
+        pelure = self.getData('Pelure')
+        pelure = pelure and '<p>Pelure: %s</p>' % pelure or ''
+
+        description = '{}{}{}{}{}'.format(foldermanager, observations, from_, to, pelure)
+        return description.decode('utf-8')
+
+
+#
 # Tasks (postits)
 #
 

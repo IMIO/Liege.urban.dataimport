@@ -5,7 +5,7 @@ from imio.urban.dataimport.csv.mapper import CSVSimpleMapper as SimpleMapper
 from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     TypeAndCategoryMapper, ReferenceMapper, CompletionStateMapper, ErrorsMapper, \
     FolderCategoryMapper, ContactFactory, ContactTitleMapper, ContactNameMapper, \
-    ContactStreetMapper, LocalityMapper, \
+    ContactStreetMapper, LocalityMapper, RecourseDateMapper, RecourseDescriptionMapper, \
     CorporationNameMapper, CorporationFactory, ArchitectMapper, UrbanEventFactory, \
     DepositEventMapper, DepositDateMapper, AnnoncedDelayMapper, InquiryEventMapper, \
     InquiryStartDateMapper, InquiryEndDateMapper, InquiryExplainationDateMapper, \
@@ -25,7 +25,8 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     ArchiveTaskIdMapper, ArchiveTaskDateMapper, DeclarationDecisionDateMapper, \
     NotificationEventMapper, DeclarationNotificationDateMapper, FDResponseEventMapper, \
     FDTransmitDateMapper, FDAnswerReceiptDateMapper, FDOpinionMapper, InspectionTaskDateMapper, \
-    PEBMapper, DeclarationDecisionEventMapper, ApplicantMapper
+    PEBMapper, DeclarationDecisionEventMapper, ApplicantMapper, RecourseTransmitDateMapper, \
+    RecourseEventMapper
 
 
 OBJECTS_NESTING = [
@@ -616,6 +617,46 @@ FIELDS_MAPPINGS = {
                 'from': 'notification',
                 'to': ('eventDate', 'transmitDate'),
             },
+        },
+    },
+
+    'RECOURSE EVENT':
+    {
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            TaskTableMapper: {
+                'table': 'TA_Recours',
+                'KEYS': ('NUMERO DE DOSSIER', 'Dossier'),
+                'mappers': {
+                    SimpleMapper: (
+                        {
+                            'from': 'Objet',
+                            'to': 'Title',
+                        },
+                    ),
+                    RecourseEventMapper: {
+                        'from': (),
+                        'to': 'eventtype',
+                    },
+                    TaskIdMapper: {
+                        'from': 'numpiece',
+                        'to': 'id',
+                    },
+                    RecourseDateMapper: {
+                        'from': 'Date',
+                        'to': 'eventDate',
+                    },
+                    RecourseTransmitDateMapper: {
+                        'from': 'Expédition',
+                        'to': 'transmitDate',
+                    },
+                    RecourseDescriptionMapper: {
+                        'from': ('remarques', 'Destinataire', 'Expéditeur', 'Gestionnaire', 'Pelure'),
+                        'to': 'pmObject',
+                    },
+                }
+            }
         },
     },
 
