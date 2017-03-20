@@ -51,7 +51,7 @@ class ReferenceMapper(PostCreationMapper):
         row = self.getValueMapping('type_map').get(type_value, '')
         abbr = row and row['abreviation'] or None
 
-        ref = '{}/{} {}'.format(abbr, self.getData('NUMDOSSIERBKP'), shore)
+        ref = '{}/{} {}'.format(abbr, self.getData('NUMERO DE DOSSIER'), shore)
         return ref
 
 
@@ -845,7 +845,9 @@ class OpinionRequestEventFactory(UrbanEventFactory):
             return None
         title = kwargs.pop('Title')
         if kwargs['eventtype']:
-            return super(OpinionRequestEventFactory, self).create(kwargs, container, line)
+            opinion_event = super(OpinionRequestEventFactory, self).create(kwargs, container, line)
+            opinion_event.setEventDate(kwargs['eventDate'])
+            return opinion_event
 
         kwargs['eventtype'] = 'config-opinion-request'
         opinion_event = super(OpinionRequestEventFactory, self).create(kwargs, container, line)

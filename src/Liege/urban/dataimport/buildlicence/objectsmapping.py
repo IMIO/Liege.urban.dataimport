@@ -47,6 +47,7 @@ OBJECTS_NESTING = [
         ('BUILDLICENCE NOTIFICATION EVENT', []),
         ('DECLARATION DECISION COLLEGE EVENT', []),
         ('DECLARATION NOTIFICATION EVENT', []),
+        ('RECOURSE EVENT', []),
         ('TASKS', []),
         ('ARCHIVE TASK', []),
         ('INSPECTION TASK', []),
@@ -61,7 +62,7 @@ FIELDS_MAPPINGS = {
         'mappers': {
             SimpleMapper: (
                 {
-                    'from': 'NUMDOSSIERBKP',
+                    'from': 'NUMERO DE DOSSIER',
                     'to': 'id',
                 },
                 {
