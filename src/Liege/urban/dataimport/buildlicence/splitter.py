@@ -20,8 +20,8 @@ class LiegeImportSplitter(object):
     def allow(self, line):
         """ """
         raw_number = self.importer.getData('NUMERO DE DOSSIER', line)
-        folder_number = raw_number and int(float(raw_number.replace(',', '.'))) or 0
-        allowed_divider = folder_number % self.divider == self.target
+        folder_number = raw_number and int(float(raw_number.replace(',', '.'))) or None
+        allowed_divider = folder_number is not None  and folder_number % self.divider == self.target
 
         raw_date = self.importer.getData('DEPOT', line)
         depot_date = parser.parse(raw_date, dayfirst=True)
