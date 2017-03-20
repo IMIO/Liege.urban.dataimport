@@ -228,7 +228,7 @@ class SolicitOpinionsMapper(MultivaluedFieldSecondaryTableMapper):
             raise NoObjectToCreateException
         folderconfig = getattr(urban_tool, portal_type.lower())
         event_types_path = '/'.join(folderconfig.urbaneventtypes.getPhysicalPath())
-        service_name = line[1].replace('.', '').replace('(', ' ').replace(')', ' ').replace('-', ' ').strip()
+        service_name = line[1].replace('.', '').replace('(', ' ').replace(')', ' ').replace('-', ' ').replace(',', ' ').strip()
         catalog = api.portal.get_tool('portal_catalog')
         brains = catalog(Title=service_name, portal_type='OpinionRequestEventType', path=event_types_path, review_state='enabled')
         if len(brains) == 1:
@@ -867,7 +867,7 @@ class OpinionEventTypeMapper(Mapper):
         licence = self.importer.current_containers_stack[-1]
         config = licence.getLicenceConfig()
         event_types_path = '/'.join(config.urbaneventtypes.getPhysicalPath())
-        service_name = self.getData('Nom_service').replace('.', '').replace('(', ' ').replace(')', ' ').replace('-', ' ').strip()
+        service_name = self.getData('Nom_service').replace('.', '').replace('(', ' ').replace(')', ' ').replace('-', ' ').replace(',', ' ').strip()
         catalog = api.portal.get_tool('portal_catalog')
         brains = catalog(Title=service_name, portal_type='OpinionRequestEventType', path=event_types_path)
         if len(brains) == 1:
