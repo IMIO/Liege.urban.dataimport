@@ -653,7 +653,7 @@ FIELDS_MAPPINGS = {
                     },
                     RecourseDescriptionMapper: {
                         'from': ('remarques', 'Destinataire', 'Expéditeur', 'Gestionnaire', 'Pelure'),
-                        'to': 'pmObject',
+                        'to': 'decisionText',
                     },
                 }
             }
