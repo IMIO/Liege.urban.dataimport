@@ -873,7 +873,10 @@ class OpinionEventTypeMapper(Mapper):
         catalog = api.portal.get_tool('portal_catalog')
         brains = catalog(Title=service_name, portal_type='OpinionRequestEventType', path=event_types_path)
         if len(brains) == 1:
-            return brains[0].getObject().id
+            event_type = brains[0].getObject()
+            if 'IInternalOpinionRequest' in event_type.getEventTypeType():
+                return None
+            return event_type.id
         return None
 
 
