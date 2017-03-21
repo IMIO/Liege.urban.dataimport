@@ -14,8 +14,8 @@ class ArchitectsImporter(AccessImporter):
 
     implements(ILiegeArchitectsImporter)
 
-    def __init__(self, db_name='P_tables.mdb', table_name='T Architecte', key_column='Numéro', savepoint_length=0):
-        super(ArchitectsImporter, self).__init__(db_name, table_name, key_column, savepoint_length)
+    def __init__(self, db_name='P_tables.mdb', table_name='T Architecte', key_column='Numéro', **kwargs):
+        super(ArchitectsImporter, self).__init__(db_name, table_name, key_column, **kwargs)
 
 
 class LiegeMapping(ObjectsMapping):
