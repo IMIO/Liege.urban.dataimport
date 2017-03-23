@@ -283,7 +283,7 @@ FIELDS_MAPPINGS = {
         'mappers': {
             ParcelsMapper: {
                 'table': 'PRUBA_CADASTRE',
-                'KEYS': ('NUMERO DE DOSSIER', 'NUMDOSSIER'),
+                'KEYS': ('NUMERO DE DOSSIER', 'NUMERO DE DOSSIER'),
                 'mappers': {
                     CapakeyMapper: {
                         'from': 'CAPAKEY',
