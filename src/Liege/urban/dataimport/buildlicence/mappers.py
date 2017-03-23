@@ -42,6 +42,13 @@ class LicenceFactory(BaseFactory):
 # mappers
 
 
+class IdMapper(Mapper):
+    """ """
+
+    def mapId(self, line):
+        return str(int(float(self.getData('NUMERO DE DOSSIER').replace(',', '.'))))
+
+
 class ReferenceMapper(PostCreationMapper):
     def mapReference(self, line, plone_object):
         to_shore = queryAdapter(plone_object, IShore)
@@ -301,15 +308,15 @@ class CompletionStateMapper(PostCreationMapper):
         workflow_tool = api.portal.get_tool('portal_workflow')
 
         annonced_delay = self.getData('Délai')
-        acknowldgement = self.getData('Date_accuse2')
+        acknowledgement = self.getData('Date_accuse2')
         decision_college = self.getData('COLLDEFINITIF1')
         notification = self.getData('notification')
         decision_choice = self.getData('COLLDECISION')
 
-        if (not annonced_delay or annonced_delay == '0') and not (notification or decision_college or decision_choice):
+        if (not annonced_delay or annonced_delay == '0' or not acknowledgement) and not (notification or decision_college or decision_choice):
             return 'checking_completion'
 
-        if acknowldgement and not (decision_college or notification or decision_choice):
+        if acknowledgement and not (decision_college or notification or decision_choice):
             return 'procedure_validated'
 
         if decision_college and not decision_choice:
@@ -401,41 +408,6 @@ class ContactTitleMapper(Mapper):
         if not title:
             raise NoObjectToCreateException
         return title
-
-
-class ContactNameMapper(Mapper):
-    """ """
-
-    regex_1 = '([A-Z]+-?[A-Z]+)\s+([A-Z][a-z]+-?[a-z]*)\s*\Z'
-    regex_2 = '([A-Z][a-z]+-?[a-z]*)\s+([A-Z]+-?[A-Z]+)\s*\Z'
-
-    def mapName1(self, line):
-        raw_name = self.getData('NOMDEMANDEUR')
-        match = re.search(self.regex_1, raw_name)
-        if match:
-            name1 = match.group(1)
-            return name1
-
-        match = re.search(self.regex_2, raw_name)
-        if match:
-            name1 = match.group(2)
-            return name1
-
-        return raw_name
-
-    def mapName2(self, line):
-        raw_name = self.getData('NOMDEMANDEUR')
-        match = re.search(self.regex_1, raw_name)
-        if match:
-            name2 = match.group(2)
-            return name2
-
-        match = re.search(self.regex_2, raw_name)
-        if match:
-            name2 = match.group(1)
-            return name2
-
-        return ''
 
 
 class CorporationNameMapper(Mapper):

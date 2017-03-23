@@ -4,7 +4,7 @@ from imio.urban.dataimport.csv.mapper import CSVSimpleMapper as SimpleMapper
 
 from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     TypeAndCategoryMapper, ReferenceMapper, CompletionStateMapper, ErrorsMapper, \
-    FolderCategoryMapper, ContactFactory, ContactTitleMapper, ContactNameMapper, \
+    FolderCategoryMapper, ContactFactory, ContactTitleMapper, \
     ContactStreetMapper, LocalityMapper, RecourseDateMapper, RecourseDescriptionMapper, \
     CorporationNameMapper, CorporationFactory, ArchitectMapper, UrbanEventFactory, \
     DepositEventMapper, DepositDateMapper, AnnoncedDelayMapper, InquiryEventMapper, \
@@ -26,7 +26,7 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     NotificationEventMapper, DeclarationNotificationDateMapper, FDResponseEventMapper, \
     FDTransmitDateMapper, FDAnswerReceiptDateMapper, FDOpinionMapper, InspectionTaskDateMapper, \
     PEBMapper, DeclarationDecisionEventMapper, ApplicantMapper, RecourseTransmitDateMapper, \
-    RecourseEventMapper
+    RecourseEventMapper, IdMapper
 
 
 OBJECTS_NESTING = [
@@ -63,10 +63,6 @@ FIELDS_MAPPINGS = {
         'mappers': {
             SimpleMapper: (
                 {
-                    'from': 'NUMERO DE DOSSIER',
-                    'to': 'id',
-                },
-                {
                     'from': 'Objettrav',
                     'to': 'licenceSubject',
                 },
@@ -75,6 +71,11 @@ FIELDS_MAPPINGS = {
                     'to': 'referenceDGATLP',
                 },
             ),
+
+            IdMapper: {
+                'from': 'NUMERO DE DOSSIER',
+                'to': 'id',
+            },
 
             TypeAndCategoryMapper: {
                 'from': 'NORM_UNIK',
@@ -196,6 +197,10 @@ FIELDS_MAPPINGS = {
                             'to': 'id',
                         },
                         {
+                            'from': 'NOMDEMANDEUR',
+                            'to': 'name1',
+                        },
+                        {
                             'from': 'NUMTELDEM',
                             'to': 'phone',
                         },
@@ -204,11 +209,6 @@ FIELDS_MAPPINGS = {
                     ContactTitleMapper: {
                         'from': 'QUALITE',
                         'to': 'personTitle',
-                    },
-
-                    ContactNameMapper: {
-                        'from': 'NOMDEMANDEUR',
-                        'to': ('name1', 'name2'),
                     },
 
                     ContactStreetMapper: {
