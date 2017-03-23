@@ -26,7 +26,7 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     NotificationEventMapper, DeclarationNotificationDateMapper, FDResponseEventMapper, \
     FDTransmitDateMapper, FDAnswerReceiptDateMapper, FDOpinionMapper, InspectionTaskDateMapper, \
     PEBMapper, DeclarationDecisionEventMapper, ApplicantMapper, RecourseTransmitDateMapper, \
-    RecourseEventMapper, IdMapper
+    RecourseEventMapper, IdMapper, ContactIdMapper
 
 
 OBJECTS_NESTING = [
@@ -83,7 +83,7 @@ FIELDS_MAPPINGS = {
             },
 
             ReferenceMapper: {
-                'from': ('NUMDOSSIERBKP', 'NORM_UNIK'),
+                'from': ('NUMERO DE DOSSIER', 'NORM_UNIK'),
                 'to': 'reference',
             },
 
@@ -189,13 +189,9 @@ FIELDS_MAPPINGS = {
         'mappers': {
             ApplicantMapper: {
                 'table': 'DEMANDEURS_PURBA',
-                'KEYS': ('NUMDOSSIERBKP', 'NUMERO DE DOSSIER'),
+                'KEYS': ('NUMERO DE DOSSIER', 'NUMERO DE DOSSIER'),
                 'mappers': {
                     SimpleMapper: (
-                        {
-                            'from': 'id',
-                            'to': 'id',
-                        },
                         {
                             'from': 'NOMDEMANDEUR',
                             'to': 'name1',
@@ -205,6 +201,11 @@ FIELDS_MAPPINGS = {
                             'to': 'phone',
                         },
                     ),
+
+                    ContactIdMapper: {
+                        'from': 'NOMDEMANDEUR',
+                        'to': 'id',
+                    },
 
                     ContactTitleMapper: {
                         'from': 'QUALITE',
@@ -232,18 +233,19 @@ FIELDS_MAPPINGS = {
         'mappers': {
             ApplicantMapper: {
                 'table': 'DEMANDEURS_PURBA',
-                'KEYS': ('NUMDOSSIERBKP', 'NUMERO DE DOSSIER'),
+                'KEYS': ('NUMERO DE DOSSIER', 'NUMERO DE DOSSIER'),
                 'mappers': {
                     SimpleMapper: (
-                        {
-                            'from': 'id',
-                            'to': 'id',
-                        },
                         {
                             'from': 'NUMTELDEM',
                             'to': 'phone',
                         },
                     ),
+
+                    ContactIdMapper: {
+                        'from': 'NOMDEMANDEUR',
+                        'to': 'id',
+                    },
 
                     CorporationNameMapper: {
                         'from': ('QUALITE', 'NOMDEMANDEUR'),

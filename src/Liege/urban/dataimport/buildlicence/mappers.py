@@ -58,7 +58,7 @@ class ReferenceMapper(PostCreationMapper):
         row = self.getValueMapping('type_map').get(type_value, '')
         abbr = row and row['abreviation'] or None
 
-        ref = '{}/{} {}'.format(abbr, self.getData('NUMERO DE DOSSIER'), shore)
+        ref = '{}/{} {}'.format(abbr, self.getData('NUMERO DE DOSSIER').replace(',00', ''), shore)
         return ref
 
 
@@ -396,6 +396,14 @@ class CorporationFactory(BaseFactory):
         return 'Corporation'
 
 # mappers
+
+
+class ContactIdMapper(Mapper):
+    """ """
+
+    def mapId(self, line):
+        name = self.getData('NOMDEMANDEUR')
+        return normalizeString(self.site.portal_urban.generateUniqueId(name))
 
 
 class ContactTitleMapper(Mapper):
