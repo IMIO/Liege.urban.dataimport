@@ -232,7 +232,7 @@ FIELDS_MAPPINGS = {
         'mappers': {
             ApplicantMapper: {
                 'table': 'DEMANDEURS_PURBA',
-                'KEYS': ('NUMDOSSIERBKP', 'NUMDOSSIER'),
+                'KEYS': ('NUMDOSSIERBKP', 'NUMERO DE DOSSIER'),
                 'mappers': {
                     SimpleMapper: (
                         {
