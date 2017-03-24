@@ -423,7 +423,7 @@ class CorporationNameMapper(Mapper):
 
     def mapDenomination(self, line):
         denomination = self.getData('NOMDEMANDEUR')
-        legal_form = self.getData('QUALITE')
+        legal_form = self.getData('QUALITE').lower()
 
         title_mapping = self.getValueMapping('person_title_map')
         title = title_mapping.get(legal_form, None)
