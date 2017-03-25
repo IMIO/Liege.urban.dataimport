@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from dateutil import parser
-
 from imio.urban.dataimport.interfaces import IImportSplitter
 
 from zope.interface import implements
@@ -25,8 +23,6 @@ class LiegeImportSplitter(object):
             folder_number = int(float(folder_id.replace(',', '.')))
             allowed_divider = folder_number > 3 and folder_number % self.divider == self.target
 
-        depot_date = parser.parse(self.importer.getData('DEPOT', line), dayfirst=True)
-        allowed_date = not depot_date or depot_date.year < 2014
         allowed_type = self.importer.getData('Type_trav', line) in ['AP', 'CU', 'DUP', 'PAT']
 
-        return allowed_divider and allowed_date and allowed_type
+        return allowed_divider and allowed_type
