@@ -9,7 +9,7 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     CorporationNameMapper, CorporationFactory, ArchitectMapper, UrbanEventFactory, \
     DepositEventMapper, DepositDateMapper, AnnoncedDelayMapper, InquiryEventMapper, \
     InquiryStartDateMapper, InquiryEndDateMapper, InquiryExplainationDateMapper, \
-    ClaimantTableMapper, ClaimantIdMapper, ClaimantTitleMapper, ClaimantNameMapper, \
+    ClaimantTableMapper, ClaimantIdMapper, ClaimantTitleMapper, \
     ClaimantStreetMapper, ClaimantLocalityMapper, ClaimantFactory, ClaimDateMapper, \
     HabitationMapper, InquiryDetailsMapper, ArticleTextMapper, DecisionEventMapper, \
     DecisionDateMapper, DecisionMapper, OpinionRequestEventFactory, OpinionRequestMapper, \
@@ -138,23 +138,23 @@ FIELDS_MAPPINGS = {
                 'to': 'solicitOpinionsTo',
             },
 
-            InquiryDetailsMapper: {
-                'table': 'T Publicites',
-                'KEYS': ('NUMERO DE DOSSIER', 'DOSSIER'),
-                'mappers': {
-                    SimpleMapper: (
-                        {
-                            'from': 'carac2',
-                            'to': 'derogationDetails',
-                        },
-                    ),
+#            InquiryDetailsMapper: {
+#                'table': 'T Publicites',
+#                'KEYS': ('NUMERO DE DOSSIER', 'DOSSIER'),
+#                'mappers': {
+#                    SimpleMapper: (
+#                        {
+#                            'from': 'carac2',
+#                            'to': 'derogationDetails',
+#                        },
+#                    ),
 
-                    ArticleTextMapper: {
-                        'from': 'carac1',
-                        'to': 'investigationArticlesText',
-                    },
-                }
-            },
+#                    ArticleTextMapper: {
+#                        'from': 'carac1',
+#                        'to': 'investigationArticlesText',
+#                    },
+#                }
+#            },
 
             HabitationMapper: {
                 'from': ('NB_LOG', 'NB_LOG_AUTORISES', 'NB_LOG_DECLARES'),
@@ -370,6 +370,10 @@ FIELDS_MAPPINGS = {
                 'mappers': {
                     SimpleMapper: (
                         {
+                            'from': 'Reclamant',
+                            'to': 'name1',
+                        },
+                        {
                             'from': 'societe',
                             'to': 'society',
                         },
@@ -383,11 +387,6 @@ FIELDS_MAPPINGS = {
                     ClaimantTitleMapper: {
                         'from': 'civilite',
                         'to': 'personTitle',
-                    },
-
-                    ClaimantNameMapper: {
-                        'from': 'Reclamant',
-                        'to': ('name1', 'name2'),
                     },
 
                     ClaimantStreetMapper: {

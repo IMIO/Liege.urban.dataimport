@@ -720,41 +720,6 @@ class ClaimantTitleMapper(Mapper):
         return title
 
 
-class ClaimantNameMapper(Mapper):
-    """ """
-
-    regex_1 = '([A-Z]+-?[A-Z]+)\s+([A-Z][a-z]+-?[a-z]*)\s*\Z'
-    regex_2 = '([A-Z][a-z]+-?[a-z]*)\s+([A-Z]+-?[A-Z]+)\s*\Z'
-
-    def mapName1(self, line):
-        raw_name = self.getData('Reclamant')
-        match = re.search(self.regex_1, raw_name)
-        if match:
-            name1 = match.group(1)
-            return name1
-
-        match = re.search(self.regex_2, raw_name)
-        if match:
-            name1 = match.group(2)
-            return name1
-
-        return raw_name
-
-    def mapName2(self, line):
-        raw_name = self.getData('Reclamant')
-        match = re.search(self.regex_1, raw_name)
-        if match:
-            name2 = match.group(2)
-            return name2
-
-        match = re.search(self.regex_2, raw_name)
-        if match:
-            name2 = match.group(1)
-            return name2
-
-        return ''
-
-
 class ClaimantStreetMapper(Mapper):
     """ """
 
@@ -1178,7 +1143,7 @@ class RecourseDescriptionMapper(Mapper):
         from_ = self.getData('Expéditeur')
         from_ = from_ and '<p>Expéditeur: %s</p>' % from_ or ''
         to = self.getData('Destinataire')
-        to = to and '<p>Expéditeur: %s</p>' % to or ''
+        to = to and '<p>Destinataire: %s</p>' % to or ''
         pelure = self.getData('Pelure')
         pelure = pelure and '<p>Pelure: %s</p>' % pelure or ''
 
