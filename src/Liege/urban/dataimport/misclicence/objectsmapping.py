@@ -4,15 +4,16 @@ from imio.urban.dataimport.csv.mapper import CSVSimpleMapper as SimpleMapper
 
 from Liege.urban.dataimport.misclicence.mappers import LicenceFactory, \
     PortalTypeMapper, ReferenceMapper, CompletionStateMapper, ErrorsMapper, \
-    ContactFactory, IdMapper, CU1SubjectMapper, \
+    ContactFactory, IdMapper, CU1SubjectMapper, InquiryExplainationDateMapper, \
     ContactStreetMapper, ContactIdMapper, LocalityMapper, UrbanEventFactory, \
     DepositEventMapper, DepositDateMapper, DecisionEventMapper, DecisionDateMapper, \
     TaskFactory, TaskTableMapper, TaskIdMapper, TaskDateMapper, TaskDescriptionMapper, \
     FirstCollegeDateMapper, FirstCollegeEventMapper, FirstCollegeDecisionMapper, \
-    OldAddressMapper, WorklocationsMapper, DecisionMapper, \
+    OldAddressMapper, WorklocationsMapper, DecisionMapper, InquiryEventMapper, \
     OldAddressNumberMapper, AddressFactory, AddressPointMapper, \
-    FDResponseEventMapper, EventCompletionStateMapper, \
-    FDAnswerReceiptDateMapper, FDOpinionMapper
+    FDResponseEventMapper, EventCompletionStateMapper, ClaimantFactory, ClaimantTableMapper, \
+    FDAnswerReceiptDateMapper, FDOpinionMapper, ClaimantIdMapper, ClaimantTitleMapper, \
+    ClaimantStreetMapper, ClaimantLocalityMapper, ClaimDateMapper
 
 
 OBJECTS_NESTING = [
@@ -20,6 +21,9 @@ OBJECTS_NESTING = [
         ('PERSON CONTACT', []),
         ('ADDRESS POINT', []),
         ('DEPOSIT EVENT', []),
+        ('INQUIRY EVENT', [
+            ('CLAIMANTS', []),
+        ]),
         ('CU FIRST COLLEGE EVENT', []),
         ('FD RESPONSE EVENT', []),
         ('CU DECISION COLLEGE EVENT', []),
@@ -153,6 +157,74 @@ FIELDS_MAPPINGS = {
                 'to': (),  # <- no field to fill, its the workflow state that has to be changed
             },
         },
+    },
+
+    'INQUIRY EVENT':
+    {
+        'allowed_containers': ['UrbanCertificateTwo'],
+
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            InquiryEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            InquiryExplainationDateMapper: {
+                'from': ('DateBU', 'DOSSIER'),
+                'to': 'explanationStartSDate',
+            },
+        },
+    },
+
+    'CLAIMANTS':
+    {
+        'factory': [ClaimantFactory],
+
+        'mappers': {
+            ClaimantTableMapper: {
+                'table': '_TReclamationsAffairesDiverses',
+                'KEYS': ('DOSSIER', 'Dossier'),
+                'mappers': {
+                    SimpleMapper: (
+                        {
+                            'from': 'Reclamant',
+                            'to': 'name1',
+                        },
+                        {
+                            'from': 'societe',
+                            'to': 'society',
+                        },
+                    ),
+
+                    ClaimantIdMapper: {
+                        'from': 'Reclamant',
+                        'to': 'id',
+                    },
+
+                    ClaimantTitleMapper: {
+                        'from': 'civilite',
+                        'to': 'personTitle',
+                    },
+
+                    ClaimantStreetMapper: {
+                        'from': 'adresse',
+                        'to': ('street', 'number'),
+                    },
+
+                    ClaimantLocalityMapper: {
+                        'from': 'CP',
+                        'to': ('city', 'zipcode'),
+                    },
+
+                    ClaimDateMapper: {
+                        'from': 'Date_reclam',
+                        'to': 'claimDate',
+                    },
+                },
+            },
+        }
     },
 
     'CU FIRST COLLEGE EVENT':
