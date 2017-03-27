@@ -1113,7 +1113,7 @@ class NotificationEventMapper(EventTypeMapper):
 
 class RecourseEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'copy_of_recours-decision-au-conseil-etat'
+    eventtype_id = 'recours'
 
 
 class RecourseDateMapper(Mapper):
