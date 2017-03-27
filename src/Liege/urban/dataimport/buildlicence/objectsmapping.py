@@ -332,7 +332,7 @@ FIELDS_MAPPINGS = {
 
     'INQUIRY EVENT':
     {
-        'allowed_containers': ['BuildLicence', 'Article127'],
+        'allowed_containers': ['BuildLicence', 'Article127', 'UniqueLicence', 'IntegratedLicence'],
 
         'factory': [UrbanEventFactory],
 
@@ -410,7 +410,7 @@ FIELDS_MAPPINGS = {
 
     'OPINION REQUEST EVENT':
     {
-        'allowed_containers': ['BuildLicence', 'Article127'],
+        'allowed_containers': ['BuildLicence', 'Article127', 'UniqueLicence', 'IntegratedLicence'],
 
         'factory': [OpinionRequestEventFactory],
 
@@ -532,7 +532,7 @@ FIELDS_MAPPINGS = {
 
     'BUILDLICENCE DECISION COLLEGE EVENT':
     {
-        'allowed_containers': ['BuildLicence', 'Article127'],
+        'allowed_containers': ['BuildLicence', 'Article127', 'UniqueLicence', 'IntegratedLicence'],
 
         'factory': [UrbanEventFactory],
 
@@ -561,7 +561,7 @@ FIELDS_MAPPINGS = {
 
     'BUILDLICENCE NOTIFICATION EVENT':
     {
-        'allowed_containers': ['BuildLicence', 'Article127'],
+        'allowed_containers': ['BuildLicence', 'Article127', 'UniqueLicence', 'IntegratedLicence'],
 
         'factory': [UrbanEventFactory],
 

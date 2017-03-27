@@ -5,14 +5,14 @@ from imio.urban.dataimport.mapping import table
 VALUES_MAPS = {
 
 'type_map': table({
-'header'  : ['portal_type',  'foldercategory', 'abreviation'],
-'N'       : ['BuildLicence', 'pn',             'PU'],
-'U'       : ['', 'pu',             'U'],
-'M'       : ['Article127',   '',               'M'],  # Article127
-'I'       : ['', 'pi',             'PI'],
-'V'       : ['Article127',   '',               'V'],  # Article127
-'D'       : ['Declaration',  '',               'D'],  # Declaration
-''        : ['',             '',               ''],
+'header'  : ['portal_type',       'foldercategory', 'abreviation'],
+'N'       : ['BuildLicence',      'pn',             'PU'],
+'U'       : ['UniqueLicence',     'pu',             'U'],
+'M'       : ['Article127',        '',               'M'],  # Article127
+'I'       : ['IntegratedLicence', 'pi',             'PI'],
+'V'       : ['Article127',        '',               'V'],  # Article127
+'D'       : ['Declaration',       '',               'D'],  # Declaration
+''        : ['',                  '',               ''],
 }),
 
 'state_map': {
@@ -31,6 +31,8 @@ VALUES_MAPS = {
     'BuildLicence'       : ['delivrance-du-permis-octroi-ou-refus', 'depot-de-la-demande', 'recepisse-art15-complement', 'notification-de-la-decision'],
     'Article127'         : ['delivrance-du-permis-octroi-ou-refus', 'reception-du-dossier-du-spw', 'recepisse-art15-complement', 'transmis-decision-aux-reclamants'],
     'Declaration'        : ['deliberation-college',                 'depot-de-la-demande', 'depot-de-la-demande',        'transmis-decision'],
+    'IntegratedLicence'  : ['decision-finale', 'depot-du-dossier', 'reception-complement', 'notification-de-la-decision-doc-de-transmis'],
+    'UniqueLicence'      : ['decision-finale', 'depot-du-dossier', 'reception-complement', 'notification-de-la-decision-doc-de-transmis'],
 }),
 
 'person_title_map': {

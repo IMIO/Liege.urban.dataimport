@@ -21,6 +21,6 @@ class LiegeImportSplitter(object):
         folder_number = raw_number and int(float(raw_number.replace(',', '.'))) or None
         allowed_divider = folder_number is not None and folder_number % self.divider == self.target
 
-        allowed_type = self.importer.getData('NORM_UNIK', line) in ['D', 'N', 'M', 'V']
+        allowed_type = self.importer.getData('NORM_UNIK', line) in ['I', 'U']  # , 'D', 'N', 'M', 'V']
 
         return allowed_divider and allowed_type

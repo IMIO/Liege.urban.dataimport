@@ -1006,7 +1006,7 @@ class FDOpinionMapper(Mapper):
 
 class DecisionEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'delivrance-du-permis-octroi-ou-refus'
+    eventtype_id = 'decision_event'
 
 
 class DeclarationDecisionEventMapper(EventTypeMapper):
