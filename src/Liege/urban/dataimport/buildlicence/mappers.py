@@ -1091,8 +1091,13 @@ class DecisionMapper(Mapper):
 
     def mapDecision(self, line):
         raw_decision = self.getData('COLLDECISION')
-        if 'autorisé' in raw_decision.lower():
+        decision = raw_decision.lower()
+        if 'autorisé' in decision:
             return 'favorable'
+        elif 'refus' in decision and 'tacite' in decision:
+            return 'refus-tacite'
+        elif 'permis' in decision and 'tacite' in decision:
+            return 'octroi-tacite'
         return 'defavorable'
 
 
