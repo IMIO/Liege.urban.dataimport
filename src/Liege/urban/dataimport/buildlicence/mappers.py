@@ -23,6 +23,7 @@ from unidecode import unidecode
 
 from zope.component import queryAdapter
 
+import datetime
 import re
 
 
@@ -111,6 +112,13 @@ class WorklocationsMapper(Mapper):
 
         streets_by_code = {}
         street_brains = catalog(portal_type='Street', review_state='enabled', sort_on='id')
+        streets = [br.getObject() for br in street_brains]
+        for street in streets:
+            code = street.getStreetCode()
+            if code not in streets_by_code:
+                streets_by_code[code] = street
+        self.streets_by_code = streets_by_code
+
         streets = [br.getObject() for br in street_brains]
         for street in streets:
             code = street.getStreetCode()
@@ -948,6 +956,8 @@ class FDResponseEventMapper(EventTypeMapper):
         licence = self.importer.current_containers_stack[-1]
         if licence.portal_type == 'BuildLicence':
             self.eventtype_id = 'demande-davis-au-fd'
+        elif licence.portal_type == 'Article127':
+            self.eventtype_id = 'decision-du-fd-sur-127'
         else:
             self.eventtype_id = 'copy_of_transmis-2eme-dossier-rw'
 
@@ -1244,6 +1254,7 @@ class ArchiveTaskDateMapper(Mapper):
             date = date and parse_date(date) or None
         except:
             raise NoObjectToCreateException
+        date = date and datetime.strptime(date, '%x %X') or None
         return date
 
 
