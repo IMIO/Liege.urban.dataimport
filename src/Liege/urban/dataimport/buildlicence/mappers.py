@@ -23,7 +23,6 @@ from unidecode import unidecode
 
 from zope.component import queryAdapter
 
-import datetime
 import re
 
 
@@ -1254,7 +1253,6 @@ class ArchiveTaskDateMapper(Mapper):
             date = date and parse_date(date) or None
         except:
             raise NoObjectToCreateException
-        date = date and datetime.strptime(date, '%x %X') or None
         return date
 
 
