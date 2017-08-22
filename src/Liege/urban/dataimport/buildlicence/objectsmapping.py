@@ -272,8 +272,7 @@ FIELDS_MAPPINGS = {
 
         'mappers': {
             AddressPointMapper: {
-                # 'from': ('gidptadresse', 'CAPAKEY'),
-                'from': ('idptadresse', 'CAPAKEY'),
+                'from': ('gidptadresse', 'CAPAKEY'),
                 'to': (),
             }
         },

@@ -531,7 +531,7 @@ class AddressPointMapper(Mapper):
     def map(self, line):
         """
         """
-        gid = self.getData('idptadresse', line)
+        gid = self.getData('gidptadresse', line)
         session = address_service.new_session()
         address_record = session.query_address_by_gid(gid)
         if address_record:
