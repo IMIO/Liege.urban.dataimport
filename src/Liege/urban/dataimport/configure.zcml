@@ -15,9 +15,10 @@
     <include package="imio.urban.dataimport" />
 
     <include package=".architects" />
-    <include package=".buildlicence" />
-    <include package=".misclicence" />
     <include package=".archives" />
+    <include package=".buildlicence" />
+    <include package=".environment" />
+    <include package=".misclicence" />
 
     <!-- Register the installation GenericSetup extension profile -->
     <genericsetup:registerProfile
