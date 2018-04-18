@@ -917,6 +917,9 @@ class FirstCollegeDateMapper(Mapper):
         date = date and DateTime(parse_date(date)) or None
         return date
 
+    def mapDecisiondate(self, line):
+        return self.mapEventdate(line)
+
 
 class FirstCollegeDecisionMapper(Mapper):
 
@@ -956,6 +959,9 @@ class SecondCollegeDateMapper(Mapper):
             raise NoObjectToCreateException
         date = date and DateTime(parse_date(date)) or None
         return date
+
+    def mapDecisiondate(self, line):
+        return self.mapEventdate(line)
 
 
 class SecondCollegeDecisionMapper(Mapper):
