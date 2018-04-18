@@ -49,6 +49,13 @@ class IdMapper(Mapper):
         return str(int(float(self.getData('NUMERO DE DOSSIER').replace(',', '.'))))
 
 
+class Clean127LicencesMapper(PostCreationMapper):
+    def map(self, line, plone_object):
+        licence = plone_object
+        to_delete = [evt for evt in licence.objectValues() if evt.Title() == 'Transmis 2eme dossier RW']
+        api.content.delete(objects=to_delete)
+
+
 class ReferenceMapper(PostCreationMapper):
     def mapReference(self, line, plone_object):
         to_shore = queryAdapter(plone_object, IShore)
@@ -890,7 +897,15 @@ class OpinionMapper(Mapper):
 
 class FirstCollegeEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'transmis-2eme-dossier-rw'
+
+    def mapEventtype(self, line):
+        licence = self.importer.current_containers_stack[-1]
+        if licence.portal_type == 'Article127':
+            self.eventtype_id = 'delivrance-du-permis-octroi-ou-refus'
+        else:
+            self.eventtype_id = 'transmis-2eme-dossier-rw'
+
+        return super(FirstCollegeEventMapper, self).mapEventtype(line)
 
 
 class FirstCollegeDateMapper(Mapper):
@@ -922,7 +937,15 @@ class FirstCollegeDecisionMapper(Mapper):
 
 class SecondCollegeEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'transmis-2eme-dossier-rw'
+
+    def mapEventtype(self, line):
+        licence = self.importer.current_containers_stack[-1]
+        if licence.portal_type == 'Article127':
+            self.eventtype_id = 'delivrance-du-permis-octroi-ou-refus'
+        else:
+            self.eventtype_id = 'transmis-2eme-dossier-rw'
+
+        return super(SecondCollegeEventMapper, self).mapEventtype(line)
 
 
 class SecondCollegeDateMapper(Mapper):
@@ -955,8 +978,6 @@ class FDResponseEventMapper(EventTypeMapper):
         licence = self.importer.current_containers_stack[-1]
         if licence.portal_type == 'BuildLicence':
             self.eventtype_id = 'demande-davis-au-fd'
-        elif licence.portal_type == 'Article127':
-            self.eventtype_id = 'decision-du-fd-sur-127'
         else:
             self.eventtype_id = 'copy_of_transmis-2eme-dossier-rw'
 

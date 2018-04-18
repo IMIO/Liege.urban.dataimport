@@ -29,10 +29,10 @@ VALUES_MAPS = {
 'eventtype_id_map': table({
     'header'             : ['decision_event',                       'deposit_event',       'second_deposit_event',       'notification_event'],
     'BuildLicence'       : ['delivrance-du-permis-octroi-ou-refus', 'depot-de-la-demande', 'recepisse-art15-complement', 'notification-de-la-decision'],
-    'Article127'         : ['delivrance-du-permis-octroi-ou-refus', 'reception-du-dossier-du-spw', 'recepisse-art15-complement', 'transmis-decision-aux-reclamants'],
+    'Article127'         : ['decision-du-fd-sur127',                'reception-du-dossier-du-spw', 'recepisse-art15-complement', 'transmis-decision-aux-reclamants'],
     'Declaration'        : ['deliberation-college',                 'depot-de-la-demande', 'depot-de-la-demande',        'transmis-decision'],
-    'IntegratedLicence'  : ['decision-finale', 'depot-du-dossier', 'reception-complement', 'notification-de-la-decision-doc-de-transmis'],
-    'UniqueLicence'      : ['decision-finale', 'depot-du-dossier', 'reception-complement', 'notification-de-la-decision-doc-de-transmis'],
+    'IntegratedLicence'  : ['decision-finale', 'depot-du-dossier',  'reception-complement', 'notification-de-la-decision-doc-de-transmis'],
+    'UniqueLicence'      : ['decision-finale', 'depot-du-dossier',  'reception-complement', 'notification-de-la-decision-doc-de-transmis'],
 }),
 
 'person_title_map': {

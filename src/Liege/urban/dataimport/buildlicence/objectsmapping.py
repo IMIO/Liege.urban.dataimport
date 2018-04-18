@@ -31,27 +31,27 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
 
 OBJECTS_NESTING = [
     ('LICENCE', [
-        ('PERSON CONTACT', []),
-        ('CORPORATION CONTACT', []),
-        ('ADDRESS POINT', []),
-        ('PARCELS', []),
-        ('DEPOSIT EVENT', []),
-        ('SECOND DEPOSIT EVENT', []),
-        ('INQUIRY EVENT', [
-            ('CLAIMANTS', []),
-        ]),
-        ('OPINION REQUEST EVENT', []),
+#        ('PERSON CONTACT', []),
+#        ('CORPORATION CONTACT', []),
+#        ('ADDRESS POINT', []),
+#        ('PARCELS', []),
+#        ('DEPOSIT EVENT', []),
+#        ('SECOND DEPOSIT EVENT', []),
+#        ('INQUIRY EVENT', [
+#            ('CLAIMANTS', []),
+#        ]),
+#        ('OPINION REQUEST EVENT', []),
         ('FD FIRST COLLEGE EVENT', []),
         ('FD SECOND COLLEGE EVENT', []),
         ('FD RESPONSE EVENT', []),
         ('BUILDLICENCE DECISION COLLEGE EVENT', []),
-        ('BUILDLICENCE NOTIFICATION EVENT', []),
-        ('DECLARATION DECISION COLLEGE EVENT', []),
-        ('DECLARATION NOTIFICATION EVENT', []),
-        ('RECOURSE EVENT', []),
-        ('TASKS', []),
-        ('ARCHIVE TASK', []),
-        ('INSPECTION TASK', []),
+#        ('BUILDLICENCE NOTIFICATION EVENT', []),
+#        ('DECLARATION DECISION COLLEGE EVENT', []),
+#        ('DECLARATION NOTIFICATION EVENT', []),
+#        ('RECOURSE EVENT', []),
+#        ('TASKS', []),
+#        ('ARCHIVE TASK', []),
+#        ('INSPECTION TASK', []),
     ],),
 ]
 
@@ -61,82 +61,92 @@ FIELDS_MAPPINGS = {
         'factory': [LicenceFactory],
 
         'mappers': {
-            SimpleMapper: (
-                {
-                    'from': 'Objettrav',
-                    'to': 'licenceSubject',
-                },
-                {
-                    'from': 'UPNumero',
-                    'to': 'referenceDGATLP',
-                },
-            ),
+#            SimpleMapper: (
+#                {
+#                    'from': 'Objettrav',
+#                    'to': 'licenceSubject',
+#                },
+#                {
+#                    'from': 'UPNumero',
+#                    'to': 'referenceDGATLP',
+#                },
+#            ),
 
             IdMapper: {
                 'from': 'NUMERO DE DOSSIER',
                 'to': 'id',
             },
 
-            TypeAndCategoryMapper: {
-                'from': 'NORM_UNIK',
-                'to': ('portal_type', 'foldercategory'),
-            },
-
-            ReferenceMapper: {
-                'from': ('NUMERO DE DOSSIER', 'NORM_UNIK'),
-                'to': 'reference',
-            },
-
-            FolderCategoryMapper: {
-                'from': 'CODE NAT TRAVAUX',
-                'to': 'folderCategoryTownship',
-            },
-
-            AnnoncedDelayMapper: {
-                'from': 'Délai',
-                'to': 'annoncedDelay',
-            },
-
-            OldAddressMapper: {
-                'table': 'Rues',
-                'KEYS': ('Correspondance_adr', 'Numero'),
-                'mappers': {
-                    WorklocationsMapper: {
-                        'from': ('CODE_RUE', 'Localite', 'PARTICULE', 'RUE'),
-                        'to': 'workLocations',
-                    },
-                }
-            },
-
-            OldAddressNumberMapper: {
-                'from': ('NUM', 'Num2'),
-                'to': 'workLocations',
-            },
-
-            ArchitectMapper: {
-                'from': 'NUMARCHITECTE',
-                'to': 'architects',
-            },
-
-            PEBMapper: {
+            Clean127LicencesMapper: {
                 'from': (
-                    'PEB_dateengag',
-                    'PEB_engag_comm',
-                    'PEB_datefinal',
-                    'PEB_final_comm',
-                    'PEB_RW',
-                    'PEB_dateEngageDem',
-                    'PEB_dateEngageDemComm',
+                    'NUMERO DE DOSSIER',
+                    'College2', 'College3',
+                    'UP2', 'UP3',
+                    'COLLDEFINITIF1'
                 ),
-                'to': 'pebDetails',
+                'to': (),
             },
 
-            SolicitOpinionsMapper: {
-                'table': 'TA Avis_services',
-                'KEYS': ('NUMERO DE DOSSIER', 'Avis_services'),
-                'from': ('Nom_service', 'NUMERO DE DOSSIER', 'NORM_UNIK'),
-                'to': 'solicitOpinionsTo',
-            },
+#            TypeAndCategoryMapper: {
+#                'from': 'NORM_UNIK',
+#                'to': ('portal_type', 'foldercategory'),
+#            },
+
+#            ReferenceMapper: {
+#                'from': ('NUMERO DE DOSSIER', 'NORM_UNIK'),
+#                'to': 'reference',
+#            },
+
+#            FolderCategoryMapper: {
+#                'from': 'CODE NAT TRAVAUX',
+#                'to': 'folderCategoryTownship',
+#            },
+
+#            AnnoncedDelayMapper: {
+#                'from': 'Délai',
+#                'to': 'annoncedDelay',
+#            },
+
+#            OldAddressMapper: {
+#                'table': 'Rues',
+#                'KEYS': ('Correspondance_adr', 'Numero'),
+#                'mappers': {
+#                    WorklocationsMapper: {
+#                        'from': ('CODE_RUE', 'Localite', 'PARTICULE', 'RUE'),
+#                        'to': 'workLocations',
+#                    },
+#                }
+#            },
+
+#            OldAddressNumberMapper: {
+#                'from': ('NUM', 'Num2'),
+#                'to': 'workLocations',
+#            },
+
+#            ArchitectMapper: {
+#                'from': 'NUMARCHITECTE',
+#                'to': 'architects',
+#            },
+
+#            PEBMapper: {
+#                'from': (
+#                    'PEB_dateengag',
+#                    'PEB_engag_comm',
+#                    'PEB_datefinal',
+#                    'PEB_final_comm',
+#                    'PEB_RW',
+#                    'PEB_dateEngageDem',
+#                    'PEB_dateEngageDemComm',
+#                ),
+#                'to': 'pebDetails',
+#            },
+
+#            SolicitOpinionsMapper: {
+#                'table': 'TA Avis_services',
+#                'KEYS': ('NUMERO DE DOSSIER', 'Avis_services'),
+#                'from': ('Nom_service', 'NUMERO DE DOSSIER', 'NORM_UNIK'),
+#                'to': 'solicitOpinionsTo',
+#            },
 
 #            InquiryDetailsMapper: {
 #                'table': 'T Publicites',
@@ -156,30 +166,30 @@ FIELDS_MAPPINGS = {
 #                }
 #            },
 
-            HabitationMapper: {
-                'from': ('NB_LOG', 'NB_LOG_AUTORISES', 'NB_LOG_DECLARES'),
-                'to': (
-                    'noApplication',
-                    'additionalHabitationsAsked',
-                    'additionalHabitationsGiven',
-                    'habitationsAfterLicence',
-                ),
-            },
+#            HabitationMapper: {
+#                'from': ('NB_LOG', 'NB_LOG_AUTORISES', 'NB_LOG_DECLARES'),
+#                'to': (
+#                    'noApplication',
+#                    'additionalHabitationsAsked',
+#                    'additionalHabitationsGiven',
+#                    'habitationsAfterLicence',
+#                ),
+#            },
 
-            DescriptionMapper: {
-                'from': ('NOMBRE DE PLANS', 'Ajourne2'),
-                'to': ('description',),
-            },
+#            DescriptionMapper: {
+#                'from': ('NOMBRE DE PLANS', 'Ajourne2'),
+#                'to': ('description',),
+#            },
 
-            CompletionStateMapper: {
-                'from': ('Délai', 'Date_accuse2', 'COLLDEFINITIF1', 'notification', 'COLLDECISION'),
-                'to': (),  # <- no field to fill, its the workflow state that has to be changed
-            },
+#            CompletionStateMapper: {
+#                'from': ('Délai', 'Date_accuse2', 'COLLDEFINITIF1', 'notification', 'COLLDECISION'),
+#                'to': (),  # <- no field to fill, its the workflow state that has to be changed
+#            },
 
-            ErrorsMapper: {
-                'from': (),
-                'to': ('description',),  # log all the errors in the description field
-            }
+#            ErrorsMapper: {
+#                'from': (),
+#                'to': ('description',),  # log all the errors in the description field
+#            }
         },
     },
 
@@ -467,11 +477,11 @@ FIELDS_MAPPINGS = {
 
             FirstCollegeDateMapper: {
                 'from': 'College2',
-                'to': 'eventDate',
+                'to': ('eventDate', 'decisionDate'),
             },
 
             FirstCollegeDecisionMapper: {
-                'from': ('College/Fav/Def', 'Ajourne2'),
+                'from': ('College/Fav/Def', 'Ajourne'),
                 'to': 'decision',
             },
         },
@@ -491,7 +501,7 @@ FIELDS_MAPPINGS = {
 
             SecondCollegeDateMapper: {
                 'from': 'College3',
-                'to': 'eventDate',
+                'to': ('eventDate', 'decisionDate'),
             },
 
             SecondCollegeDecisionMapper: {
