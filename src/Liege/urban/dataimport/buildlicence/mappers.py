@@ -984,6 +984,8 @@ class FDResponseEventMapper(EventTypeMapper):
         licence = self.importer.current_containers_stack[-1]
         if licence.portal_type == 'BuildLicence':
             self.eventtype_id = 'demande-davis-au-fd'
+        elif licence.portal_type == 'Article127':
+            self.eventtype_id = 'copy2_of_transmis-2eme-dossier-rw'
         else:
             self.eventtype_id = 'copy_of_transmis-2eme-dossier-rw'
 
