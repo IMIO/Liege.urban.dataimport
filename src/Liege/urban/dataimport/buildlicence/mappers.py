@@ -53,6 +53,13 @@ class Clean127LicencesMapper(PostCreationMapper):
     def map(self, line, plone_object):
         licence = plone_object
         to_delete = [evt for evt in licence.objectValues() if evt.Title() == 'Transmis 2eme dossier RW']
+        if self.getData('Colleg2') or self.getData('College3'):
+            to_delete.extend([evt for evt in licence.objectValues() if 'Avis du collège' in evt.Title()])
+        if self.getData('COLLDEFINITIF1'):
+            to_delete.extend([evt for evt in licence.objectValues() if 'Décision du FD sur 127' in evt.Title()])
+        if self.getData('UP2'):
+            to_delete.extend([evt for evt in licence.objectValues() if 'Transmis avis Collège au FD' in evt.Title()])
+
         api.content.delete(objects=to_delete)
 
 
