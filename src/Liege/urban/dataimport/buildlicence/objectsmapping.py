@@ -26,7 +26,7 @@ from Liege.urban.dataimport.buildlicence.mappers import LicenceFactory, \
     NotificationEventMapper, DeclarationNotificationDateMapper, FDResponseEventMapper, \
     FDTransmitDateMapper, FDAnswerReceiptDateMapper, FDOpinionMapper, InspectionTaskDateMapper, \
     PEBMapper, DeclarationDecisionEventMapper, ApplicantMapper, RecourseTransmitDateMapper, \
-    RecourseEventMapper, IdMapper, ContactIdMapper
+    RecourseEventMapper, IdMapper, ContactIdMapper, Clean127LicencesMapper
 
 
 OBJECTS_NESTING = [
