@@ -87,10 +87,10 @@ FIELDS_MAPPINGS = {
                 'to': (),
             },
 
-#            TypeAndCategoryMapper: {
-#                'from': 'NORM_UNIK',
-#                'to': ('portal_type', 'foldercategory'),
-#            },
+            TypeAndCategoryMapper: {
+                'from': 'NORM_UNIK',
+                'to': ('portal_type', 'foldercategory'),
+            },
 
 #            ReferenceMapper: {
 #                'from': ('NUMERO DE DOSSIER', 'NORM_UNIK'),
