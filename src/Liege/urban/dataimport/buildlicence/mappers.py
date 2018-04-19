@@ -51,6 +51,7 @@ class IdMapper(Mapper):
 
 class Clean127LicencesMapper(PostCreationMapper):
     def map(self, line, plone_object):
+        self.line = line
         licence = plone_object
         to_delete = [evt for evt in licence.objectValues() if evt.Title() == 'Transmis 2eme dossier RW']
         if self.getData('College2') or self.getData('College3'):
