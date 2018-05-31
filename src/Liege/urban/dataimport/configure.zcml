@@ -19,6 +19,7 @@
     <include package=".buildlicence" />
     <include package=".environment" />
     <include package=".misclicence" />
+    <include package=".rubrics_env" />
 
     <!-- Register the installation GenericSetup extension profile -->
     <genericsetup:registerProfile

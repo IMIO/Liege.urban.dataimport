@@ -18,6 +18,10 @@ class ILiegeEnvironmentLicencesImporter(IUrbanDataImporter):
     """ Marker interface for ILiege buildlicence importer """
 
 
+class ILiegeEnvironmentRubricsImporter(IUrbanDataImporter):
+    """ Marker interface for ILiege buildlicence importer """
+
+
 class ILiegeMisclicenceImporter(IUrbanDataImporter):
     """ Marker interface for ILiege buildlicence importer """
 
