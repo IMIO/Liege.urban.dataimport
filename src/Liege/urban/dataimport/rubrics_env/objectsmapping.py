@@ -12,7 +12,7 @@ OBJECTS_NESTING = [
 FIELDS_MAPPINGS = {
     'LICENCE':
     {
-        'factory': [mappers.LicenceFactory],
+        'factory': [mappers.RubricFactory],
 
         'mappers': {
             SimpleMapper: (

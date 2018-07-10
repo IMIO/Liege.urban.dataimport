@@ -24,7 +24,7 @@ import re
 # factory
 
 
-class LicenceFactory(BaseFactory):
+class RubricFactory(BaseFactory):
     def getCreationPlace(self, factory_args):
         return self.site.portal_urban.rubrics.old_rubrics
 
