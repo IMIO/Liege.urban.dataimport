@@ -1,0 +1,34 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="Liege.urban.dataimport">
+
+     <adapter
+         for="Liege.urban.dataimport.interfaces.ILiegeEnvironmentOldRubricsImporter"
+         factory=".importer.EnvironmentOldRubricsImportSource"
+         provides="imio.urban.dataimport.interfaces.IUrbanImportSource"
+         name="data source"
+      />
+
+    <adapter
+        for="Liege.urban.dataimport.old_rubrics_env.importer.EnvironmentOldRubricsImporter"
+        factory=".importer.EnvironmentOldRubricsValuesMapping"
+        provides="imio.urban.dataimport.interfaces.IValuesMapping"
+        name="values mapping"
+        />
+
+    <adapter
+        for="Liege.urban.dataimport.interfaces.ILiegeEnvironmentOldRubricsImporter"
+        factory=".importer.EnvironmentOldRubricsMapping"
+        provides="imio.urban.dataimport.interfaces.IObjectsMapping"
+        name="objects mapping"
+        />
+
+    <adapter
+        for="imio.urban.dataimport.interfaces.IImportSettingsForm"
+        factory=".settings.EnvironmentOldRubricsImporterFromImportSettings"
+        provides="imio.urban.dataimport.csv.interfaces.ICSVImporter"
+        name="liege old old_rubrics for environment"
+        />
+
+</configure>
