@@ -223,7 +223,7 @@ class ContactIdMapper(Mapper):
         name = self.getData('firme')
         if not name:
             raise NoObjectToCreateException
-        return normalizeString(self.site.portal_urban.generateUniqueId(name))
+        return normalizeString(name)
 
 
 class ContactStreetMapper(Mapper):
@@ -270,9 +270,12 @@ class UrbanEventFactory(BaseFactory):
 
     def create(self, kwargs, container, line):
         eventtype_uid = kwargs.pop('eventtype')
+        title = kwargs.pop('title', None)
         if 'eventDate' not in kwargs:
             kwargs['eventDate'] = None
         urban_event = container.createUrbanEvent(eventtype_uid, **kwargs)
+        if title:
+            urban_event.setTitle(title)
         return urban_event
 
 #mappers
@@ -324,3 +327,36 @@ class DecisionDateMapper(Mapper):
             raise NoObjectToCreateException
         date = date and DateTime(str(date)) or None
         return date
+
+#
+# Misc UrbanEvent
+#
+
+
+class MiscEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'misc_event'
+
+
+class MiscEventDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('datenvoi')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(str(date)) or None
+        return date
+
+
+class MiscEventTitle(Mapper):
+
+    def mapTitle(self, line):
+        code = self.getData('codenvoi')
+        comment = self.getData('commentairenv')
+        title = None
+        if not code:
+            title = comment
+        else:
+            code_mapping = self.getValueMapping('eventtitle_map')
+            title = code_mapping.get(code, None)
+        return title

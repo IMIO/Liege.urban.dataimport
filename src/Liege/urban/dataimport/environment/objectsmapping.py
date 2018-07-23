@@ -11,6 +11,7 @@ OBJECTS_NESTING = [
     ('LICENCE', [
         ('CORPORATION CONTACT', []),
         ('OLD CORPORATION CONTACT', []),
+        ('MISC EVENT', []),
         ('DECISION EVENT', []),
     ],),
 ]
@@ -171,13 +172,49 @@ FIELDS_MAPPINGS = {
 
         'mappers': {
             mappers.DecisionEventMapper: {
-                'from': ('datcol', 'datdp'),
+                'from': (),
                 'to': 'eventtype',
             },
 
             mappers.DecisionDateMapper: {
                 'from': ('datcol', 'datdp'),
                 'to': ('eventDate', 'decisionDate'),
+            },
+        },
+    },
+
+    'MISC EVENT':
+    {
+        'factory': [mappers.UrbanEventFactory],
+
+        'mappers': {
+            MultiLinesSecondaryTableMapper: {
+                'table': 'tabenv',
+                'KEYS': ('autoris', 'autoris'),
+                'mappers': {
+                    SimpleMapper: (
+                        {
+                            'from': 'commentairenv',
+                            'to': 'misc_description',
+                        },
+                    ),
+
+                    mappers.MiscEventMapper: {
+                        'from': (),
+                        'to': 'eventtype',
+                    },
+
+                    mappers.MiscEventDateMapper: {
+                        'from': 'datenvoi',
+                        'to': 'eventDate',
+                    },
+
+                    mappers.MiscEventTitle: {
+                        'from': ('codenvoi', 'commentairenv'),
+                        'to': 'title',
+                    },
+
+                },
             },
         },
     },
