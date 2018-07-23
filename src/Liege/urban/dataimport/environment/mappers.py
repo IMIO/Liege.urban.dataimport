@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 
+from DateTime import DateTime
+
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
-from imio.urban.dataimport.Postgres.mapper import PostgresMapper as Mapper
+from imio.urban.dataimport.Postgres.mapper import FieldMultiLinesSecondaryTableMapper
+from imio.urban.dataimport.Postgres.mapper import SecondaryTableMapper
 from imio.urban.dataimport.Postgres.mapper import PostgresFinalMapper as FinalMapper
+from imio.urban.dataimport.Postgres.mapper import PostgresMapper as Mapper
+from imio.urban.dataimport.Postgres.mapper import PostgresPostCreationMapper as PostCreationMapper
 
 from plone import api
 
@@ -34,26 +39,48 @@ class IdMapper(Mapper):
     """ """
 
     def mapId(self, line):
-        return self.getData('numetab').replace('/', '_')
+        return self.getData('autoris').replace('/', '_')
 
 
 class PortalTypeMapper(Mapper):
     """ """
-    def mapPortal_type(self, line):
-        type_value = self.getData('clasprinc')
-        portal_type = None
-        if '1' in type_value:
-            portal_type = 'EnvClassOne'
-        elif '2' in type_value:
-            portal_type = 'EnvClassTwo'
-        elif '3' in type_value:
-            portal_type = 'EnvClassThree'
+    types_mapping = {
+        '1': 'EnvClassOne',
+        '2': 'EnvClassTwo',
+        '3': 'EnvClassThree',
+        'PU': 'UniqueLicence',
+    }
 
-        if not portal_type:
-            self.logError(self, line, 'No portal type found for this type value', {'TYPE value': type_value})
+    def mapPortal_type(self, line):
+        ref = self.getData('autoris')
+        nature = self.getData('nature')
+
+        if nature == 'PU':
             raise NoObjectToCreateException
 
-        return portal_type
+        regex = '\d+/([1-3])/\d+'
+        class_match = re.match(regex, ref)
+        portal_type = None
+        if class_match:
+            class_num = class_match.groups()[0]
+            portal_type = self.types_mapping.get(class_num, None)
+            return portal_type
+
+        regex = '\d+/.*N[1-5]'
+        class_match = re.match(regex, ref)
+        if class_match:
+            portal_type = 'EnvClassTwo'
+            return portal_type
+
+        regex = '\d+/.*C3[4-8]'
+        class_match = re.match(regex, ref)
+        if class_match:
+            portal_type = 'EnvClassOne'
+            return portal_type
+
+        if not portal_type:
+            self.logError(self, line, 'No portal type found for this type value', {'TYPE value': ref})
+            raise NoObjectToCreateException
 
 
 class WorklocationsMapper(Mapper):
@@ -78,7 +105,7 @@ class WorklocationsMapper(Mapper):
             if code not in streets_by_code:
                 streets_by_code[code] = street
 
-        # handle case of disbaled streets by referencing an active street instead
+        # handle case of disabled streets by referencing an active street instead
         disabled_street_brains = catalog(portal_type='Street', review_state='disabled', sort_on='id')
         streets = [br.getObject() for br in disabled_street_brains]
         for street in streets:
@@ -105,6 +132,7 @@ class WorklocationsMapper(Mapper):
             return []
         street_code = int(raw_street_code)
         street = self.streets_by_code.get(street_code, None)
+        number = self.getData('numetab')[4:].encode('utf-8')
         if not street:
             self.logError(
                 self,
@@ -113,10 +141,39 @@ class WorklocationsMapper(Mapper):
                     'street_code': street_code,
                     'street_name': self.getData('z_librue'),
                     'street_start': self.getData('z_ravpl'),
+                    'street_number': number,
                 }
             )
             return []
-        return [{'street': street.UID(), 'number': ''}]
+        return [{'street': street.UID(), 'number': number}]
+
+
+
+class RubricsMapper(FieldMultiLinesSecondaryTableMapper):
+    """ """
+    def __init__(self, importer, args):
+        super(RubricsMapper, self).__init__(importer, args)
+        catalog = api.portal.get_tool('portal_catalog')
+
+        rubrics_by_code = {}
+        rubrics_brains = catalog(portal_type='EnvironmentRubricTerm',)
+        rubrics = [br.getObject() for br in rubrics_brains]
+        rubrics_by_code = dict([('old_rubrics' in r.getPhysicalPath() and r.id or r.id.replace('.', ''), r) for r in rubrics])
+        self.rubrics_by_code = rubrics_by_code
+
+
+    def mapRubrics(self, line):
+        """ """
+        self.line = line
+        rubric_name = self.getData('classe').replace(' ', '')
+        if rubric_name in self.rubrics_by_code:
+            rubric = self.rubrics_by_code[rubric_name]
+        else:
+            import ipdb; ipdb.set_trace()
+
+        return rubric
+
+
 
 
 class ErrorsMapper(FinalMapper):
@@ -132,7 +189,11 @@ class ErrorsMapper(FinalMapper):
             for error in errors:
                 data = error.data
                 if 'street' in error.message:
-                    error_trace.append('<p>adresse : %s, %s %s</p>' % (data['street_code'], data['street_start'], data['street_name']))
+                    error_trace.append(
+                        '<p>adresse : %s, %s %s (%s) </p>' % (
+                            data['street_number'], data['street_start'], data['street_name'], data['street_code']
+                        )
+                    )
             error_trace.append('<br />')
         error_trace = ''.join(error_trace)
 
@@ -146,6 +207,13 @@ class ErrorsMapper(FinalMapper):
 class CorporationFactory(BaseFactory):
     def getPortalType(self, container, **kwargs):
         return 'Corporation'
+
+    def create(self, kwargs, container=None, line=None):
+        review_state = kwargs.pop('state', None)
+        corp = super(CorporationFactory, self).create(kwargs, container, line)
+        if review_state:
+            api.content.transition(obj=corp, to_state=review_state)
+        return corp
 
 
 class ContactIdMapper(Mapper):
@@ -180,3 +248,79 @@ class ContactStreetMapper(Mapper):
             return number
 
         return ''
+
+
+class OldCorporationStateMapper(Mapper):
+     """
+     Put old corporation on state 'disabled'
+     """
+
+     def mapState(self, line):
+         return 'disabled'
+
+#
+# UrbanEvent base
+#
+
+# factory
+
+
+class UrbanEventFactory(BaseFactory):
+    """ """
+
+    def create(self, kwargs, container, line):
+        eventtype_uid = kwargs.pop('eventtype')
+        if 'eventDate' not in kwargs:
+            kwargs['eventDate'] = None
+        urban_event = container.createUrbanEvent(eventtype_uid, **kwargs)
+        return urban_event
+
+#mappers
+
+
+class EventTypeMapper(Mapper):
+    """ """
+
+    eventtype_id = ''  # to override
+
+    def mapEventtype(self, line):
+        if not self.eventtype_id:
+            return
+        licence = self.importer.current_containers_stack[-1]
+        urban_tool = api.portal.get_tool('portal_urban')
+        config = urban_tool.getUrbanConfig(licence)
+
+        event_id_mapping = self.getValueMapping('eventtype_id_map')[licence.portal_type]
+        eventtype_id = event_id_mapping.get(self.eventtype_id, self.eventtype_id)
+
+        return getattr(config.urbaneventtypes, eventtype_id).UID()
+
+#
+# UrbanEvent final decision
+#
+
+
+class DecisionEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'decision_event'
+
+
+class DecisionDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date_decision_college = self.getData('datcol')
+        date_decision_ft = self.getData('datdp')
+        date = date_decision_ft or date_decision_college
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(str(date)) or None
+        return date
+
+    def mapDecisiondate(self, line):
+        date_decision_college = self.getData('datcol')
+        date_decision_ft = self.getData('datdp')
+        date = date_decision_ft or date_decision_college
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(str(date)) or None
+        return date

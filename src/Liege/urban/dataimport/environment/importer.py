@@ -12,15 +12,7 @@ from imio.urban.dataimport.Postgres.importer import PostgresImportSource
 
 
 class EnvironmentLicencesImportSource(PostgresImportSource):
-
-    def iterdata(self):
-
-        result = self.session.query(self.main_table)
-        wrkdossier = self.importer.datasource.get_table('tabetab')
-
-        # default:
-        records = result.order_by(wrkdossier.columns['numetab'].desc()).all()
-        return records
+    """ """
 
 
 class EnvironmentLicencesImporter(PostgresDataImporter):
@@ -28,7 +20,7 @@ class EnvironmentLicencesImporter(PostgresDataImporter):
 
     implements(ILiegeEnvironmentLicencesImporter)
 
-    def __init__(self, db_name='liege_environnement', table_name='tabetab', key_column='numetab', **kwargs):
+    def __init__(self, db_name='liege_environnement', table_name='tabaut', key_column='autoris', **kwargs):
         super(EnvironmentLicencesImporter, self).__init__(db_name, table_name, key_column, **kwargs)
 
 

@@ -20,8 +20,8 @@ class EnvironmentLicencesImporterFromImportSettings(ImporterFromSettingsForm):
         settings = super(EnvironmentLicencesImporterFromImportSettings, self).get_importer_settings()
 
         db_settings = {
-            'table_name': 'tabetab',
-            'key_column': 'numetab',
+            'table_name': 'tabaut',
+            'key_column': 'autoris',
         }
 
         settings.update(db_settings)

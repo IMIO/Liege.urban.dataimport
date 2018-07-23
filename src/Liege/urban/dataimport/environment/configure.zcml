@@ -3,6 +3,12 @@
     xmlns:five="http://namespaces.zope.org/five"
     i18n_domain="Liege.urban.dataimport">
 
+    <adapter
+        for="Liege.urban.dataimport.environment.importer.EnvironmentLicencesImporter"
+        factory=".splitter.EnvironmentImportSplitter"
+        provides="imio.urban.dataimport.interfaces.IImportSplitter"
+        />
+
      <adapter
          for="Liege.urban.dataimport.interfaces.ILiegeEnvironmentLicencesImporter"
          factory=".importer.EnvironmentLicencesImportSource"
