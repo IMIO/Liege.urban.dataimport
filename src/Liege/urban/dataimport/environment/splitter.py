@@ -17,8 +17,8 @@ class EnvironmentImportSplitter(object):
 
     def allow(self, line):
         """ """
-        # allowed_type = self.importer.getData('numetab', line) in ['40780002']
-        allowed_type = self.importer.getData('autoris', line) in ['1/11C38']
+        allowed_type = self.importer.getData('numetab', line) not in ['40780002']
+        # allowed_type = self.importer.getData('autoris', line) in ['1/11C38']
         # allowed_type = True
 
         return allowed_type

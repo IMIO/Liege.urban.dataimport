@@ -12,7 +12,10 @@ OBJECTS_NESTING = [
         ('CORPORATION CONTACT', []),
         ('OLD CORPORATION CONTACT', []),
         ('MISC EVENT', []),
+        ('HISTORIC EVENT', []),
         ('DECISION EVENT', []),
+        ('AUTHORIZATION START EVENT', []),
+        ('AUTHORIZATION END EVENT', []),
     ],),
 ]
 
@@ -37,6 +40,16 @@ FIELDS_MAPPINGS = {
             mappers.PortalTypeMapper: {
                 'from': ('autoris', 'nature'),
                 'to': 'portal_type',
+            },
+
+            mappers.AuthorityMapper: {
+                'from': 'datdp',
+                'to': 'authority',
+            },
+
+            mappers.Description: {
+                'from': 'autorefdp',
+                'to': 'description',
             },
 
             SecondaryTableMapper: {
@@ -168,6 +181,8 @@ FIELDS_MAPPINGS = {
 
     'DECISION EVENT':
     {
+        'allowed_containers': ['EnvClassOne', 'EnvClassTwo'],
+
         'factory': [mappers.UrbanEventFactory],
 
         'mappers': {
@@ -179,6 +194,81 @@ FIELDS_MAPPINGS = {
             mappers.DecisionDateMapper: {
                 'from': ('datcol', 'datdp'),
                 'to': ('eventDate', 'decisionDate'),
+            },
+        },
+    },
+
+    'CLASS 3 DECISION EVENT':
+    {
+        'allowed_containers': ['EnvClassThree'],
+
+        'factory': [mappers.UrbanEventFactory],
+
+        'mappers': {
+            mappers.ClassThreeDecisionEventMapper: {
+                'from': ('automotif'),
+                'to': 'eventtype',
+            },
+
+            mappers.DecisionDateMapper: {
+                'from': ('datcol', 'datdp'),
+                'to': ('eventDate', 'decisionDate'),
+            },
+        },
+    },
+
+    'AUTHORIZATION START EVENT':
+    {
+        'factory': [mappers.UrbanEventFactory],
+
+        'mappers': {
+            mappers.AuthorisationStartEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            mappers.AuthorisationStartDateMapper: {
+                'from': 'autodeb',
+                'to': 'eventDate',
+            },
+        },
+    },
+
+    'AUTHORIZATION END EVENT':
+    {
+        'factory': [mappers.UrbanEventFactory],
+
+        'mappers': {
+            mappers.AuthorisationEndEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            mappers.AuthorisationEndDateMapper: {
+                'from': 'autofin'
+                'to': 'eventDate',
+            },
+        },
+    },
+
+    'FORCED AUTHORIZATION END EVENT':
+    {
+        'factory': [mappers.UrbanEventFactory],
+
+        'mappers': {
+            mappers.ForcedAuthorisationEndEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            mappers.ForcedAuthorisationEndDateMapper: {
+                'from': 'autofinfordate'
+                'to': 'eventDate',
+            },
+
+            mappers.ForcedAuthorisationEndDescriptionMapper: {
+                'from': 'automotif'
+                'to': 'misc_description',
             },
         },
     },
@@ -211,6 +301,42 @@ FIELDS_MAPPINGS = {
 
                     mappers.MiscEventTitle: {
                         'from': ('codenvoi', 'commentairenv'),
+                        'to': 'title',
+                    },
+
+                },
+            },
+        },
+    },
+
+    'HISTORIC EVENT':
+    {
+        'factory': [mappers.UrbanEventFactory],
+
+        'mappers': {
+            MultiLinesSecondaryTableMapper: {
+                'table': 'tabret',
+                'KEYS': ('autoris', 'autoris'),
+                'mappers': {
+                    SimpleMapper: (
+                        {
+                            'from': 'commentairet',
+                            'to': 'misc_description',
+                        },
+                    ),
+
+                    mappers.HistoricEventMapper: {
+                        'from': (),
+                        'to': 'eventtype',
+                    },
+
+                    mappers.HistoricEventDateMapper: {
+                        'from': 'datretour',
+                        'to': 'eventDate',
+                    },
+
+                    mappers.HistoricEventTitle: {
+                        'from': ('codretour', 'commentairet'),
                         'to': 'title',
                     },
 

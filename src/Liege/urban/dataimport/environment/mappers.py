@@ -83,6 +83,29 @@ class PortalTypeMapper(Mapper):
             raise NoObjectToCreateException
 
 
+class AuthorityMapper(Mapper):
+    """ """
+
+    def mapAuthority(self, line):
+        deputation = self.getData('datdp')
+        if deputation:
+            return 'deputation-provinciale'
+
+
+class DescriptionMapper(Mapper):
+    """ """
+
+    def mapDescription(self, line):
+        description = []
+
+        ref_dp = self.getData('autorefdp')
+        if ref_dp:
+            description.append('<p>iRéférence dp: %s</p>' % ref_dp)
+
+        description = ''.join(description)
+        return description
+
+
 class WorklocationsMapper(Mapper):
     """ """
 
@@ -174,9 +197,9 @@ class RubricsMapper(FieldMultiLinesSecondaryTableMapper):
         return rubric
 
 
-
-
 class ErrorsMapper(FinalMapper):
+    """ """
+
     def mapDescription(self, line, plone_object):
 
         line_number = self.importer.current_line
@@ -305,7 +328,19 @@ class EventTypeMapper(Mapper):
 
 class DecisionEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'decision_event'
+
+    def mapEventtype(self, line):
+
+        licence = self.importer.current_containers_stack[-1]
+        urban_tool = api.portal.get_tool('portal_urban')
+        config = urban_tool.getUrbanConfig(licence)
+
+        eventtype_id = 'demande-recevable'
+        motif = self.getData('automotif')
+        if motif in ['6030']:
+            eventtype_id = 'demande-irrecevable'
+
+        return getattr(config.urbaneventtypes, eventtype_id).UID()
 
 
 class DecisionDateMapper(Mapper):
@@ -329,13 +364,88 @@ class DecisionDateMapper(Mapper):
         return date
 
 #
+# UrbanEvent class 3 recevability event
+#
+
+
+class DecisionEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'decision_event'
+
+#
+# UrbanEvent authorisation start
+#
+
+
+class AuthorisationStartEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'date-de-debut-de-lautorisation'
+
+
+class AuthorisationStartDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('autodeb')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(str(date)) or None
+        return date
+
+#
+# UrbanEvent authorisation end
+#
+
+
+class AuthorisationEndEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'date-de-fin-de-lautorisation'
+
+
+class AuthorisationEndDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('autofin')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(str(date)) or None
+        return date
+
+#
+# UrbanEvent forced authorisation end
+#
+
+
+class ForcedAuthorisationEndEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'fin-forcee-par-ladministration'
+
+
+class ForcedAuthorisationEndDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('autofinfordate')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(str(date)) or None
+        return date
+
+
+class ForcedAuthorisationEndDescriptionMapper(Mapper):
+
+    def mapMisc_description(self, line):
+        code = self.getData('automotif')
+        code_mapping = self.getValueMapping('eventtitle_map')
+        description = code_mapping.get(code, '')
+        return description
+
+#
 # Misc UrbanEvent
 #
 
 
 class MiscEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'misc_event'
+    eventtype_id = 'evenement-libre'
 
 
 class MiscEventDateMapper(Mapper):
@@ -353,6 +463,39 @@ class MiscEventTitle(Mapper):
     def mapTitle(self, line):
         code = self.getData('codenvoi')
         comment = self.getData('commentairenv')
+        title = ''
+        if not code:
+            title = comment
+        else:
+            code_mapping = self.getValueMapping('eventtitle_map')
+            title = code_mapping.get(code, '')
+        return title
+
+#
+# Historic UrbanEvent
+#
+
+
+class HistoricEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'misc_event'
+
+
+class HistoricEventDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('datretour')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(str(date)) or None
+        return date
+
+
+class HistoricEventTitle(Mapper):
+
+    def mapTitle(self, line):
+        code = self.getData('codretour')
+        comment = self.getData('commentairet')
         title = None
         if not code:
             title = comment

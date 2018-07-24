@@ -27,10 +27,10 @@ VALUES_MAPS = {
 },
 
 'eventtype_id_map': table({
-    'header'       : ['decision_event',            'misc_event'],
-    'EnvClassThree': ['acceptation-de-la-demande', 'evenement-libre'],
-    'EnvClassTwo'  : ['decision',                  'evenement-libre'],
-    'EnvClassOne'  : ['decision',                  'evenement-libre'],
+    'header'       : ['decision_event',],
+    'EnvClassThree': ['acceptation-de-la-demande',],
+    'EnvClassTwo'  : ['decision-finale',],
+    'EnvClassOne'  : ['decision-finale',],
 }),
 
 'person_title_map': {
