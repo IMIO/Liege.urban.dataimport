@@ -102,7 +102,7 @@ class DescriptionMapper(Mapper):
 
         ref_dp = self.getData('autorefdp')
         if ref_dp:
-            description.append('<p>Référence dp: %s</p>' % ref_dpencode('utf-8'))
+            description.append('<p>Référence dp: %s</p>' % ref_dp.encode('utf-8'))
 
         description = ''.join(description)
         return description
