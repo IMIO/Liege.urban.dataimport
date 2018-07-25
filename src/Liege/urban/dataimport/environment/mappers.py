@@ -97,7 +97,7 @@ class AuthorityMapper(Mapper):
 class FolderManagerMapper(Mapper):
     """ """
 
-    self.mapping = {
+    mapping = {
         '13': 'jean-francois-yernaux-technicien',
         '14': 'lucien-sanelli-technicien-1',
         '15': 'tony-lixon-technicien-1',
@@ -111,7 +111,7 @@ class FolderManagerMapper(Mapper):
             return None
 
         config = api.portal.get_tool('portal_urban')
-        fm_folder = config.foldermanagers:
+        fm_folder = config.foldermanagers
         foldermanager = getattr(fm_folder, foldermanager_id)
         return foldermanager.UID()
 
