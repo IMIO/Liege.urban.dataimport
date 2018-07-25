@@ -47,7 +47,7 @@ FIELDS_MAPPINGS = {
                 'to': 'authority',
             },
 
-            mappers.Description: {
+            mappers.DescriptionMapper: {
                 'from': 'autorefdp',
                 'to': 'description',
             },
@@ -245,7 +245,7 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.AuthorisationEndDateMapper: {
-                'from': 'autofin'
+                'from': 'autofin',
                 'to': 'eventDate',
             },
         },
@@ -262,12 +262,12 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.ForcedAuthorisationEndDateMapper: {
-                'from': 'autofinfordate'
+                'from': 'autofinfordate',
                 'to': 'eventDate',
             },
 
             mappers.ForcedAuthorisationEndDescriptionMapper: {
-                'from': 'automotif'
+                'from': 'automotif',
                 'to': 'misc_description',
             },
         },

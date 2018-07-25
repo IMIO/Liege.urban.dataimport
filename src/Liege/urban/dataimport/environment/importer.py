@@ -20,7 +20,8 @@ class EnvironmentLicencesImporter(PostgresDataImporter):
 
     implements(ILiegeEnvironmentLicencesImporter)
 
-    def __init__(self, db_name='liege_environnement', table_name='tabaut', key_column='autoris', **kwargs):
+    def __init__(self, db_name='liege_environnement', table_name='tabaut', key_column='autoris',
+                 username='ro_user', password='r60i84y8w54L3LyJT94zy2323b296s1J', host='devel.interne.imio.be', **kwargs):
         super(EnvironmentLicencesImporter, self).__init__(db_name, table_name, key_column, **kwargs)
 
 

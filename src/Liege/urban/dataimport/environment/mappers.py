@@ -328,19 +328,7 @@ class EventTypeMapper(Mapper):
 
 class DecisionEventMapper(EventTypeMapper):
     """ """
-
-    def mapEventtype(self, line):
-
-        licence = self.importer.current_containers_stack[-1]
-        urban_tool = api.portal.get_tool('portal_urban')
-        config = urban_tool.getUrbanConfig(licence)
-
-        eventtype_id = 'demande-recevable'
-        motif = self.getData('automotif')
-        if motif in ['6030']:
-            eventtype_id = 'demande-irrecevable'
-
-        return getattr(config.urbaneventtypes, eventtype_id).UID()
+    eventtype_id = 'decision_event'
 
 
 class DecisionDateMapper(Mapper):
@@ -368,9 +356,21 @@ class DecisionDateMapper(Mapper):
 #
 
 
-class DecisionEventMapper(EventTypeMapper):
+class ClassThreeDecisionEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'decision_event'
+
+    def mapEventtype(self, line):
+
+        licence = self.importer.current_containers_stack[-1]
+        urban_tool = api.portal.get_tool('portal_urban')
+        config = urban_tool.getUrbanConfig(licence)
+
+        eventtype_id = 'demande-recevable'
+        motif = self.getData('automotif')
+        if motif in ['6030']:
+            eventtype_id = 'demande-irrecevable'
+
+        return getattr(config.urbaneventtypes, eventtype_id).UID()
 
 #
 # UrbanEvent authorisation start
