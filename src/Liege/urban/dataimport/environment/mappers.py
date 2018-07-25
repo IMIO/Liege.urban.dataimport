@@ -102,7 +102,7 @@ class DescriptionMapper(Mapper):
 
         ref_dp = self.getData('autorefdp')
         if ref_dp:
-            description.append('<p>iRéférence dp: %s</p>' % ref_dp)
+            description.append('<p>Référence dp: %s</p>' % ref_dpencode('utf-8'))
 
         description = ''.join(description)
         return description
@@ -214,11 +214,10 @@ class ErrorsMapper(FinalMapper):
             for error in errors:
                 data = error.data
                 if 'street' in error.message:
-                    error_trace.append(
-                        '<p>adresse : %s, %s %s (%s) </p>' % (
-                            data['street_number'], data['street_start'], data['street_name'], data['street_code']
-                        )
+                    error = u'<p>adresse : %s, %s %s (%s) </p>' % (
+                        data['street_number'], data['street_start'], data['street_name'], data['street_code']
                     )
+                    error_trace.append(error.encode('utf-8'))
             error_trace.append('<br />')
         error_trace = ''.join(error_trace)
 
@@ -465,12 +464,10 @@ class MiscEventTitle(Mapper):
     def mapTitle(self, line):
         code = self.getData('codenvoi')
         comment = self.getData('commentairenv')
-        title = ''
-        if not code:
+        code_mapping = self.getValueMapping('eventtitle_map')
+        title = code_mapping.get(code, '')
+        if not title:
             title = comment
-        else:
-            code_mapping = self.getValueMapping('eventtitle_map')
-            title = code_mapping.get(code, '')
         return title
 
 #
@@ -498,10 +495,8 @@ class HistoricEventTitle(Mapper):
     def mapTitle(self, line):
         code = self.getData('codretour')
         comment = self.getData('commentairet')
-        title = None
-        if not code:
+        code_mapping = self.getValueMapping('eventtitle_map')
+        title = code_mapping.get(code, '')
+        if not title:
             title = comment
-        else:
-            code_mapping = self.getValueMapping('eventtitle_map')
-            title = code_mapping.get(code, None)
         return title
