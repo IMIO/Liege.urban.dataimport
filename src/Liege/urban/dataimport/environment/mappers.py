@@ -94,6 +94,28 @@ class AuthorityMapper(Mapper):
         raise NoFieldToMapException
 
 
+class FolderManagerMapper(Mapper):
+    """ """
+
+    self.mapping = {
+        '13': 'jean-francois-yernaux-technicien',
+        '14': 'lucien-sanelli-technicien-1',
+        '15': 'tony-lixon-technicien-1',
+        '16': 'daniel-strykers-technicien-1',
+    }
+
+    def mapFoldermanager(self, line):
+        code = self.getData('codges')
+        foldermanager_id = self.mapping.get(code, None)
+        if foldermanager_id is None:
+            return None
+
+        config = api.portal.get_tool('portal_urban')
+        fm_folder = config.foldermanagers:
+        foldermanager = getattr(fm_folder, foldermanager_id)
+        return foldermanager.UID()
+
+
 class DescriptionMapper(Mapper):
     """ """
 

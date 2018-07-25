@@ -62,6 +62,12 @@ FIELDS_MAPPINGS = {
                             'to': 'licenceSubject',
                         },
                     ),
+
+                    mappers.FolderManagerMapper: {
+                        'from': 'codges'
+                        'to': 'folderManager',
+                    },
+
                     mappers.WorklocationsMapper: {
                         'from': ('numetab', 'nrue', 'z_librue', 'z_ravpl',),
                         'to': 'workLocations',
