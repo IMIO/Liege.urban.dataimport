@@ -3,6 +3,7 @@
 from DateTime import DateTime
 
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
+from imio.urban.dataimport.exceptions import NoFieldToMapException
 from imio.urban.dataimport.factory import BaseFactory
 from imio.urban.dataimport.Postgres.mapper import FieldMultiLinesSecondaryTableMapper
 from imio.urban.dataimport.Postgres.mapper import SecondaryTableMapper
@@ -90,6 +91,7 @@ class AuthorityMapper(Mapper):
         deputation = self.getData('datdp')
         if deputation:
             return 'deputation-provinciale'
+        raise NoFieldToMapException
 
 
 class DescriptionMapper(Mapper):
@@ -478,7 +480,7 @@ class MiscEventTitle(Mapper):
 
 class HistoricEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'misc_event'
+    eventtype_id = 'evenement-libre'
 
 
 class HistoricEventDateMapper(Mapper):
