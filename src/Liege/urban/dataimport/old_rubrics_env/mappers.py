@@ -35,3 +35,13 @@ class PortalTypeMapper(Mapper):
 
     def mapPortal_type(self, line):
         return 'EnvironmentRubricTerm'
+
+
+class DescriptionMapper(Mapper):
+    """ """
+
+    def mapDescription(self, line):
+        num = self.getData('num_rubrique2')
+        desc = self.getData('libelle_rubrique2')
+        full_desc = '{} - {}'.format(num, desc)
+        return full_desc

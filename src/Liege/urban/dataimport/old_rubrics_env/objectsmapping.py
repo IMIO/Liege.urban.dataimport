@@ -17,10 +17,6 @@ FIELDS_MAPPINGS = {
         'mappers': {
             SimpleMapper: (
                 {
-                    'from': 'libelle_rubrique2',
-                    'to': 'description',
-                },
-                {
                     'from': 'num_rubrique2',
                     'to': 'id',
                 },
@@ -29,6 +25,11 @@ FIELDS_MAPPINGS = {
             mappers.PortalTypeMapper: {
                 'from': (),
                 'to': 'portal_type',
+            },
+
+            mappers.DescriptionMapper: {
+                'from': ('libelle_rubrique2', 'num_rubrique2'),
+                'to': 'description',
             },
         },
     },
