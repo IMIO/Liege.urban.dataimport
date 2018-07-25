@@ -19,9 +19,19 @@ class EnvironmentOldRubricsImporter(PostgresDataImporter):
 
     implements(ILiegeEnvironmentOldRubricsImporter)
 
-    def __init__(self, db_name='liege_environnement', table_name='tabrub2', key_column='num_rubrique2',
-                 username='ro_user', password='', host='devel.interne.imio.be', **kwargs):
-        super(EnvironmentOldRubricsImporter, self).__init__(db_name, table_name, key_column, **kwargs)
+    def __init__(self, db_name='liege_environnement', table_name='tabrub2',
+                 key_column='num_rubrique2', username='ro_user', password='',
+                 host='devel.interne.imio.be', **kwargs):
+
+        super(EnvironmentOldRubricsImporter, self).__init__(
+            db_name,
+            table_name,
+            key_column,
+            username,
+            password,
+            host,
+            **kwargs
+        )
 
 
 class EnvironmentOldRubricsMapping(ObjectsMapping):

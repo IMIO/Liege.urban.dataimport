@@ -20,9 +20,19 @@ class EnvironmentLicencesImporter(PostgresDataImporter):
 
     implements(ILiegeEnvironmentLicencesImporter)
 
-    def __init__(self, db_name='liege_environnement', table_name='tabaut', key_column='autoris',
-                 username='ro_user', password='', host='devel.interne.imio.be', **kwargs):
-        super(EnvironmentLicencesImporter, self).__init__(db_name, table_name, key_column, **kwargs)
+    def __init__(self, db_name='liege_environnement', table_name='tabaut',
+                 key_column='autoris', username='ro_user', password='',
+                 host='devel.interne.imio.be', **kwargs):
+
+        super(EnvironmentLicencesImporter, self).__init__(
+            db_name,
+            table_name,
+            key_column,
+            username,
+            password,
+            host,
+            **kwargs
+        )
 
 
 class EnvironmentLicencesMapping(ObjectsMapping):
