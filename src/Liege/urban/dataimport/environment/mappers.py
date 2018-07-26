@@ -14,6 +14,7 @@ from imio.urban.dataimport.Postgres.mapper import PostgresPostCreationMapper as 
 from plone import api
 
 from Products.CMFPlone.utils import normalizeString
+from Products.urban.interfaces import IEnvClassThree
 
 from unidecode import unidecode
 
