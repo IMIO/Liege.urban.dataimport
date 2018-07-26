@@ -104,8 +104,8 @@ class FolderManagerMapper(Mapper):
         '16': 'daniel-strykers-technicien-1',
     }
 
-    def mapFoldermanager(self, line):
-        code = self.getData('codges')
+    def mapFoldermanagers(self, line):
+        code = str(self.getData('codges'))
         foldermanager_id = self.mapping.get(code, None)
         if foldermanager_id is None:
             return None
@@ -113,7 +113,7 @@ class FolderManagerMapper(Mapper):
         config = api.portal.get_tool('portal_urban')
         fm_folder = config.foldermanagers
         foldermanager = getattr(fm_folder, foldermanager_id)
-        return foldermanager.UID()
+        return [foldermanager]
 
 
 class DescriptionMapper(Mapper):

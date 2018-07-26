@@ -65,7 +65,7 @@ FIELDS_MAPPINGS = {
 
                     mappers.FolderManagerMapper: {
                         'from': 'codges',
-                        'to': 'folderManager',
+                        'to': 'foldermanagers',
                     },
 
                     mappers.WorklocationsMapper: {
