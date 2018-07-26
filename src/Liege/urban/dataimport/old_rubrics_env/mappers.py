@@ -2,6 +2,7 @@
 
 from DateTime import DateTime
 
+from imio.urban.dataimport.exceptions import NoFieldToMapException
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
 from imio.urban.dataimport.Postgres.mapper import SecondaryTableMapper
@@ -37,11 +38,11 @@ class PortalTypeMapper(Mapper):
         return 'EnvironmentRubricTerm'
 
 
-class DescriptionMapper(Mapper):
+class ClassMapper(Mapper):
     """ """
 
-    def mapDescription(self, line):
-        num = self.getData('num_rubrique2')
-        desc = self.getData('libelle_rubrique2')
-        full_desc = '{} - {}'.format(num, desc)
-        return full_desc
+    def mapExtravalue(self, line):
+        classe = str(self.getData('classe_rubrique2'))
+        if classe == '6':
+            raise NoFieldToMapException
+        return classe

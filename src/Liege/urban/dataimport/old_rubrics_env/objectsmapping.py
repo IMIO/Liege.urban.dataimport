@@ -20,6 +20,14 @@ FIELDS_MAPPINGS = {
                     'from': 'num_rubrique2',
                     'to': 'id',
                 },
+                {
+                    'from': 'num_rubrique2',
+                    'to': 'number',
+                },
+                {
+                    'from': 'libelle_rubrique2',
+                    'to': 'description',
+                },
             ),
 
             mappers.PortalTypeMapper: {
@@ -27,9 +35,9 @@ FIELDS_MAPPINGS = {
                 'to': 'portal_type',
             },
 
-            mappers.DescriptionMapper: {
-                'from': ('libelle_rubrique2', 'num_rubrique2'),
-                'to': 'description',
+            mappers.ClassMapper: {
+                'from': 'classe_rubrique2',
+                'to': 'extraValue',
             },
         },
     },
