@@ -276,8 +276,8 @@ class CompletionStateMapper(PostCreationMapper):
                 state = 'refused'
             elif code in self.env_licence_mapping['abandoned']:
                 state = 'abandoned'
-            elif code in self.env_licence_mapping['abandoned']:
-                state = 'abandoned'
+            elif code in self.env_licence_mapping['authorized']:
+                state = 'authorized'
             else:
                 state = 'authorized'
 
