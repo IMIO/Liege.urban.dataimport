@@ -231,6 +231,7 @@ class CompletionStateMapper(PostCreationMapper):
         if raw_motif:
             code = int(raw_motif)
 
+        state = None
         if IEnvClassThree.providedBy(plone_object):
             if not code:
                 state = 'acceptable'
@@ -241,11 +242,13 @@ class CompletionStateMapper(PostCreationMapper):
             elif code in [6040]:
                 state = 'acceptable_with_conditions'
 
-        workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
-        workflow_id = workflow_def.getId()
-        workflow_state = workflow_tool.getStatusOf(workflow_id, plone_object)
-        workflow_state['review_state'] = state
-        workflow_tool.setStatusOf(workflow_id, plone_object, workflow_state.copy())
+
+        if state:
+            workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
+            workflow_id = workflow_def.getId()
+            workflow_state = workflow_tool.getStatusOf(workflow_id, plone_object)
+            workflow_state['review_state'] = state
+            workflow_tool.setStatusOf(workflow_id, plone_object, workflow_state.copy())
 
 
 class ErrorsMapper(FinalMapper):
