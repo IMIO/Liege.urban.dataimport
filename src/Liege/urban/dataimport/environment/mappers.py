@@ -221,6 +221,32 @@ class RubricsMapper(FieldMultiLinesSecondaryTableMapper):
         return rubric
 
 
+class CompletionStateMapper(PostCreationMapper):
+    def map(self, line, plone_object):
+        self.line = line
+        workflow_tool = api.portal.get_tool('portal_workflow')
+        raw_motif = self.getData('automotif')
+        code = None
+        if raw_motif:
+            code = int(raw_motif)
+
+        if IEnvClassThree.providedBy(plone_object):
+            if not code:
+                state = 'acceptable'
+            elif code in [6010, 6020, 6050, 6060]:
+                state = 'acceptable'
+            elif code in [6030]:
+                state = 'inacceptable'
+            elif code in [6040]:
+                state = 'acceptable_with_conditions'
+
+        workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
+        workflow_id = workflow_def.getId()
+        workflow_state = workflow_tool.getStatusOf(workflow_id, plone_object)
+        workflow_state['review_state'] = state
+        workflow_tool.setStatusOf(workflow_id, plone_object, workflow_state.copy())
+
+
 class ErrorsMapper(FinalMapper):
     """ """
 
@@ -389,8 +415,11 @@ class ClassThreeDecisionEventMapper(EventTypeMapper):
         config = urban_tool.getUrbanConfig(licence)
 
         eventtype_id = 'demande-recevable'
-        motif = self.getData('automotif')
-        if motif in ['6030']:
+        raw_motif = self.getData('automotif')
+        motif_code = None
+        if raw_motif:
+            motif_code = int(raw_motif)
+        if motif_code in [6030]:
             eventtype_id = 'demande-irrecevable'
 
         return getattr(config.urbaneventtypes, eventtype_id).UID()
@@ -456,7 +485,10 @@ class ForcedAuthorisationEndDateMapper(Mapper):
 class ForcedAuthorisationEndDescriptionMapper(Mapper):
 
     def mapMisc_description(self, line):
-        code = self.getData('automotif')
+        raw_code = self.getData('automotif')
+        code = None
+        if raw_code:
+            code = int(raw_code)
         code_mapping = self.getValueMapping('eventtitle_map')
         description = code_mapping.get(code, '')
         return description

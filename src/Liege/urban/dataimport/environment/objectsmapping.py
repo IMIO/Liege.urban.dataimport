@@ -82,6 +82,11 @@ FIELDS_MAPPINGS = {
                 'to': 'rubrics',
             },
 
+            mappers.CompletionStateMapper: {
+                'from': 'automotif',
+                'to': (),  # <- no field to fill, its the workflow state that has to be changed
+            },
+
             mappers.ErrorsMapper: {
                 'from': (),
                 'to': ('description',),  # log all the errors in the description field
