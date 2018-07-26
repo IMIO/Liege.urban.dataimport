@@ -228,7 +228,7 @@ class CompletionStateMapper(PostCreationMapper):
 
     env_licence_mapping = {
         'final_decision_in_progress': [
-            None, 538, 548, 3100, 3516, 3519, 4270, 4280
+            538, 548, 3100, 3516, 3519, 4270, 4280
         ],
         'refused': [
             425, 435, 445, 535, 545, 2950, 3090, 3400, 3517, 4260
@@ -237,7 +237,7 @@ class CompletionStateMapper(PostCreationMapper):
             437, 447, 537, 547
         ],
         'authorized': [
-            421, 422, 423, 424, 426, 431, 432, 433, 434, 436,
+            None, 421, 422, 423, 424, 426, 431, 432, 433, 434, 436,
             441, 442, 443, 444, 446, 448,
             531, 532, 533, 534, 536,
             541, 542, 543, 544, 546,
@@ -279,7 +279,7 @@ class CompletionStateMapper(PostCreationMapper):
             elif code in self.env_licence_mapping['abandoned']:
                 state = 'abandoned'
             else:
-                state = 'final_decision_in_progress'
+                state = 'authorized'
 
         if state:
             workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
