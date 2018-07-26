@@ -14,7 +14,9 @@ from imio.urban.dataimport.Postgres.mapper import PostgresPostCreationMapper as 
 from plone import api
 
 from Products.CMFPlone.utils import normalizeString
+from Products.urban.interfaces import IEnvClassOne
 from Products.urban.interfaces import IEnvClassThree
+from Products.urban.interfaces import IEnvClassTwo
 
 from unidecode import unidecode
 
@@ -223,6 +225,30 @@ class RubricsMapper(FieldMultiLinesSecondaryTableMapper):
 
 
 class CompletionStateMapper(PostCreationMapper):
+
+    env_licence_mapping = {
+        'final_decision_in_progress': [
+            None, 538, 548, 3100, 3516, 3519, 4270, 4280
+        ],
+        'refused': [
+            425, 435, 445, 535, 545, 2950, 3090, 3400, 3517, 4260
+        ],
+        'abandoned': [
+            437, 447, 537, 547
+        ],
+        'authorized': [
+            421, 422, 423, 424, 426, 431, 432, 433, 434, 436,
+            441, 442, 443, 444, 446, 448,
+            531, 532, 533, 534, 536,
+            541, 542, 543, 544, 546,
+            2910, 2920, 2930, 2940,
+            3030, 3040, 3050, 3060, 3070,
+            3300,
+            3511, 3512, 3513, 3514, 3515,
+            4410, 4420, 4430, 4440,
+        ],
+    }
+
     def map(self, line, plone_object):
         self.line = line
         workflow_tool = api.portal.get_tool('portal_workflow')
@@ -242,6 +268,18 @@ class CompletionStateMapper(PostCreationMapper):
             elif code in [6040]:
                 state = 'acceptable_with_conditions'
 
+        state = None
+        if IEnvClassTwo.providedBy(plone_object) or IEnvClassOne.providedBy(plone_object):
+            if code in self.env_licence_mapping['final_decision_in_progress']:
+                state = 'final_decision_in_progress'
+            elif code in self.env_licence_mapping['refused']:
+                state = 'refused'
+            elif code in self.env_licence_mapping['abandoned']:
+                state = 'abandoned'
+            elif code in self.env_licence_mapping['abandoned']:
+                state = 'abandoned'
+            else:
+                state = 'final_decision_in_progress'
 
         if state:
             workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
