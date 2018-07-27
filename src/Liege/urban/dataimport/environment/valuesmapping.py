@@ -31,6 +31,7 @@ VALUES_MAPS = {
     'EnvClassThree': ['acceptation-de-la-demande',],
     'EnvClassTwo'  : ['decision-finale',],
     'EnvClassOne'  : ['decision-finale',],
+    'UniqueLicence': ['decision-finale',],
 }),
 
 'person_title_map': {
