@@ -17,6 +17,7 @@ from Products.CMFPlone.utils import normalizeString
 from Products.urban.interfaces import IEnvClassOne
 from Products.urban.interfaces import IEnvClassThree
 from Products.urban.interfaces import IEnvClassTwo
+from Products.urban.interfaces import IUniqueLicence
 
 from unidecode import unidecode
 
@@ -60,7 +61,7 @@ class PortalTypeMapper(Mapper):
         nature = self.getData('nature')
 
         if nature == 'PU':
-            raise NoObjectToCreateException
+            return 'UniqueLicence'
 
         regex = '\d+/([1-3])/\d+'
         class_match = re.match(regex, ref)
@@ -268,8 +269,7 @@ class CompletionStateMapper(PostCreationMapper):
             elif code in [6040]:
                 state = 'acceptable_with_conditions'
 
-        state = None
-        if IEnvClassTwo.providedBy(plone_object) or IEnvClassOne.providedBy(plone_object):
+        elif IEnvClassTwo.providedBy(plone_object) or IEnvClassOne.providedBy(plone_object):
             if code in self.env_licence_mapping['final_decision_in_progress']:
                 state = 'final_decision_in_progress'
             elif code in self.env_licence_mapping['refused']:
@@ -280,6 +280,18 @@ class CompletionStateMapper(PostCreationMapper):
                 state = 'authorized'
             else:
                 state = 'authorized'
+
+        elif IUniqueLicence.providedBy(plone_object):
+            if code in self.env_licence_mapping['final_decision_in_progress']:
+                state = 'in_progress'
+            elif code in self.env_licence_mapping['refused']:
+                state = 'refused'
+            elif code in self.env_licence_mapping['abandoned']:
+                state = 'retired'
+            elif code in self.env_licence_mapping['authorized']:
+                state = 'accepted'
+            else:
+                state = 'accepted'
 
         if state:
             workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
