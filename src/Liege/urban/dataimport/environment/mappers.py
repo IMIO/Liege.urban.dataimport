@@ -404,7 +404,7 @@ class UrbanEventFactory(BaseFactory):
             urban_event.setTitle(title)
         return urban_event
 
-#mappers
+# mappers
 
 
 class EventTypeMapper(Mapper):
@@ -439,7 +439,8 @@ class DecisionDateMapper(Mapper):
     def mapEventdate(self, line):
         date_decision_college = self.getData('datcol')
         date_decision_ft = self.getData('datdp')
-        date = date_decision_ft or date_decision_college
+        date_decision_rw = self.getData('datrw')
+        date = date_decision_ft or date_decision_college or date_decision_rw
         if not date:
             raise NoObjectToCreateException
         date = date and DateTime(str(date)) or None
@@ -448,7 +449,8 @@ class DecisionDateMapper(Mapper):
     def mapDecisiondate(self, line):
         date_decision_college = self.getData('datcol')
         date_decision_ft = self.getData('datdp')
-        date = date_decision_ft or date_decision_college
+        date_decision_rw = self.getData('datrw')
+        date = date_decision_ft or date_decision_college or date_decision_rw
         if not date:
             raise NoObjectToCreateException
         date = date and DateTime(str(date)) or None

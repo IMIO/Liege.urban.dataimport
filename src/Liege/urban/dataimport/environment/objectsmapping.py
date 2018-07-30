@@ -14,6 +14,7 @@ OBJECTS_NESTING = [
         ('MISC EVENT', []),
         ('HISTORIC EVENT', []),
         ('DECISION EVENT', []),
+        ('CLASS 3 DECISION EVENT', []),
         ('AUTHORIZATION START EVENT', []),
         ('AUTHORIZATION END EVENT', []),
     ],),
@@ -29,6 +30,10 @@ FIELDS_MAPPINGS = {
                 {
                     'from': 'autoris',
                     'to': 'reference',
+                },
+                {
+                    'from': 'refrw',
+                    'to': 'referenceDGATLP',
                 },
             ),
 
@@ -192,7 +197,7 @@ FIELDS_MAPPINGS = {
 
     'DECISION EVENT':
     {
-        'allowed_containers': ['EnvClassOne', 'EnvClassTwo'],
+        'allowed_containers': ['EnvClassOne', 'EnvClassTwo', 'UniqueLicence'],
 
         'factory': [mappers.UrbanEventFactory],
 
