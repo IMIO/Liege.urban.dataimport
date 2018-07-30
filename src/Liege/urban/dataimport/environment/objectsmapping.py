@@ -32,7 +32,7 @@ FIELDS_MAPPINGS = {
                     'to': 'reference',
                 },
                 {
-                    'from': 'refrw',
+                    'from': 'autorefrw',
                     'to': 'referenceDGATLP',
                 },
             ),
