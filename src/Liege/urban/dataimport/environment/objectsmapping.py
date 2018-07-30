@@ -48,7 +48,7 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.AuthorityMapper: {
-                'from': 'datdp',
+                'from': ('datdp', 'datrw'),
                 'to': 'authority',
             },
 
@@ -208,7 +208,7 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.DecisionDateMapper: {
-                'from': ('datcol', 'datdp'),
+                'from': ('datcol', 'datdp', 'datrw'),
                 'to': ('eventDate', 'decisionDate'),
             },
         },
@@ -227,7 +227,7 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.DecisionDateMapper: {
-                'from': ('datcol', 'datdp'),
+                'from': ('datcol', 'datdp', 'datrw'),
                 'to': ('eventDate', 'decisionDate'),
             },
         },

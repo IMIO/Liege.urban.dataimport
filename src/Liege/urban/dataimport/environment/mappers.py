@@ -93,8 +93,11 @@ class AuthorityMapper(Mapper):
 
     def mapAuthority(self, line):
         deputation = self.getData('datdp')
+        rw = self.getData('datrw')
         if deputation:
             return 'deputation-provinciale'
+        elif rw:
+            return 'ft'
         raise NoFieldToMapException
 
 
