@@ -53,7 +53,7 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.DescriptionMapper: {
-                'from': 'autorefdp',
+                'from': ('autorefdp', 'automotif', 'autolmotif'),
                 'to': 'description',
             },
 

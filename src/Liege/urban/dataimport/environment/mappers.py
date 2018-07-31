@@ -128,12 +128,22 @@ class DescriptionMapper(Mapper):
 
     def mapDescription(self, line):
         description = []
+        code_mapping = self.getValueMapping('eventtitle_map')
 
         ref_dp = self.getData('autorefdp')
         if ref_dp:
             description.append('<p>Référence dp: %s</p>' % ref_dp.encode('utf-8'))
 
-        description = ''.join(description)
+        raw_motif = self.getData('automotif')
+        if raw_motif:
+            motif = code_mapping.get(raw_motif, '')
+            description.append('<p>Motif autorisation dp: %s</p>' % motif.encode('utf-8'))
+
+        motif_com = self.getData('autolmotif')
+        if motif_com:
+            description.append('<p>Commentaire autorisation: %s</p>' % motif_com.encode('utf-8'))
+
+        description = '<br />'.join(description)
         return description
 
 
