@@ -136,7 +136,7 @@ class DescriptionMapper(Mapper):
 
         raw_motif = self.getData('automotif')
         motif = code_mapping.get(int(raw_motif), '')
-        if rmotif:
+        if motif:
             description.append('<p>Motif autorisation: %s</p>' % motif.encode('utf-8'))
 
         motif_com = self.getData('autolmotif')
