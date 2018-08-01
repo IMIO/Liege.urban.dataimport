@@ -197,7 +197,12 @@ FIELDS_MAPPINGS = {
 
     'DECISION EVENT':
     {
-        'allowed_containers': ['EnvClassOne', 'EnvClassTwo', 'UniqueLicence'],
+        'allowed_containers': [
+            'EnvClassOne',
+            'EnvClassTwo',
+            'UniqueLicence',
+            'EnvClassBordering'
+        ],
 
         'factory': [mappers.UrbanEventFactory],
 

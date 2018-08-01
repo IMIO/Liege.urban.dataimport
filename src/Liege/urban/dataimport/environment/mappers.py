@@ -53,7 +53,6 @@ class PortalTypeMapper(Mapper):
         '1': 'EnvClassOne',
         '2': 'EnvClassTwo',
         '3': 'EnvClassThree',
-        'PU': 'UniqueLicence',
     }
 
     def mapPortal_type(self, line):
@@ -69,6 +68,13 @@ class PortalTypeMapper(Mapper):
         if class_match:
             class_num = class_match.groups()[0]
             portal_type = self.types_mapping.get(class_num, None)
+            return portal_type
+
+        regex = '1/4/.*'
+        class_match = re.match(regex, ref)
+        portal_type = None
+        if class_match:
+            portal_type = 'EnvClassBordering'
             return portal_type
 
         regex = '\d+/.*N[1-5]'
