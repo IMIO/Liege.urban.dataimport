@@ -47,12 +47,6 @@ class LicenceFactory(BaseFactory):
             licence = self.uniquelicences.get(reference)
             if not licence:
                 return super(LicenceFactory, self).create(kwargs, container, line)
-            elif licence.portal_type == 'CODT_UniqueLicence':
-                licence_to_update = self.uniquelicences.get(kwargs['reference'], None)
-                if licence_to_update:
-                    return licence_to_update
-                else:
-                    raise NoObjectToCreateException
             return licence
         else:
             return super(LicenceFactory, self).create(kwargs, container, line)

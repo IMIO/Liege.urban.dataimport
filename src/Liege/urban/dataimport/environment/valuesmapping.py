@@ -32,6 +32,7 @@ VALUES_MAPS = {
     'EnvClassTwo'  : ['decision-finale',],
     'EnvClassOne'  : ['decision-finale',],
     'UniqueLicence': ['decision-finale',],
+    'CODT_UniqueLicence': ['decision-finale',],
     'EnvClassBordering': ['decision-finale',],
 }),
 
