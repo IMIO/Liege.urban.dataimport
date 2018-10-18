@@ -32,6 +32,31 @@ import re
 
 
 class LicenceFactory(BaseFactory):
+
+    def __init__(self, importer, portal_type=''):
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog(portal_type=['UniqueLicence', 'CODT_UniqueLicence'])
+        uniquelicences = [b.getObject() for b in brains]
+        self.uniquelicences = dict([(l.getReferenceSPE().strip(), l) for l in uniquelicences])
+        super(LicenceFactory, self).__init__(importer, portal_type)
+
+    def create(self, kwargs, container=None, line=None):
+        portal_type = kwargs.get('portal_type')
+        if portal_type in ['UniqueLicence', 'CODT_UniqueLicence']:
+            reference = kwargs.get('reference')
+            licence = self.uniquelicences.get(reference)
+            if not licence:
+                return super(LicenceFactory, self).create(kwargs, container, line)
+            elif licence.portal_type == 'CODT_UniqueLicence':
+                licence_to_update = self.uniquelicences.get(kwargs['reference'], None)
+                if licence_to_update:
+                    return licence_to_update
+                else:
+                    raise NoObjectToCreateException
+            return licence
+        else:
+            return super(LicenceFactory, self).create(kwargs, container, line)
+
     def getCreationPlace(self, factory_args):
         foldername = factory_args['portal_type'].lower()
         path = '{}/urban/{}s'.format(self.site.absolute_url_path(), foldername)
@@ -60,6 +85,11 @@ class PortalTypeMapper(Mapper):
         nature = self.getData('nature')
 
         if nature == 'PU':
+            # ignore unique licences of bordering township !!
+            regex = '1/4/.*'
+            class_match = re.match(regex, ref)
+            if class_match:
+                return 'EnvClassBordering'
             return 'UniqueLicence'
 
         regex = '\d+/([1-3])/\d+'
