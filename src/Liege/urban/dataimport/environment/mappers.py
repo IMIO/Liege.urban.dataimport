@@ -118,7 +118,7 @@ class PortalTypeMapper(Mapper):
             raise NoObjectToCreateException
 
 
-class AuthorityMapper(Mapper):
+class AuthorityMapper(PostCreationMapper):
     """ """
 
     def mapAuthority(self, line):
@@ -153,7 +153,7 @@ class FolderManagerMapper(Mapper):
         return [foldermanager]
 
 
-class DescriptionMapper(Mapper):
+class DescriptionMapper(PostCreationMapper):
     """ """
 
     def mapDescription(self, line):
@@ -243,7 +243,7 @@ class WorklocationsMapper(Mapper):
 
 
 
-class RubricsMapper(FieldMultiLinesSecondaryTableMapper):
+class RubricsMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMapper):
     """ """
     def __init__(self, importer, args):
         super(RubricsMapper, self).__init__(importer, args)
