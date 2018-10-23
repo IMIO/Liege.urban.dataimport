@@ -121,7 +121,7 @@ class PortalTypeMapper(Mapper):
 class AuthorityMapper(PostCreationMapper):
     """ """
 
-    def mapAuthority(self, line):
+    def mapAuthority(self, line, plone_object):
         deputation = self.getData('datdp')
         rw = self.getData('datrw')
         if deputation:
@@ -156,7 +156,7 @@ class FolderManagerMapper(Mapper):
 class DescriptionMapper(PostCreationMapper):
     """ """
 
-    def mapDescription(self, line):
+    def mapDescription(self, line, plone_object):
         description = []
         code_mapping = self.getValueMapping('eventtitle_map')
 
@@ -256,7 +256,7 @@ class RubricsMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMapper):
         self.rubrics_by_code = rubrics_by_code
 
 
-    def mapRubrics(self, line):
+    def mapRubrics(self, line, plone_object):
         """ """
         self.line = line
         rubric_name = self.getData('classe').replace(' ', '')
