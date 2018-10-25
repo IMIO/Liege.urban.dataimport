@@ -98,6 +98,8 @@ class PortalTypeMapper(Mapper):
         class_match = re.match(regex, ref)
         portal_type = None
         if class_match:
+            if ref not in self.getValueMapping('allowed_env_bordering'):
+                raise NoObjectToCreateException
             portal_type = 'EnvClassBordering'
             return portal_type
 
