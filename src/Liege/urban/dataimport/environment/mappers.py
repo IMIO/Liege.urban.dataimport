@@ -243,7 +243,7 @@ class WorklocationsMapper(Mapper):
 
         number = self.getData('numetab')[4:].encode('utf-8')
         regex = '1/4/.*'
-        ref = self.getData('autoris')
+        ref = self.getData('autoris', line=self.original_line)
         class_match = re.match(regex, ref)
         # for env bordering licences the worklocation field is a bit different
         if class_match:
