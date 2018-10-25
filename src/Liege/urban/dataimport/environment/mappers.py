@@ -6,7 +6,6 @@ from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.exceptions import NoFieldToMapException
 from imio.urban.dataimport.factory import BaseFactory
 from imio.urban.dataimport.Postgres.mapper import FieldMultiLinesSecondaryTableMapper
-from imio.urban.dataimport.Postgres.mapper import SecondaryTableMapper
 from imio.urban.dataimport.Postgres.mapper import PostgresFinalMapper as FinalMapper
 from imio.urban.dataimport.Postgres.mapper import PostgresMapper as Mapper
 from imio.urban.dataimport.Postgres.mapper import PostgresPostCreationMapper as PostCreationMapper
@@ -228,9 +227,18 @@ class WorklocationsMapper(Mapper):
         raw_street_code = self.getData('nrue')
         if not raw_street_code:
             return []
+
+        number = self.getData('numetab')[4:].encode('utf-8')
+        regex = '1/4/.*'
+        ref = self.getData('autoris')
+        class_match = re.match(regex, ref)
+        # for env bordering licences the worklocation field is a bit different
+        if class_match:
+            street_name = self.getData('z_ravpl') + self.getData('z_librue'),
+            return [{'street': street_name, 'number': number}]
+
         street_code = int(raw_street_code)
         street = self.streets_by_code.get(street_code, None)
-        number = self.getData('numetab')[4:].encode('utf-8')
         if not street:
             self.logError(
                 self,
@@ -244,7 +252,6 @@ class WorklocationsMapper(Mapper):
             )
             return []
         return [{'street': street.UID(), 'number': number}]
-
 
 
 class RubricsMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMapper):
@@ -281,7 +288,7 @@ class RubricsMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMapper):
         if rubric_name in self.rubrics_by_code:
             rubric = self.rubrics_by_code[rubric_name]
         else:
-            import ipdb; ipdb.set_trace()
+            return []
 
         return rubric
 
@@ -441,12 +448,12 @@ class ContactStreetMapper(Mapper):
 
 
 class OldCorporationStateMapper(Mapper):
-     """
-     Put old corporation on state 'disabled'
-     """
+    """
+    Put old corporation on state 'disabled'
+    """
 
-     def mapState(self, line):
-         return 'disabled'
+    def mapState(self, line):
+        return 'disabled'
 
 #
 # UrbanEvent base
