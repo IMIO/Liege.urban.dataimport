@@ -255,8 +255,22 @@ class RubricsMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMapper):
         rubrics_by_code = dict([('old_rubrics' in r.getPhysicalPath() and r.id or r.id.replace('.', ''), r) for r in rubrics])
         self.rubrics_by_code = rubrics_by_code
 
+    def map(self, line, plone_object):
+        mapped = super(RubricsMapper, self).map(line)
+        for dest, value in mapped.iteritems():
+            field = plone_object.getField(dest)
+            if field:
+                mutator = field.getMutator(plone_object)
+                mutator(value)
+            else:
+                msg = '{mapper}: THE FIELD {field} DOES EXIST ON OBJECT {object}'.format(
+                    mapper=self,
+                    field=dest,
+                    object=plone_object,
+                )
+                print (msg)
 
-    def mapRubrics(self, line, plone_object):
+    def mapRubrics(self, line):
         """ """
         self.line = line
         rubric_name = self.getData('classe').replace(' ', '')
