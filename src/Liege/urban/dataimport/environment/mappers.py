@@ -121,6 +121,19 @@ class PortalTypeMapper(Mapper):
             raise NoObjectToCreateException
 
 
+class referenceForUniqueLicence(PostCreationMapper):
+    """ """
+
+    def mapReferencespe(self, line, plone_object):
+        if plone_object.portal_type not in ['UniqueLicence', 'CODT_UniqueLicence']:
+            raise NoFieldToMapException
+
+        reference_spe = self.getData('autoris')
+        if plone_object.getReference() == reference_spe:
+            plone_object.setReference('')
+        return reference_spe
+
+
 class AuthorityMapper(PostCreationMapper):
     """ """
 

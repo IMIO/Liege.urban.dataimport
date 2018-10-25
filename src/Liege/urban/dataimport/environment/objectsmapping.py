@@ -47,6 +47,11 @@ FIELDS_MAPPINGS = {
                 'to': 'portal_type',
             },
 
+            mappers.referenceForUniqueLicence: {
+                'from': 'autoris',
+                'to': 'referenceSPE',
+            },
+
             mappers.AuthorityMapper: {
                 'from': ('datdp', 'datrw'),
                 'to': 'authority',
@@ -74,7 +79,7 @@ FIELDS_MAPPINGS = {
                     },
 
                     mappers.WorklocationsMapper: {
-                        'from': ('numetab', 'nrue', 'z_librue', 'z_ravpl',),
+                        'from': ('numetab', 'nrue', 'z_librue', 'z_ravpl', 'autoris'),
                         'to': 'workLocations',
                     },
                 },
