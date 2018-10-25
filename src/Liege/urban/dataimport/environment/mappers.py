@@ -247,7 +247,7 @@ class WorklocationsMapper(Mapper):
         class_match = re.match(regex, ref)
         # for env bordering licences the worklocation field is a bit different
         if class_match:
-            street_name = self.getData('z_ravpl') + self.getData('z_librue'),
+            street_name = self.getData('z_ravpl') or u'' + self.getData('z_librue') or u'',
             return [{'street': street_name, 'number': number}]
 
         street_code = int(raw_street_code)
