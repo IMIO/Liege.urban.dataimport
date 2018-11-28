@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from imio.urban.dataimport.factory import UrbanEventFactory
 from imio.urban.dataimport.Postgres.mapper import MultiLinesSecondaryTableMapper
 from imio.urban.dataimport.Postgres.mapper import PostgresSimpleMapper as SimpleMapper
 from imio.urban.dataimport.Postgres.mapper import SecondaryTableMapper
@@ -209,7 +210,7 @@ FIELDS_MAPPINGS = {
             'EnvClassBordering'
         ],
 
-        'factory': [mappers.UrbanEventFactory],
+        'factory': [UrbanEventFactory],
 
         'mappers': {
             mappers.DecisionEventMapper: {
@@ -228,7 +229,7 @@ FIELDS_MAPPINGS = {
     {
         'allowed_containers': ['EnvClassThree'],
 
-        'factory': [mappers.UrbanEventFactory],
+        'factory': [UrbanEventFactory],
 
         'mappers': {
             mappers.ClassThreeDecisionEventMapper: {
@@ -245,7 +246,7 @@ FIELDS_MAPPINGS = {
 
     'AUTHORIZATION START EVENT':
     {
-        'factory': [mappers.UrbanEventFactory],
+        'factory': [UrbanEventFactory],
 
         'mappers': {
             mappers.AuthorisationStartEventMapper: {
@@ -262,7 +263,7 @@ FIELDS_MAPPINGS = {
 
     'AUTHORIZATION END EVENT':
     {
-        'factory': [mappers.UrbanEventFactory],
+        'factory': [UrbanEventFactory],
 
         'mappers': {
             mappers.AuthorisationEndEventMapper: {
@@ -279,7 +280,7 @@ FIELDS_MAPPINGS = {
 
     'FORCED AUTHORIZATION END EVENT':
     {
-        'factory': [mappers.UrbanEventFactory],
+        'factory': [UrbanEventFactory],
 
         'mappers': {
             mappers.ForcedAuthorisationEndEventMapper: {
@@ -301,7 +302,7 @@ FIELDS_MAPPINGS = {
 
     'MISC EVENT':
     {
-        'factory': [mappers.UrbanEventFactory],
+        'factory': [UrbanEventFactory],
 
         'mappers': {
             MultiLinesSecondaryTableMapper: {
@@ -337,7 +338,7 @@ FIELDS_MAPPINGS = {
 
     'HISTORIC EVENT':
     {
-        'factory': [mappers.UrbanEventFactory],
+        'factory': [UrbanEventFactory],
 
         'mappers': {
             MultiLinesSecondaryTableMapper: {

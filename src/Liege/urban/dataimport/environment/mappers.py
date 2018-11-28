@@ -472,22 +472,6 @@ class OldCorporationStateMapper(Mapper):
 # UrbanEvent base
 #
 
-# factory
-
-
-class UrbanEventFactory(BaseFactory):
-    """ """
-
-    def create(self, kwargs, container, line):
-        eventtype_uid = kwargs.pop('eventtype')
-        title = kwargs.pop('title', None)
-        if 'eventDate' not in kwargs:
-            kwargs['eventDate'] = None
-        urban_event = container.createUrbanEvent(eventtype_uid, **kwargs)
-        if title:
-            urban_event.setTitle(title)
-        return urban_event
-
 # mappers
 
 
