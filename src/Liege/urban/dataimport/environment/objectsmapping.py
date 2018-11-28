@@ -308,12 +308,6 @@ FIELDS_MAPPINGS = {
                 'table': 'tabenv',
                 'KEYS': ('autoris', 'autoris'),
                 'mappers': {
-                    SimpleMapper: (
-                        {
-                            'from': 'commentairenv',
-                            'to': 'misc_description',
-                        },
-                    ),
 
                     mappers.MiscEventMapper: {
                         'from': (),
@@ -330,6 +324,10 @@ FIELDS_MAPPINGS = {
                         'to': 'title',
                     },
 
+                    mappers.MiscEventDescription: {
+                        'from': 'commentairenv',
+                        'to': 'misc_description',
+                    },
                 },
             },
         },
@@ -344,12 +342,6 @@ FIELDS_MAPPINGS = {
                 'table': 'tabret',
                 'KEYS': ('autoris', 'autoris'),
                 'mappers': {
-                    SimpleMapper: (
-                        {
-                            'from': 'commentairet',
-                            'to': 'misc_description',
-                        },
-                    ),
 
                     mappers.HistoricEventMapper: {
                         'from': (),
@@ -364,6 +356,11 @@ FIELDS_MAPPINGS = {
                     mappers.HistoricEventTitle: {
                         'from': ('codretour', 'commentairet'),
                         'to': 'title',
+                    },
+
+                    mappers.HistoricEventDescription: {
+                        'from': 'commentairet',
+                        'to': 'misc_description',
                     },
 
                 },

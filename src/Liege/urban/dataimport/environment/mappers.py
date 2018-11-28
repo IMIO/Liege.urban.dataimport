@@ -622,9 +622,9 @@ class ForcedAuthorisationEndDateMapper(Mapper):
         return date
 
 
-class ForcedAuthorisationEndDescriptionMapper(Mapper):
+class ForcedAuthorisationEndDescriptionMapper(PostCreationMapper):
 
-    def mapMisc_description(self, line):
+    def mapMisc_description(self, line, plone_object):
         raw_code = self.getData('automotif')
         code = None
         if raw_code:
@@ -664,6 +664,13 @@ class MiscEventTitle(Mapper):
             title = comment
         return title
 
+
+class MiscEventDescription(PostCreationMapper):
+
+    def mapMisc_description(self, line, plone_object):
+        description = self.getData('commentairenv')
+        return description
+
 #
 # Historic UrbanEvent
 #
@@ -694,3 +701,10 @@ class HistoricEventTitle(Mapper):
         if not title:
             title = comment
         return title
+
+
+class HistoricEventDescription(PostCreationMapper):
+
+    def mapMisc_description(self, line, plone_object):
+        description = self.getData('commentairet')
+        return description
