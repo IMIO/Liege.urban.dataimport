@@ -54,7 +54,7 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.AuthorityMapper: {
-                'from': ('datdp', 'datrw'),
+                'from': ('datdp', 'datrw', 'automotif'),
                 'to': 'authority',
             },
 

@@ -140,7 +140,23 @@ class AuthorityMapper(PostCreationMapper):
     def mapAuthority(self, line, plone_object):
         deputation = self.getData('datdp')
         rw = self.getData('datrw')
-        if deputation:
+        autorisation_code = self.getData('automotif')
+        autorisation_code = autorisation_code and int(autorisation_code)
+        college_code = [
+            421, 422, 423, 424, 425, 426,
+            3030, 3040, 3050, 3060, 3070, 3071, 3080, 3090, 3100, 3300, 3400,
+        ]
+        if autorisation_code in college_code:
+            return 'college'
+        elif autorisation_code in [431, 432, 433, 434, 435, 436, 437]:
+            return 'deputation-provinciale'
+        elif autorisation_code in [441, 442, 443, 444, 445, 446, 447, 448]:
+            return 'region-wallone'
+        elif autorisation_code in [2900, 2910, 2920, 2930, 2940, 2950, 2980]:
+            return 'ft'
+        elif autorisation_code in [3511, 3512, 3513, 3514, 3515, 3516, 3517]:
+            return 'college-commune-limitrophe'
+        elif deputation:
             return 'deputation-provinciale'
         elif rw:
             return 'ft'
@@ -352,6 +368,8 @@ class CompletionStateMapper(PostCreationMapper):
                 state = 'inacceptable'
             elif code in [6040]:
                 state = 'acceptable_with_conditions'
+            else:
+                state = 'deposit'
 
         elif IEnvClassTwo.providedBy(plone_object) or IEnvClassOne.providedBy(plone_object):
             if code in self.env_licence_mapping['final_decision_in_progress']:
@@ -363,7 +381,7 @@ class CompletionStateMapper(PostCreationMapper):
             elif code in self.env_licence_mapping['authorized']:
                 state = 'authorized'
             else:
-                state = 'authorized'
+                state = 'deposit'
 
         elif IUniqueLicence.providedBy(plone_object):
             if code in self.env_licence_mapping['final_decision_in_progress']:
@@ -375,7 +393,7 @@ class CompletionStateMapper(PostCreationMapper):
             elif code in self.env_licence_mapping['authorized']:
                 state = 'accepted'
             else:
-                state = 'accepted'
+                state = 'deposit'
 
         if state:
             workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
