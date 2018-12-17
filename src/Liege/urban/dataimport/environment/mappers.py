@@ -617,7 +617,7 @@ class ForcedAuthorisationEndEventMapper(EventTypeMapper):
 class ForcedAuthorisationEndDateMapper(Mapper):
 
     def mapEventdate(self, line):
-        date = self.getData('autofinfordate')
+        date = self.getData('autofinfor')
         if not date:
             raise NoObjectToCreateException
         date = date and DateTime(str(date)) or None
