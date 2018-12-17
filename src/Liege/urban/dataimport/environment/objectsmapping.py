@@ -18,6 +18,7 @@ OBJECTS_NESTING = [
         ('CLASS 3 DECISION EVENT', []),
         ('AUTHORIZATION START EVENT', []),
         ('AUTHORIZATION END EVENT', []),
+        ('FORCED AUTHORIZATION END EVENT', []),
     ],),
 ]
 
@@ -59,7 +60,7 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.DescriptionMapper: {
-                'from': ('autorefdp', 'automotif', 'autolmotif'),
+                'from': ('autorefdp', 'automotif', 'automotif'),
                 'to': 'description',
             },
 
@@ -282,6 +283,8 @@ FIELDS_MAPPINGS = {
     {
         'factory': [UrbanEventFactory],
 
+        'allowed_containers': ['EnvClassOne', 'EnvClassTwo', 'EnvClassThree'],
+
         'mappers': {
             mappers.ForcedAuthorisationEndEventMapper: {
                 'from': (),
@@ -317,7 +320,7 @@ FIELDS_MAPPINGS = {
                     ),
 
                     mappers.MiscEventMapper: {
-                        'from': (),
+                        'from': ('codenvoi'),
                         'to': 'eventtype',
                     },
 

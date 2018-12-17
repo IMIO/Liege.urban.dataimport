@@ -644,6 +644,16 @@ class MiscEventMapper(EventTypeMapper):
     """ """
     eventtype_id = 'evenement-libre'
 
+    def mapEventtype(self, line):
+        code = self.getData('codenvoi')
+        if code in [900, 9900]:
+            self.eventtype_id = 'archivage-service'
+        elif code in [909, 9910]:
+            self.eventtype_id = 'archivage-general'
+        else:
+            self.eventtype_id = 'evenement-libre'
+        return super(MiscEventMapper, self).mapEventtype(line)
+
 
 class MiscEventDateMapper(Mapper):
 
@@ -662,7 +672,7 @@ class MiscEventTitle(Mapper):
         comment = self.getData('commentairenv')
         code_mapping = self.getValueMapping('eventtitle_map')
         title = code_mapping.get(code, '')
-        if not title:
+        if not title and comment:
             title = comment
         return title
 
