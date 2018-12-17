@@ -28,10 +28,10 @@ VALUES_MAPS = {
 
 'eventtype_id_map': table({
     'header'       : ['decision_event',],
-    'EnvClassThree': ['acceptation-de-la-demande',],
-    'EnvClassTwo'  : ['decision-finale',],
-    'EnvClassOne'  : ['decision-finale',],
-    'UniqueLicence': ['decision-finale',],
+    'EnvClassThree': ['demande-recevable',],
+    'EnvClassTwo'  : ['decision',],
+    'EnvClassOne'  : ['decision',],
+    'UniqueLicence': ['decision',],
     'CODT_UniqueLicence': ['decision-finale',],
     'EnvClassBordering': ['decision-finale',],
 }),
