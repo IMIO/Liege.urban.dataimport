@@ -292,7 +292,7 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.ForcedAuthorisationEndDateMapper: {
-                'from': 'autofinfordate',
+                'from': 'autofinfor',
                 'to': 'eventDate',
             },
 
