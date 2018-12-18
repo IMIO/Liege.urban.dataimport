@@ -19,9 +19,8 @@ class EnvironmentRubricsImporter(PostgresDataImporter):
 
     implements(ILiegeEnvironmentRubricsImporter)
 
-
-    def __init__(self, db_name='liege_environnement', table_name='tabrub2',
-                 key_column='num_rubrique2', username='ro_user', password='',
+    def __init__(self, db_name='liege_environnement', table_name='tabrub1',
+                 key_column='classe_rubrique1', username='ro_user', password='',
                  host='devel.interne.imio.be', **kwargs):
 
         super(EnvironmentRubricsImporter, self).__init__(
