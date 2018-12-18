@@ -511,6 +511,34 @@ class EventTypeMapper(Mapper):
         return getattr(config.urbaneventtypes, eventtype_id).UID()
 
 #
+# UrbanEvent owner change
+#
+
+
+class OwnerChangeEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'evenement-libre'
+
+
+class OwnerChangeEventTitle(Mapper):
+
+    def mapTitle(self, line):
+        expl_name = self.getData('firme')
+        title = 'Fin d\'exploitation: {}'.format(expl_name)
+        return title
+
+
+class OwnerChangeEventDate(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('expfin')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(str(date)) or None
+        return date
+
+
+#
 # UrbanEvent final decision
 #
 

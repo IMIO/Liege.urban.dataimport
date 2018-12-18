@@ -12,6 +12,7 @@ OBJECTS_NESTING = [
     ('LICENCE', [
         ('CORPORATION CONTACT', []),
         ('OLD CORPORATION CONTACT', []),
+        ('OWNER CHANGE EVENT', []),
         ('MISC EVENT', []),
         ('HISTORIC EVENT', []),
         ('DECISION EVENT', []),
@@ -197,6 +198,33 @@ FIELDS_MAPPINGS = {
                         'from': (),
                         'to': 'state',
                     }
+                },
+            },
+        },
+    },
+
+    'OWNER CHANGE EVENT':
+    {
+        'factory': [UrbanEventFactory],
+        'mappers': {
+            MultiLinesSecondaryTableMapper: {
+                'table': 'tabexp',
+                'KEYS': ('numetab', 'numetab'),
+                'mappers': {
+                    mappers.OwnerChangeEventMapper: {
+                        'from': (),
+                        'to': 'eventtype',
+                    },
+
+                    mappers.OwnerChangeEventTitle: {
+                        'from': 'firme',
+                        'to': 'Title',
+                    },
+
+                    mappers.OwnerChangeEventDate: {
+                        'from': 'expfin',
+                        'to': 'eventDate',
+                    },
                 },
             },
         },
