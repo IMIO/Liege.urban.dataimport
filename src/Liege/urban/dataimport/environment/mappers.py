@@ -332,7 +332,10 @@ class CompletionStateMapper(PostCreationMapper):
             425, 435, 445, 535, 545, 2950, 3090, 3400, 3517, 4260
         ],
         'abandoned': [
-            437, 447, 537, 547
+            437, 447, 537, 547,
+            801, 901, 999,
+            1840,
+            8050, 8060, 8310,
         ],
         'inacceptable': [
             1830,
