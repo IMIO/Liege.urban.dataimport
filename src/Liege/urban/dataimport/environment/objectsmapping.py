@@ -218,7 +218,7 @@ FIELDS_MAPPINGS = {
 
                     mappers.OwnerChangeEventTitle: {
                         'from': 'firme',
-                        'to': 'Title',
+                        'to': 'title',
                     },
 
                     mappers.OwnerChangeEventDate: {
