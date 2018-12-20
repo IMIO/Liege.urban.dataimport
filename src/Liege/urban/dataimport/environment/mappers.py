@@ -322,7 +322,7 @@ class RubricsMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMapper):
         return rubric
 
 
-class CompletionStateMapper(PostCreationMapper):
+class CompletionStateMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMapper):
 
     env_licence_mapping = {
         'final_decision_in_progress': [
@@ -352,11 +352,12 @@ class CompletionStateMapper(PostCreationMapper):
             4410, 4420, 4430, 4440,
         ],
     }
+    all_codes = [v for lists in env_licence_mapping.values() for v in lists]
 
     def map(self, line, plone_object):
+        mapped = super(CompletionStateMapper, self).map(line)
         self.line = line
         workflow_tool = api.portal.get_tool('portal_workflow')
-        raw_motif = self.getData('automotif')
         code = None
         if raw_motif:
             code = int(raw_motif)
