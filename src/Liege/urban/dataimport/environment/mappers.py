@@ -329,16 +329,14 @@ class CompletionStateMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMap
             3100, 3516,
         ],
         'refused': [
-            425, 435, 445, 535, 545, 2950, 3090, 3400, 3517, 4260
+            425, 435, 445, 535, 545, 2950, 3090, 3400, 3517, 4260,
+            1830, 6030  # class three
         ],
         'abandoned': [
             437, 447, 537, 547,
             801, 901, 999,
             1840,
             8050, 8060, 8310,
-        ],
-        'inacceptable': [
-            1830,
         ],
         'authorized': [
             421, 422, 423, 424, 426, 431, 432, 433, 434, 436,
@@ -350,8 +348,9 @@ class CompletionStateMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMap
             3100, 3300,
             3511, 3512, 3513, 3514, 3515, 3516,
             4410, 4420, 4430, 4440,
+            6010, 6020, 6050, 6060,  # class three
         ],
-        'env_class_3': [6010, 6020, 6030, 6040, 6050, 6060],
+        'acceptable_with_conditions': [6040],
     }
     all_codes = set([v for lists in env_licence_mapping.values() for v in lists])
 
@@ -364,14 +363,14 @@ class CompletionStateMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMap
 
         state = None
         if IEnvClassThree.providedBy(plone_object):
-            if not code:
+            if code in self.env_licence_mapping['authorized']:
                 state = 'acceptable'
-            elif code in [6010, 6020, 6050, 6060]:
-                state = 'acceptable'
-            elif code in [6030]:
+            elif code in self.env_licence_mapping['refused']:
                 state = 'inacceptable'
-            elif code in [6040]:
+            elif code in self.env_licence_mapping['acceptable_with_conditions']:
                 state = 'acceptable_with_conditions'
+            elif code in self.env_licence_mapping['abandoned']:
+                state = 'abandoned'
             else:
                 state = 'deposit'
 
