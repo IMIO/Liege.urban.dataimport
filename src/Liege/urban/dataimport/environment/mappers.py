@@ -341,7 +341,7 @@ class CompletionStateMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMap
             1830,
         ],
         'authorized': [
-            None, 421, 422, 423, 424, 426, 431, 432, 433, 434, 436,
+            421, 422, 423, 424, 426, 431, 432, 433, 434, 436,
             441, 442, 443, 444, 446, 448,
             531, 532, 533, 534, 536,
             541, 542, 543, 544, 546,
@@ -351,16 +351,16 @@ class CompletionStateMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMap
             3511, 3512, 3513, 3514, 3515, 3516,
             4410, 4420, 4430, 4440,
         ],
+        'env_class_3': [6010, 6020, 6030, 6040, 6050, 6060],
     }
-    all_codes = [v for lists in env_licence_mapping.values() for v in lists]
+    all_codes = set([v for lists in env_licence_mapping.values() for v in lists])
 
     def map(self, line, plone_object):
         mapped = super(CompletionStateMapper, self).map(line)
         self.line = line
         workflow_tool = api.portal.get_tool('portal_workflow')
-        code = None
-        if raw_motif:
-            code = int(raw_motif)
+        code = self.all_codes.intersection(set(mapped['code']))
+        code = code and max(code) or None
 
         state = None
         if IEnvClassThree.providedBy(plone_object):
@@ -405,6 +405,12 @@ class CompletionStateMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMap
             workflow_state = workflow_tool.getStatusOf(workflow_id, plone_object)
             workflow_state['review_state'] = state
             workflow_tool.setStatusOf(workflow_id, plone_object, workflow_state.copy())
+
+    def mapCode(self, line):
+        self.line = line
+        code = self.getData('codenvoi')
+        code = code and int(code)
+        return code
 
 
 class ErrorsMapper(FinalMapper):
