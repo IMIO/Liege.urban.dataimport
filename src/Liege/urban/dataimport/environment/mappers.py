@@ -683,6 +683,12 @@ class MiscEventMapper(EventTypeMapper):
 
     def mapEventtype(self, line):
         code = self.getData('codenvoi')
+        if code in [90, 101, 1100, 1110, 1120, 1130, 1140, 1150, 1180]:
+            self.eventtype_id = 'depot-dossier'
+        if code in [1820]:
+            self.eventtype_id = 'incomplet'
+        if code in [800, 919, 997, 8100, 8110, 8120]:
+            self.eventtype_id = 'fin-forcee-par-ladministration'
         if code in [900, 9900]:
             self.eventtype_id = 'archivage-service'
         elif code in [909, 9910]:
