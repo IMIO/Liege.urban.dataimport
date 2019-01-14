@@ -696,7 +696,7 @@ class MiscEventMapper(EventTypeMapper):
             self.eventtype_id = 'depot-dossier'
         elif code in [1820]:
             self.eventtype_id = 'incomplet'
-        elif code in [800, 919, 997, 8100, 8110, 8120]:
+        elif code in [800, 919, 997, 8100, 8110, 8120, 8180, 8300]:
             self.eventtype_id = 'fin-forcee-par-ladministration'
         elif code in [900, 9900]:
             self.eventtype_id = 'archivage-service'
