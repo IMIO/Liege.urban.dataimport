@@ -355,11 +355,14 @@ class CompletionStateMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMap
     all_codes = set([v for lists in env_licence_mapping.values() for v in lists])
 
     def map(self, line, plone_object):
-        mapped = super(CompletionStateMapper, self).map(line)
         self.line = line
         workflow_tool = api.portal.get_tool('portal_workflow')
-        code = self.all_codes.intersection(set(mapped['code']))
+        code = self.all_codes.intersection(set([m[0] for m in self.query_secondary_table(line)]))
         code = code and max(code) or None
+        date_decision_college = self.getData('datcol')
+        date_decision_ft = self.getData('datdp')
+        date_decision_rw = self.getData('datrw')
+        date = date_decision_ft or date_decision_college or date_decision_rw
 
         state = None
         if IEnvClassThree.providedBy(plone_object):
@@ -371,6 +374,8 @@ class CompletionStateMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMap
                 state = 'acceptable_with_conditions'
             elif code in self.env_licence_mapping['abandoned']:
                 state = 'abandoned'
+            elif date:
+                state = 'acceptable'
             else:
                 state = 'deposit'
 
@@ -383,6 +388,8 @@ class CompletionStateMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMap
                 state = 'abandoned'
             elif code in self.env_licence_mapping['authorized']:
                 state = 'authorized'
+            elif date:
+                state = 'authorized'
             else:
                 state = 'deposit'
 
@@ -394,6 +401,8 @@ class CompletionStateMapper(FieldMultiLinesSecondaryTableMapper, PostCreationMap
             elif code in self.env_licence_mapping['abandoned']:
                 state = 'retired'
             elif code in self.env_licence_mapping['authorized']:
+                state = 'accepted'
+            elif date:
                 state = 'accepted'
             else:
                 state = 'deposit'
@@ -685,11 +694,11 @@ class MiscEventMapper(EventTypeMapper):
         code = self.getData('codenvoi')
         if code in [90, 101, 1100, 1110, 1120, 1130, 1140, 1150, 1180]:
             self.eventtype_id = 'depot-dossier'
-        if code in [1820]:
+        elif code in [1820]:
             self.eventtype_id = 'incomplet'
-        if code in [800, 919, 997, 8100, 8110, 8120]:
+        elif code in [800, 919, 997, 8100, 8110, 8120]:
             self.eventtype_id = 'fin-forcee-par-ladministration'
-        if code in [900, 9900]:
+        elif code in [900, 9900]:
             self.eventtype_id = 'archivage-service'
         elif code in [909, 9910]:
             self.eventtype_id = 'archivage-general'
