@@ -478,7 +478,7 @@ class ContactStreetMapper(Mapper):
     regex = '(.*?)\s*,?\s*(\d.*)\s*\Z'
 
     def mapStreet(self, line):
-        raw_addr = self.getData('expadr')
+        raw_addr = self.getData('expadr') or ''
         match = re.search(self.regex, raw_addr)
         if match:
             street = match.group(1)
@@ -487,7 +487,7 @@ class ContactStreetMapper(Mapper):
         return raw_addr
 
     def mapNumber(self, line):
-        raw_addr = self.getData('expadr')
+        raw_addr = self.getData('expadr') or ''
         match = re.search(self.regex, raw_addr)
         if match:
             number = match.group(2)
