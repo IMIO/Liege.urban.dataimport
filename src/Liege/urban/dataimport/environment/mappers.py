@@ -724,8 +724,8 @@ class MiscEventTitle(Mapper):
         comment = self.getData('commentairenv')
         code_mapping = self.getValueMapping('eventtitle_map')
         title = code_mapping.get(code, '')
-        if not title and comment:
-            title = comment
+        if not title:
+            title = comment or str(code)
         return title
 
 #
@@ -755,6 +755,6 @@ class HistoricEventTitle(Mapper):
         comment = self.getData('commentairet')
         code_mapping = self.getValueMapping('eventtitle_map')
         title = code_mapping.get(code, '')
-        if not title:
-            title = comment
+        if not title and comment:
+            title = comment or str(code)
         return title

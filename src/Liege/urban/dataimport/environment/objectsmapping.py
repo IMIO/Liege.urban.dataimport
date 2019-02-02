@@ -98,7 +98,7 @@ FIELDS_MAPPINGS = {
             mappers.CompletionStateMapper: {
                 'table': 'tabenv',
                 'KEYS': ('autoris', 'autoris'),
-                'from': 'codenvoi',
+                'from': ('codenvoi', 'datcol', 'datdp', 'datrw'),
                 'to': (),  # <- no field to fill, its the workflow state that has to be changed
             },
 
