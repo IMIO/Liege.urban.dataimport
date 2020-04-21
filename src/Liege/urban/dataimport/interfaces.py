@@ -36,3 +36,7 @@ class ILiegeArchivesImporter(IUrbanDataImporter):
 
 class ILiegeArchitectsImporter(IUrbanDataImporter):
     """ Marker interface for ILiege architects importer """
+
+
+class ILiegeInspectionImporter(IUrbanDataImporter):
+    """ Marker interface for ILiege inspections importer """

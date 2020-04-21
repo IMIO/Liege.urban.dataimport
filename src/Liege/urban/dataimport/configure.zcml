@@ -18,6 +18,7 @@
     <include package=".archives" />
     <include package=".buildlicence" />
     <include package=".environment" />
+    <include package=".inspection" />
     <include package=".misclicence" />
     <include package=".old_rubrics_env" />
     <include package=".rubrics_env" />
