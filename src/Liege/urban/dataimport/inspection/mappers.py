@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from DateTime import DateTime
+
 from imio.urban.dataimport.csv.mapper import CSVFinalMapper as FinalMapper
 from imio.urban.dataimport.csv.mapper import CSVMapper as Mapper
 from imio.urban.dataimport.csv.mapper import CSVPostCreationMapper as PostCreationMapper
 from imio.urban.dataimport.csv.mapper import SecondaryTableMapper
+from imio.urban.dataimport.exceptions import NoFieldToMapException
+from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
+from imio.urban.dataimport.utils import parse_date
 
 from plone import api
 
@@ -41,11 +46,30 @@ class ReferenceMapper(PostCreationMapper):
         return self.getData('numerorapport')
 
 
-class OldAddressMapper(SecondaryTableMapper):
+class FoldermanagersMapper(PostCreationMapper):
     """ """
 
-    delimiter = "#"
-    quotechar = '"'
+    def mapFoldermanagers(self, line, plone_object):
+
+        inspectors_mapping = self.getValueMapping('inspectors')
+        portal_urban = self.site.portal_urban
+        foldermanagers = portal_urban.foldermanagers
+
+        foldermanager_id = inspectors_mapping.get(self.getData('ref_inspecteur'), None)
+        if not foldermanager_id:
+            raise NoFieldToMapException
+
+        foldermanager = getattr(foldermanagers, foldermanager_id, None)
+        if not foldermanager:
+            self.logError(self, line, 'inspector', {'name': foldermanager_id})
+            raise NoFieldToMapException
+
+        # plone_object.setFoldermanagers(foldermanager.UID())
+        return foldermanager.UID()
+
+
+class OldAddressMapper(SecondaryTableMapper):
+    """ """
 
 
 class WorklocationsMapper(Mapper):
@@ -92,11 +116,7 @@ class WorklocationsMapper(Mapper):
 
     def mapWorklocations(self, line):
         """ """
-        try:
-            raw_street_code = self.getData('CODE_RUE')
-        except:
-            import ipdb; ipdb.set_trace()
-            raw_street_code = self.getData('CODE_RUE')
+        raw_street_code = self.getData('CODE_RUE')
         if not raw_street_code:
             return []
         street_code = int(raw_street_code)
@@ -157,8 +177,8 @@ class ErrorsMapper(FinalMapper):
         if errors:
             for error in errors:
                 data = error.data
-                if 'streets' in error.message:
-                    error_trace.append('<p>adresse : %s</p>' % data['address'])
+                if 'inspector' in error.message:
+                    error_trace.append('<p>inspecteur : %s</p>' % data['name'])
             error_trace.append('<br />')
         error_trace = ''.join(error_trace)
 
@@ -184,3 +204,60 @@ class ContactIdMapper(Mapper):
     def mapId(self, line):
         name = self.getData('proprio')
         return normalizeString(self.site.portal_urban.generateUniqueId(name))
+
+
+#
+# UrbanEvent base
+#
+
+# factory
+
+
+class UrbanEventFactory(BaseFactory):
+    """ """
+
+    def create(self, kwargs, container, line):
+        eventtype_uid = kwargs.pop('eventtype')
+        if 'eventDate' not in kwargs:
+            kwargs['eventDate'] = None
+        urban_event = container.createUrbanEvent(eventtype_uid, **kwargs)
+        return urban_event
+
+# mappers
+
+
+class EventTypeMapper(Mapper):
+    """ """
+
+    eventtype_id = ''  # to override
+
+    def mapEventtype(self, line):
+        if not self.eventtype_id:
+            return
+        licence = self.importer.current_containers_stack[-1]
+        urban_tool = api.portal.get_tool('portal_urban')
+        config = urban_tool.getUrbanConfig(licence)
+        return getattr(config.urbaneventtypes, self.eventtype_id).UID()
+
+
+class ReportEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'rapport'
+
+
+class InspectDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('date_constat')
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(parse_date(date)) or None
+        return date
+
+
+class ReportDateMapper(Mapper):
+
+    def mapReportdate(self, line):
+        date = self.getData('date_rapport')
+        date = date and DateTime(parse_date(date)) or None
+        return date

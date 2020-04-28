@@ -8,6 +8,7 @@ from Liege.urban.dataimport.inspection import mappers
 OBJECTS_NESTING = [
     ('LICENCE', [
         ('PROPRIETARY', []),
+        ('REPORT EVENT', []),
     ],),
 ]
 
@@ -32,6 +33,11 @@ FIELDS_MAPPINGS = {
             mappers.ReferenceMapper: {
                 'from': 'numerorapport',
                 'to': 'reference',
+            },
+
+            mappers.FoldermanagersMapper: {
+                'from': 'ref_inspecteur',
+                'to': 'foldermanagers',
             },
 
             mappers.OldAddressMapper: {
@@ -71,6 +77,28 @@ FIELDS_MAPPINGS = {
             mappers.ContactIdMapper: {
                 'from': 'proprio',
                 'to': 'id',
+            },
+        },
+    },
+
+    'REPORT EVENT':
+    {
+        'factory': [mappers.UrbanEventFactory],
+
+        'mappers': {
+            mappers.ReportEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            mappers.InspectDateMapper: {
+                'from': 'date_constat',
+                'to': 'eventDate',
+            },
+
+            mappers.ReportDateMapper: {
+                'from': 'date_rapport',
+                'to': 'reportDate',
             },
         },
     },
