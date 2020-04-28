@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from imio.urban.dataimport.csv.mapper import CSVSimpleMapper as SimpleMapper
+from imio.urban.dataimport.factory import UrbanEventFactory
 
 from Liege.urban.dataimport.inspection import mappers
 
@@ -9,6 +10,8 @@ OBJECTS_NESTING = [
     ('LICENCE', [
         ('PROPRIETARY', []),
         ('REPORT EVENT', []),
+        ('FOLLOWUP EVENT', []),
+        ('COMMENT EVENT', []),
     ],),
 ]
 
@@ -83,7 +86,7 @@ FIELDS_MAPPINGS = {
 
     'REPORT EVENT':
     {
-        'factory': [mappers.UrbanEventFactory],
+        'factory': [UrbanEventFactory],
 
         'mappers': {
             mappers.ReportEventMapper: {
@@ -99,6 +102,59 @@ FIELDS_MAPPINGS = {
             mappers.ReportDateMapper: {
                 'from': 'date_rapport',
                 'to': 'reportDate',
+            },
+        },
+    },
+
+    'FOLLOWUP EVENT':
+    {
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+
+            mappers.FollowupsMapper: {
+                'table': 'TA_suite_rapport_ib',
+                'KEYS': ('numerorapport', 'num_rapport'),
+                'mappers': {
+
+                    mappers.FollowupEventMapper: {
+                        'from': (),
+                        'to': 'eventtype',
+                    },
+
+                    mappers.FollowupDateMapper: {
+                        'from': 'date_encodage',
+                        'to': 'eventDate',
+                    },
+
+                    mappers.FollowupMapper: {
+                        'from': ('pièce', 'encodeur', 'suite'),
+                        'to': 'misc_description',
+                    },
+                }
+            },
+        },
+    },
+
+    'COMMENT EVENT':
+    {
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            mappers.CommentEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            mappers.CommentsMapper: {
+                'table': 'INSP_RAPPORT_data7',
+                'KEYS': ('N°', 'N°'),
+                'mappers': {
+                    mappers.CommentMapper: {
+                        'from': ('commentaires'),
+                        'to': 'misc_description',
+                    },
+                }
             },
         },
     },

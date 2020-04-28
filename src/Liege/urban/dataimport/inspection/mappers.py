@@ -5,6 +5,7 @@ from DateTime import DateTime
 from imio.urban.dataimport.csv.mapper import CSVFinalMapper as FinalMapper
 from imio.urban.dataimport.csv.mapper import CSVMapper as Mapper
 from imio.urban.dataimport.csv.mapper import CSVPostCreationMapper as PostCreationMapper
+from imio.urban.dataimport.csv.mapper import MultiLinesSecondaryTableMapper
 from imio.urban.dataimport.csv.mapper import SecondaryTableMapper
 from imio.urban.dataimport.exceptions import NoFieldToMapException
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
@@ -210,19 +211,6 @@ class ContactIdMapper(Mapper):
 # UrbanEvent base
 #
 
-# factory
-
-
-class UrbanEventFactory(BaseFactory):
-    """ """
-
-    def create(self, kwargs, container, line):
-        eventtype_uid = kwargs.pop('eventtype')
-        if 'eventDate' not in kwargs:
-            kwargs['eventDate'] = None
-        urban_event = container.createUrbanEvent(eventtype_uid, **kwargs)
-        return urban_event
-
 # mappers
 
 
@@ -261,3 +249,58 @@ class ReportDateMapper(Mapper):
         date = self.getData('date_rapport')
         date = date and DateTime(parse_date(date)) or None
         return date
+
+
+class FollowupEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'followup-access'
+
+
+class FollowupsMapper(MultiLinesSecondaryTableMapper):
+    """ """
+
+
+class FollowupDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('date_encodage', line)
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(parse_date(date)) or None
+        return date
+
+
+class FollowupMapper(Mapper):
+    """ """
+
+    def mapMisc_description(self, line):
+        piece = self.getData('pièce', line)
+        writer = self.getData('encodeur', line)
+        comment = self.getData('suite', line)
+        if not comment:
+            raise NoObjectToCreateException
+        text = '<p>Pièce: {}</p><p>Encodeur: {}</p><P>Suite: {}</p>'.format(
+            piece,
+            writer,
+            comment
+        )
+        return text
+
+
+class CommentEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'commentaire-reprise-access'
+
+
+class CommentsMapper(SecondaryTableMapper):
+    """ """
+
+
+class CommentMapper(Mapper):
+    """ """
+
+    def mapMisc_description(self, line):
+        comment = self.getData('commentaires', line)
+        if not comment:
+            raise NoObjectToCreateException
+        return '<p>{}</p>'.format(comment)
