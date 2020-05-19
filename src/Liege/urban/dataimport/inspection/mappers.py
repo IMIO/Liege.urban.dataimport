@@ -12,11 +12,15 @@ from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
 from imio.urban.dataimport.utils import parse_date
 
+from liege.urban.services import address_service
+
 from plone import api
 
 from Products.CMFPlone.utils import normalizeString
 
 from unidecode import unidecode
+
+import re
 
 
 #
@@ -185,6 +189,46 @@ class ErrorsMapper(FinalMapper):
 
         return '%s%s' % (error_trace, description)
 
+
+#
+# Address point
+#
+
+# factory
+
+class AddressFactory(BaseFactory):
+    """ """
+
+    def create(self, kwargs, container, line):
+        if not kwargs:
+            return None
+        address_factory = container.restrictedTraverse('@@create_address')
+        try:
+            address = address_factory.create_address(**kwargs)
+        except Exception:
+            self.logError(
+                self,
+                line,
+                'invalid capakey',
+                {'capakey': str(kwargs['capakey']), 'address_point': kwargs.get('address_point', None)}
+            )
+            return None
+        return address
+
+
+class AddressPointMapper(Mapper):
+
+    def map(self, line):
+        """
+        """
+        gid = self.getData('gidptadresse', line)
+        session = address_service.new_session()
+        address_record = session.query_address_by_gid(gid)
+        if address_record:
+            return address_record._asdict()
+
+        raise NoObjectToCreateException
+
 #
 # PERSON/CORPORATION CONTACT
 #
@@ -206,6 +250,61 @@ class ContactIdMapper(Mapper):
         name = self.getData('proprio')
         return normalizeString(self.site.portal_urban.generateUniqueId(name))
 
+
+class ContactAddressTableMapper(SecondaryTableMapper):
+    """ """
+
+
+class ContactAddressMapper(Mapper):
+    """ """
+
+    regex_zipcode = '(.*)(\d{4,4})\s+(\S.*)\s*\Z'
+    regex_street_1 = '(.*?)\s*,?\s*(\d.*)\s*-?\Z'
+    regex_street_2 = '(\d.*?)\s*,?\s*(.*)\s*-?\Z'
+
+    def mapStreet(self, line):
+        raw_addr = self.getData('adr_proprio')
+        match = re.search(self.regex_zipcode, raw_addr)
+        if match:
+            street_and_number = match.group(1)
+            match = re.search(self.regex_street_1, street_and_number)
+            if match:
+                return match.group(1)
+            match = re.search(self.regex_street_2, street_and_number)
+            if match:
+                return match.group(2)
+            return street_and_number
+        return raw_addr
+
+    def mapNumber(self, line):
+        raw_addr = self.getData('adr_proprio')
+        match = re.search(self.regex_zipcode, raw_addr)
+        if match:
+            street_and_number = match.group(1)
+            match = re.search(self.regex_street_1, street_and_number)
+            if match:
+                return match.group(2)
+            match = re.search(self.regex_street_2, street_and_number)
+            if match:
+                return match.group(1)
+            return ''
+        return ''
+
+    def mapZipcode(self, line):
+        raw_addr = self.getData('adr_proprio')
+        match = re.search(self.regex_zipcode, raw_addr)
+        if match:
+            zipcode = match.group(2)
+            return zipcode
+        return ''
+
+    def mapCity(self, line):
+        raw_addr = self.getData('adr_proprio')
+        match = re.search(self.regex_zipcode, raw_addr)
+        if match:
+            city = match.group(3)
+            return city
+        return ''
 
 #
 # UrbanEvent base

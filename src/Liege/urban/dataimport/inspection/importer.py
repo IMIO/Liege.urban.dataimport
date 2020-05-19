@@ -15,6 +15,8 @@ class InspectionImporter(CSVImporter):
     implements(ILiegeInspectionImporter)
 
     delimiter = '#'
+    quotechar = '"'
+    escapechar = '\\'
 
     def __init__(self, csv_filename='INSP_RAPPORT_data1.txt', key_column='N°', **kwargs):
         super(InspectionImporter, self).__init__(csv_filename, key_column, **kwargs)
