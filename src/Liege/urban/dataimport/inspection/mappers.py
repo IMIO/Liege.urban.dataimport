@@ -362,6 +362,18 @@ class ReportTextMapper(Mapper):
         return report
 
 
+class ArticlesTableMapper(SecondaryTableMapper):
+    """ """
+
+
+class ArticleTextMapper(Mapper):
+
+    def mapOffense_articles_details(self, line):
+        article = '<p>{}</p>'.format(self.getData('ref_cwatup'))
+        article = article.replace('\n', '<br/>').replace('\r', '<br/>')
+        return article
+
+
 class FollowupEventMapper(EventTypeMapper):
     """ """
     eventtype_id = 'followup-access'

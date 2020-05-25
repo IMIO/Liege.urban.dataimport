@@ -133,10 +133,20 @@ FIELDS_MAPPINGS = {
                 'table': 'INSP_RAPPORT_data3',
                 'KEYS': ('numerorapport', 'N°'),
                 'mappers': {
-
                     mappers.ReportTextMapper: {
                         'from': 'rapport',
                         'to': 'report',
+                    },
+                }
+            },
+
+            mappers.ArticlesTableMapper: {
+                'table': 'INSP_RAPPORT_data4',
+                'KEYS': ('numerorapport', 'N°'),
+                'mappers': {
+                    mappers.ArticleTextMapper: {
+                        'from': 'ref_cwatup',
+                        'to': 'offense_articles_details',
                     },
                 }
             },
