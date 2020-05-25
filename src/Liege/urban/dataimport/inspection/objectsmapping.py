@@ -128,6 +128,18 @@ FIELDS_MAPPINGS = {
                 'from': 'date_rapport',
                 'to': 'reportDate',
             },
+
+            mappers.ReportTableMapper: {
+                'table': 'INSP_RAPPORT_data3',
+                'KEYS': ('numerorapport', 'N°'),
+                'mappers': {
+
+                    mappers.ReportTextMapper: {
+                        'from': 'rapport',
+                        'to': 'report',
+                    },
+                }
+            },
         },
     },
 

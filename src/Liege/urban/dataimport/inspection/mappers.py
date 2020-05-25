@@ -327,6 +327,10 @@ class EventTypeMapper(Mapper):
         return getattr(config.urbaneventtypes, self.eventtype_id).UID()
 
 
+class ReportTableMapper(SecondaryTableMapper):
+    """ """
+
+
 class ReportEventMapper(EventTypeMapper):
     """ """
     eventtype_id = 'rapport'
@@ -348,6 +352,14 @@ class ReportDateMapper(Mapper):
         date = self.getData('date_rapport')
         date = date and DateTime(parse_date(date)) or None
         return date
+
+
+class ReportTextMapper(Mapper):
+
+    def mapReport(self, line):
+        report = '<p>{}</p>'.format(self.getData('rapport'))
+        report = report.replace('\n', '<br/>').replace('\r', '<br/>')
+        return report
 
 
 class FollowupEventMapper(EventTypeMapper):
