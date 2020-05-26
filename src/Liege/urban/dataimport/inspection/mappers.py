@@ -170,6 +170,30 @@ class OldAddressNumberMapper(PostCreationMapper):
         return [new_addr]
 
 
+class ComplaintTableMapper(SecondaryTableMapper):
+    """ """
+
+
+class ComplaintTextMapper(Mapper):
+
+    def mapInspectiondescription(self, line):
+        plainte = '<p>{}</p>'.format(self.getData('plainte'))
+        plainte = plainte.replace('\n', '<br/>').replace('\r', '<br/>')
+        return plainte
+
+
+class InfosTableMapper(SecondaryTableMapper):
+    """ """
+
+
+class InfosTextMapper(Mapper):
+
+    def mapDescription(self, line):
+        infos = '<p>{}</p>'.format(self.getData('infos'))
+        infos = infos.replace('\n', '<br/>').replace('\r', '<br/>')
+        return infos
+
+
 class ErrorsMapper(FinalMapper):
     def mapDescription(self, line, plone_object):
 

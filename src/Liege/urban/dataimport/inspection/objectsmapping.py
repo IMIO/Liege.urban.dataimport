@@ -60,6 +60,28 @@ FIELDS_MAPPINGS = {
                 'to': 'workLocations',
             },
 
+            mappers.ComplaintTableMapper: {
+                'table': 'INSP_RAPPORT_data5',
+                'KEYS': ('numerorapport', 'N°'),
+                'mappers': {
+                    mappers.ComplaintTextMapper: {
+                        'from': 'plainte',
+                        'to': 'inspectionDescription',
+                    },
+                }
+            },
+
+            mappers.InfosTableMapper: {
+                'table': 'INSP_RAPPORT_data6',
+                'KEYS': ('numerorapport', 'N°'),
+                'mappers': {
+                    mappers.InfosTextMapper: {
+                        'from': 'infos',
+                        'to': 'description',
+                    },
+                }
+            },
+
             mappers.ErrorsMapper: {
                 'from': (),
                 'to': ('description',),  # log all the errors in the description field
