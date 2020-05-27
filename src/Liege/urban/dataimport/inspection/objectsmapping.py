@@ -62,7 +62,7 @@ FIELDS_MAPPINGS = {
 
             mappers.ComplaintTableMapper: {
                 'table': 'INSP_RAPPORT_data5',
-                'KEYS': ('numerorapport', 'N°'),
+                'KEYS': ('N°', 'N°'),
                 'mappers': {
                     mappers.ComplaintTextMapper: {
                         'from': 'plainte',
@@ -73,7 +73,7 @@ FIELDS_MAPPINGS = {
 
             mappers.InfosTableMapper: {
                 'table': 'INSP_RAPPORT_data6',
-                'KEYS': ('numerorapport', 'N°'),
+                'KEYS': ('N°', 'N°'),
                 'mappers': {
                     mappers.InfosTextMapper: {
                         'from': 'infos',
@@ -119,7 +119,7 @@ FIELDS_MAPPINGS = {
 
             mappers.ContactAddressTableMapper: {
                 'table': 'INSP_RAPPORT_data2',
-                'KEYS': ('numerorapport', 'N°'),
+                'KEYS': ('N°', 'N°'),
                 'mappers': {
 
                     mappers.ContactAddressMapper: {
@@ -153,7 +153,7 @@ FIELDS_MAPPINGS = {
 
             mappers.ReportTableMapper: {
                 'table': 'INSP_RAPPORT_data3',
-                'KEYS': ('numerorapport', 'N°'),
+                'KEYS': ('N°', 'N°'),
                 'mappers': {
                     mappers.ReportTextMapper: {
                         'from': 'rapport',
@@ -164,7 +164,7 @@ FIELDS_MAPPINGS = {
 
             mappers.ArticlesTableMapper: {
                 'table': 'INSP_RAPPORT_data4',
-                'KEYS': ('numerorapport', 'N°'),
+                'KEYS': ('N°', 'N°'),
                 'mappers': {
                     mappers.ArticleTextMapper: {
                         'from': 'ref_cwatup',
