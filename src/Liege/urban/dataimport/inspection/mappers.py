@@ -400,7 +400,7 @@ class ArticleTextMapper(Mapper):
 
 class FollowupEventMapper(EventTypeMapper):
     """ """
-    eventtype_id = 'other'
+    eventtype_id = 'followup-access'
 
 
 class FollowupsMapper(MultiLinesSecondaryTableMapper):
