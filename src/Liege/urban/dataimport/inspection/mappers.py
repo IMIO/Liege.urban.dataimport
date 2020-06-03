@@ -398,6 +398,18 @@ class ReportTextMapper(Mapper):
         return report
 
 
+class EventCompletionStateMapper(PostCreationMapper):
+    def map(self, line, plone_object):
+        self.line = line
+        workflow_tool = api.portal.get_tool('portal_workflow')
+
+        workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
+        workflow_id = workflow_def.getId()
+        workflow_state = workflow_tool.getStatusOf(workflow_id, plone_object)
+        workflow_state['review_state'] = 'closed'
+        workflow_tool.setStatusOf(workflow_id, plone_object, workflow_state.copy())
+
+
 class ArticlesTableMapper(SecondaryTableMapper):
     """ """
 
