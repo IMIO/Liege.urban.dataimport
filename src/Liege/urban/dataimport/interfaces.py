@@ -40,3 +40,7 @@ class ILiegeArchitectsImporter(IUrbanDataImporter):
 
 class ILiegeInspectionImporter(IUrbanDataImporter):
     """ Marker interface for ILiege inspections importer """
+
+
+class ILiegeTicketImporter(IUrbanDataImporter):
+    """ Marker interface for ILiege tickets importer """
