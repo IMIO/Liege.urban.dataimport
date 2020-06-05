@@ -22,6 +22,7 @@
     <include package=".misclicence" />
     <include package=".old_rubrics_env" />
     <include package=".rubrics_env" />
+    <include package=".ticket" />
 
     <!-- Register the installation GenericSetup extension profile -->
     <genericsetup:registerProfile
