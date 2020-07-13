@@ -212,6 +212,11 @@ FIELDS_MAPPINGS = {
                     },
                 }
             },
+
+            mappers.EventCompletionStateMapper: {
+                'from': (),
+                'to': (),  # <- no field to fill, its the workflow state that has to be changed
+            },
         },
     },
 
@@ -234,6 +239,11 @@ FIELDS_MAPPINGS = {
                         'to': 'misc_description',
                     },
                 }
+            },
+
+            mappers.EventCompletionStateMapper: {
+                'from': (),
+                'to': (),  # <- no field to fill, its the workflow state that has to be changed
             },
         },
     },
