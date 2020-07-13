@@ -12,6 +12,7 @@ OBJECTS_NESTING = [
         ('TENANT2', []),
         ('TENANT3', []),
         ('PROPRIETARY', []),
+        ('TASKS', []),
     ],),
 ]
 
@@ -37,6 +38,10 @@ FIELDS_MAPPINGS = {
                 {
                     'from': 'NUM_PV_POLICE',
                     'to': 'policeTicketReference',
+                },
+                {
+                    'from': 'INFRACTION',
+                    'to': 'licenceSubject',
                 },
             ),
 
@@ -143,7 +148,7 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.Tenant2AddressMapper: {
-                'from': ('Adr2', 'Localite2'),
+                'from': ('Adr3', 'Localite3'),
                 'to': ('street', 'number', 'zipcode', 'city'),
             },
         },
@@ -164,6 +169,38 @@ FIELDS_MAPPINGS = {
                 'from': 'PROPRIETAIRE',
                 'to': 'id',
             },
+        },
+    },
+
+    'TASKS':
+    {
+        'factory': [mappers.TaskFactory],
+
+        'mappers': {
+            mappers.TaskTableMapper: {
+                'table': 'T Courrier PV',
+                'KEYS': ('NUMERO', 'NUMERO'),
+                'mappers': {
+                    SimpleMapper: (
+                        {
+                            'from': 'Objet',
+                            'to': 'title',
+                        },
+                    ),
+                    mappers.TaskIdMapper: {
+                        'from': 'numpiece',
+                        'to': 'id',
+                    },
+                    mappers.TaskDescriptionMapper: {
+                        'from': ('remarques', 'Destinataire', 'Expéditeur', 'Expédition', 'Gestionnaire'),
+                        'to': 'task_description',
+                    },
+                    mappers.TaskDateMapper: {
+                        'from': 'Date',
+                        'to': 'due_date',
+                    }
+                }
+            }
         },
     },
 }

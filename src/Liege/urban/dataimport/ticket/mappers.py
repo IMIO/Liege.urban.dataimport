@@ -3,9 +3,11 @@
 from imio.urban.dataimport.csv.mapper import CSVFinalMapper as FinalMapper
 from imio.urban.dataimport.csv.mapper import CSVMapper as Mapper
 from imio.urban.dataimport.csv.mapper import CSVPostCreationMapper as PostCreationMapper
+from imio.urban.dataimport.csv.mapper import MultiLinesSecondaryTableMapper
 from imio.urban.dataimport.csv.mapper import SecondaryTableMapper
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
+from imio.urban.dataimport.utils import parse_date
 
 from liege.urban.services import address_service
 
@@ -127,7 +129,9 @@ class OldAddressNumberMapper(PostCreationMapper):
         num = num and str(int(float(num.replace(',', '.'))))
         num2 = self.getData('Num2')
         num2 = num2 and ', {}'.format(num2) or ''
-        number = '{}{}'.format(num, num2)
+        num3 = self.getData('numbisreel')
+        num3 = num3 and ', {}'.format(num3) or ''
+        number = '{}{}{}'.format(num, num2, num3)
         new_addr = {'street': addr['street'], 'number': number}
         return [new_addr]
 
@@ -231,6 +235,8 @@ class ContactIdMapper(Mapper):
 
     def mapId(self, line):
         name = self.getData(self.field_name)
+        if not name:
+            raise NoObjectToCreateException
         return normalizeString(self.site.portal_urban.generateUniqueId(name))
 
 
@@ -361,3 +367,61 @@ class Tenant3AddressMapper(TenantAddressMapper):
     """ """
     locality_field = 'Localite3'
     address_field = 'Adr3'
+
+
+#
+# Tasks (postits)
+#
+
+# factory
+
+class TaskFactory(BaseFactory):
+    """ """
+
+    def getPortalType(self, container, **kwargs):
+        return 'task'
+
+
+# mappers
+
+
+class TaskTableMapper(MultiLinesSecondaryTableMapper):
+    """ """
+
+
+class TaskIdMapper(Mapper):
+    """ """
+
+    def mapId(self, line):
+        return str(int(float(self.getData('numpiece').replace(',', '.'))))
+
+
+class TaskDescriptionMapper(Mapper):
+    """ """
+
+    def mapTask_description(self, line):
+        foldermanager = self.getData('Gestionnaire')
+        foldermanager = foldermanager and '<p>Agent traitant: %s</p>' % foldermanager or ''
+        observations = self.getData('remarques')
+        observations = observations and '<p>Remarques: %s</p>' % observations or ''
+        from_ = self.getData('Expéditeur')
+        from_ = from_ and '<p>Expéditeur: %s</p>' % from_ or ''
+        to = self.getData('Destinataire')
+        to = to and '<p>Expéditeur: %s</p>' % to or ''
+        expedition = self.getData('Expédition')
+        expedition = expedition and '<p>Expédition: %s</p>' % expedition or ''
+
+        description = '{}{}{}{}{}'.format(foldermanager, observations, from_, to, expedition)
+        return description.decode('utf-8')
+
+
+class TaskDateMapper(Mapper):
+    """ """
+
+    def mapDue_date(self, line):
+        date = self.getData('Date')
+        try:
+            date = date and parse_date(date) or None
+        except Exception:
+            raise NoObjectToCreateException
+        return date
