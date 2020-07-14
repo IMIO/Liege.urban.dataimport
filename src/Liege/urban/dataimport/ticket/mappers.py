@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from DateTime import DateTime
+
 from imio.urban.dataimport.csv.mapper import CSVFinalMapper as FinalMapper
 from imio.urban.dataimport.csv.mapper import CSVMapper as Mapper
 from imio.urban.dataimport.csv.mapper import CSVPostCreationMapper as PostCreationMapper
@@ -394,6 +396,54 @@ class Proprietary3AddressMapper(ProprietaryAddressMapper):
     """ """
     locality_field = 'Localite3'
     address_field = 'Adr3'
+
+
+#
+# UrbanEvent base
+#
+
+# mappers
+
+
+class EventTypeMapper(Mapper):
+    """ """
+
+    eventtype_id = ''  # to override
+
+    def mapEventtype(self, line):
+        if not self.eventtype_id:
+            return
+        licence = self.importer.current_containers_stack[-1]
+        urban_tool = api.portal.get_tool('portal_urban')
+        config = urban_tool.getUrbanConfig(licence)
+        return getattr(config.urbaneventtypes, self.eventtype_id).UID()
+
+
+class TicketSentEventMapper(EventTypeMapper):
+    """ """
+    eventtype_id = 'redaction-du-pv'
+
+
+class TransmitDateMapper(Mapper):
+
+    def mapEventdate(self, line):
+        date = self.getData('TRANSMIS', line)
+        if not date:
+            raise NoObjectToCreateException
+        date = date and DateTime(parse_date(date)) or None
+        return date
+
+
+class EventCompletionStateMapper(PostCreationMapper):
+    def map(self, line, plone_object):
+        self.line = line
+        workflow_tool = api.portal.get_tool('portal_workflow')
+
+        workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
+        workflow_id = workflow_def.getId()
+        workflow_state = workflow_tool.getStatusOf(workflow_id, plone_object)
+        workflow_state['review_state'] = 'closed'
+        workflow_tool.setStatusOf(workflow_id, plone_object, workflow_state.copy())
 
 
 #

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from imio.urban.dataimport.csv.mapper import CSVSimpleMapper as SimpleMapper
+from imio.urban.dataimport.factory import UrbanEventFactory
 
 from Liege.urban.dataimport.ticket import mappers
 
@@ -12,6 +13,7 @@ OBJECTS_NESTING = [
         ('TENANT2', []),
         ('TENANT3', []),
         ('PROPRIETARY', []),
+        ('TICKET SENT EVENT', []),
         ('TASKS', []),
     ],),
 ]
@@ -206,6 +208,23 @@ FIELDS_MAPPINGS = {
                     }
                 }
             }
+        },
+    },
+
+    'TICKET SENT EVENT':
+    {
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            mappers.TicketSentEventMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            mappers.EventCompletionStateMapper: {
+                'from': (),
+                'to': (),  # <- no field to fill, its the workflow state that has to be changed
+            },
         },
     },
 }
