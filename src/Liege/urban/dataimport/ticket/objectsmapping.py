@@ -61,6 +61,11 @@ FIELDS_MAPPINGS = {
                 'to': 'workLocations',
             },
 
+            mappers.BoundLicencesMapper: {
+                'from': ('Dossiers', 'Mise en demeure'),
+                'to': 'bound_licences',
+            },
+
             mappers.CompletionStateMapper: {
                 'from': ('termine',),
                 'to': (),  # <- no field to fill, its the workflow state that has to be changed

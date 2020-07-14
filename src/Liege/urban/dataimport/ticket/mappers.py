@@ -136,6 +136,35 @@ class OldAddressNumberMapper(PostCreationMapper):
         return [new_addr]
 
 
+class BoundLicencesMapper(PostCreationMapper):
+
+    def mapBound_licences(self, line, plone_object):
+        self.line = line
+        bound_licences = []
+        refs_not_found = []
+        catalog = api.portal.get_tool('portal_catalog')
+        licence_ref = self.getData('Dossiers')
+        licence_ref = licence_ref and int(licence_ref)
+        miscdemand_ref = self.getData('Mise en demeure')
+        miscdemand_ref = miscdemand_ref and int(miscdemand_ref)
+        if licence_ref:
+            licence_ref = str(licence_ref)
+            brains = catalog(getReference=licence_ref)
+            if len(brains) == 1:
+                bound_licences.append(brains[0].UID)
+            else:
+                refs_not_found.append(licence_ref)
+        if miscdemand_ref:
+            miscdemand_ref = str(miscdemand_ref)
+            brains = catalog(getReference=miscdemand_ref)
+            if len(brains) == 1:
+                bound_licences.append(brains[0].UID)
+            else:
+                refs_not_found.append(miscdemand_ref)
+        self.logError(self, line, 'bound_licences', {'refs': refs_not_found})
+        return bound_licences
+
+
 class CompletionStateMapper(PostCreationMapper):
     def map(self, line, plone_object):
         self.line = line
@@ -162,8 +191,9 @@ class ErrorsMapper(FinalMapper):
         if errors:
             for error in errors:
                 data = error.data
-                if 'inspector' in error.message:
-                    error_trace.append('<p>inspecteur : %s</p>' % data['name'])
+                if 'bound_licences' in error.message:
+                    for ref in data['refs']:
+                        error_trace.append('<p>dossier lié non trouvé : %s</p>' % ref)
             error_trace.append('<br />')
         error_trace = ''.join(error_trace)
 
