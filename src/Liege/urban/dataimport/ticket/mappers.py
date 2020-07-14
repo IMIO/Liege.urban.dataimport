@@ -137,6 +137,7 @@ class OldAddressNumberMapper(PostCreationMapper):
 
 
 class BoundLicencesMapper(PostCreationMapper):
+    """ """
 
     def mapBound_licences(self, line, plone_object):
         self.line = line
@@ -144,9 +145,9 @@ class BoundLicencesMapper(PostCreationMapper):
         refs_not_found = []
         catalog = api.portal.get_tool('portal_catalog')
         licence_ref = self.getData('Dossiers')
-        licence_ref = licence_ref and int(licence_ref)
+        licence_ref = licence_ref and int(float(licence_ref))
         miscdemand_ref = self.getData('Mise en demeure')
-        miscdemand_ref = miscdemand_ref and int(miscdemand_ref)
+        miscdemand_ref = miscdemand_ref and int(float(miscdemand_ref))
         if licence_ref:
             licence_ref = str(licence_ref)
             brains = catalog(getReference=licence_ref)
