@@ -14,6 +14,7 @@ from liege.urban.services import address_service
 from plone import api
 
 from Products.CMFPlone.utils import normalizeString
+from Products.urban.interfaces import IGenericLicence
 
 from unidecode import unidecode
 
@@ -150,14 +151,14 @@ class BoundLicencesMapper(PostCreationMapper):
         miscdemand_ref = miscdemand_ref and int(float(miscdemand_ref))
         if licence_ref:
             licence_ref = str(licence_ref)
-            brains = catalog(getReference=licence_ref)
+            brains = catalog(getReference=licence_ref, object_provides=IGenericLicence.__identifier__)
             if len(brains) == 1:
                 bound_licences.append(brains[0].UID)
             else:
                 refs_not_found.append(licence_ref)
         if miscdemand_ref:
             miscdemand_ref = str(miscdemand_ref)
-            brains = catalog(getReference=miscdemand_ref)
+            brains = catalog(getReference=miscdemand_ref, object_provides=IGenericLicence.__identifier__)
             if len(brains) == 1:
                 bound_licences.append(brains[0].UID)
             else:
