@@ -62,7 +62,7 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.CompletionStateMapper: {
-                'from': (),
+                'from': ('termine',),
                 'to': (),  # <- no field to fill, its the workflow state that has to be changed
             },
 
