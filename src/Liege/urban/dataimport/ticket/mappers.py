@@ -248,13 +248,6 @@ class AddressPointMapper(Mapper):
 # factory
 
 
-class TenantFactory(BaseFactory):
-    def getPortalType(self, container, **kwargs):
-        return 'Tenant'
-
-# factory
-
-
 class ProprietaryFactory(BaseFactory):
     def getPortalType(self, container, **kwargs):
         return 'Proprietary'
@@ -330,22 +323,22 @@ class ContactAddressMapper(Mapper):
         return ''
 
 
-class TenantIdMapper(ContactIdMapper):
+class ProprietaryIdMapper(ContactIdMapper):
     """ """
     field_name = 'A CHARGE DE'
 
 
-class Tenant2IdMapper(ContactIdMapper):
+class Proprietary2IdMapper(ContactIdMapper):
     """ """
     field_name = 'Charge 2'
 
 
-class Tenant3IdMapper(ContactIdMapper):
+class Proprietary3IdMapper(ContactIdMapper):
     """ """
     field_name = 'Charge3'
 
 
-class TenantAddressMapper(Mapper):
+class ProprietaryAddressMapper(Mapper):
     """ """
     locality_field = 'Localite1'
     address_field = 'Adr1'
@@ -391,13 +384,13 @@ class TenantAddressMapper(Mapper):
         return ''
 
 
-class Tenant2AddressMapper(TenantAddressMapper):
+class Proprietary2AddressMapper(ProprietaryAddressMapper):
     """ """
     locality_field = 'Localite2'
     address_field = 'Adr2'
 
 
-class Tenant3AddressMapper(TenantAddressMapper):
+class Proprietary3AddressMapper(ProprietaryAddressMapper):
     """ """
     locality_field = 'Localite3'
     address_field = 'Adr3'

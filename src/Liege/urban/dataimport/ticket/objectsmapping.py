@@ -92,7 +92,7 @@ FIELDS_MAPPINGS = {
 
     'TENANT':
     {
-        'factory': [mappers.TenantFactory],
+        'factory': [mappers.ProprietaryFactory],
         'mappers': {
             SimpleMapper: (
                 {
@@ -101,12 +101,12 @@ FIELDS_MAPPINGS = {
                 },
             ),
 
-            mappers.TenantIdMapper: {
+            mappers.ProprietaryIdMapper: {
                 'from': 'A CHARGE DE',
                 'to': 'id',
             },
 
-            mappers.TenantAddressMapper: {
+            mappers.ProprietaryAddressMapper: {
                 'from': ('Adr1', 'Localite1'),
                 'to': ('street', 'number', 'zipcode', 'city'),
             },
@@ -115,7 +115,7 @@ FIELDS_MAPPINGS = {
 
     'TENANT2':
     {
-        'factory': [mappers.TenantFactory],
+        'factory': [mappers.ProprietaryFactory],
         'mappers': {
             SimpleMapper: (
                 {
@@ -124,12 +124,12 @@ FIELDS_MAPPINGS = {
                 },
             ),
 
-            mappers.Tenant2IdMapper: {
+            mappers.Proprietary2IdMapper: {
                 'from': 'Charge 2',
                 'to': 'id',
             },
 
-            mappers.Tenant2AddressMapper: {
+            mappers.Proprietary2AddressMapper: {
                 'from': ('Adr2', 'Localite2'),
                 'to': ('street', 'number', 'zipcode', 'city'),
             },
@@ -138,7 +138,7 @@ FIELDS_MAPPINGS = {
 
     'TENANT3':
     {
-        'factory': [mappers.TenantFactory],
+        'factory': [mappers.ProprietaryFactory],
         'mappers': {
             SimpleMapper: (
                 {
@@ -147,12 +147,12 @@ FIELDS_MAPPINGS = {
                 },
             ),
 
-            mappers.Tenant3IdMapper: {
+            mappers.Proprietary3IdMapper: {
                 'from': 'Charge3',
                 'to': 'id',
             },
 
-            mappers.Tenant2AddressMapper: {
+            mappers.Proprietary2AddressMapper: {
                 'from': ('Adr3', 'Localite3'),
                 'to': ('street', 'number', 'zipcode', 'city'),
             },
