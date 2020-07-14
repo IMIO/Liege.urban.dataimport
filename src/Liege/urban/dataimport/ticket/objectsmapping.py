@@ -221,6 +221,11 @@ FIELDS_MAPPINGS = {
                 'to': 'eventtype',
             },
 
+            mappers.TransmitDateMapper: {
+                'from': 'TRANSMIS',
+                'to': 'eventDate',
+            },
+
             mappers.EventCompletionStateMapper: {
                 'from': (),
                 'to': (),  # <- no field to fill, its the workflow state that has to be changed
