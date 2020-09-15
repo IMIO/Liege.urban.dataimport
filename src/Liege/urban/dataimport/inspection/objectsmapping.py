@@ -45,7 +45,7 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.OldAddressMapper: {
-                'table': 'Rues',
+                'table': 'Rues_inspection',
                 'KEYS': ('ref_rue', 'Numero'),
                 'mappers': {
                     mappers.WorklocationsMapper: {
@@ -192,7 +192,7 @@ FIELDS_MAPPINGS = {
         'mappers': {
 
             mappers.FollowupsMapper: {
-                'table': 'TA_suite_rapport_ib',
+                'table': 'INSP_TA_suite_rapport_ib',
                 'KEYS': ('numerorapport', 'num_rapport'),
                 'mappers': {
 

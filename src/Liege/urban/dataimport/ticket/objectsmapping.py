@@ -185,7 +185,7 @@ FIELDS_MAPPINGS = {
 
         'mappers': {
             mappers.TaskTableMapper: {
-                'table': 'T Courrier PV',
+                'table': 'PV_Courriers',
                 'KEYS': ('NUMERO', 'NUMERO'),
                 'mappers': {
                     SimpleMapper: (

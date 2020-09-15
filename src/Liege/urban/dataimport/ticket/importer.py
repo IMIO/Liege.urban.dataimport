@@ -18,7 +18,7 @@ class TicketImporter(CSVImporter):
     quotechar = '"'
     escapechar = '\\'
 
-    def __init__(self, csv_filename='PVerbaux', key_column='NUMERO', **kwargs):
+    def __init__(self, csv_filename='PVerbaux_data', key_column='NUMERO', **kwargs):
         super(TicketImporter, self).__init__(csv_filename, key_column, **kwargs)
 
 
