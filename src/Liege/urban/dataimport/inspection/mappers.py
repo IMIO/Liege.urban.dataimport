@@ -445,7 +445,7 @@ class FollowupMapper(Mapper):
     """ """
 
     def mapMisc_description(self, line):
-        piece = self.getData('pièce', line)
+        piece = self.getData('piece', line)
         writer = self.getData('encodeur', line)
         comment = self.getData('suite', line)
         if not comment:

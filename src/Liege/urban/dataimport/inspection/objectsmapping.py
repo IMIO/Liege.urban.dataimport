@@ -207,7 +207,7 @@ FIELDS_MAPPINGS = {
                     },
 
                     mappers.FollowupMapper: {
-                        'from': ('pièce', 'encodeur', 'suite'),
+                        'from': ('piece', 'encodeur', 'suite'),
                         'to': 'misc_description',
                     },
                 }
