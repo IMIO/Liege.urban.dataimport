@@ -20,7 +20,7 @@ class TicketImporterFromImportSettings(CSVImporterFromImportSettings):
         settings = super(TicketImporterFromImportSettings, self).get_importer_settings()
 
         db_settings = {
-            'csv_filename': 'PVerbaux',
+            'csv_filename': 'PVerbaux_data',
             'key_column': 'NUMERO',
         }
 
