@@ -48,7 +48,7 @@ FIELDS_MAPPINGS = {
             ),
 
             mappers.OldAddressMapper: {
-                'table': 'Rues',
+                'table': 'Rues_inspection',
                 'KEYS': ('Correspondance_adr', 'Numero'),
                 'mappers': {
                     mappers.WorklocationsMapper: {
