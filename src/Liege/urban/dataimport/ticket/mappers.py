@@ -470,7 +470,7 @@ class TaskIdMapper(Mapper):
     """ """
 
     def mapId(self, line):
-        return str(int(float(self.getData('numpiece').replace(',', '.'))))
+        return str(int(float(self.getData('numpiece').replace(',', '.') or '0')))
 
 
 class TaskDescriptionMapper(Mapper):
