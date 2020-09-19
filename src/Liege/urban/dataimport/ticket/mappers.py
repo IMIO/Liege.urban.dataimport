@@ -481,11 +481,11 @@ class TaskDescriptionMapper(Mapper):
         foldermanager = foldermanager and '<p>Agent traitant: %s</p>' % foldermanager or ''
         observations = self.getData('remarques')
         observations = observations and '<p>Remarques: %s</p>' % observations or ''
-        from_ = self.getData('Expéditeur')
+        from_ = self.getData('Expediteur')
         from_ = from_ and '<p>Expéditeur: %s</p>' % from_ or ''
         to = self.getData('Destinataire')
         to = to and '<p>Expéditeur: %s</p>' % to or ''
-        expedition = self.getData('Expédition')
+        expedition = self.getData('Expedition')
         expedition = expedition and '<p>Expédition: %s</p>' % expedition or ''
 
         description = '{}{}{}{}{}'.format(foldermanager, observations, from_, to, expedition)
