@@ -489,7 +489,7 @@ class TaskDescriptionMapper(Mapper):
         expedition = expedition and '<p>Expédition: %s</p>' % expedition or ''
 
         description = '{}{}{}{}{}'.format(foldermanager, observations, from_, to, expedition)
-        return description.decode('utf-8')
+        return description.decode('ISO 8859-1')
 
 
 class TaskDateMapper(Mapper):
