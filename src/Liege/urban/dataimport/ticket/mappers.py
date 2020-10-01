@@ -148,9 +148,9 @@ class BoundLicencesMapper(PostCreationMapper):
         refs_not_found = []
         catalog = api.portal.get_tool('portal_catalog')
         licence_ref = self.getData('Dossiers')
-        licence_ref = licence_ref and int(float(licence_ref))
+        licence_ref = licence_ref and int(float(licence_ref.replace(',', '.')))
         miscdemand_ref = self.getData('Mise en demeure')
-        miscdemand_ref = miscdemand_ref and int(float(miscdemand_ref))
+        miscdemand_ref = miscdemand_ref and int(float(miscdemand_ref.replace(',', '.')))
         if licence_ref:
             licence_ref = str(licence_ref)
             brains = catalog(getReference=licence_ref, object_provides=IGenericLicence.__identifier__)
