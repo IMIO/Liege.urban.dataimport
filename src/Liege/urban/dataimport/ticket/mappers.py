@@ -238,6 +238,7 @@ class AddressPointMapper(Mapper):
         gid = self.getData('gidptadresse', line)
         session = address_service.new_session()
         address_record = session.query_address_by_gid(gid)
+        session.close()
         if address_record:
             return address_record._asdict()
 
