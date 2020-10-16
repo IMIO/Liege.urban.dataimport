@@ -30,6 +30,14 @@ import re
 
 
 class LicenceFactory(BaseFactory):
+    """
+    Override the factory to create either an inspection licence or an urbanevent if the inspection licence
+    already exists.
+    """
+    def create(self, kwargs, container=None, line=None):
+        portal_type = 'Inspection'
+        return portal_type
+
     def getCreationPlace(self, factory_args):
         foldername = factory_args['portal_type'].lower()
         path = '{}/urban/{}s'.format(self.site.absolute_url_path(), foldername)
@@ -49,18 +57,7 @@ class PortalTypeMapper(Mapper):
     """ """
 
     def mapPortal_type(self, line):
-        type_value = self.getData('Type_trav').upper()
-        row = self.getValueMapping('type_map').get(type_value, None)
-        portal_type = row and row['portal_type'] or None
-        if portal_type == 'UrbanCertificateOne':
-            subject = self.getData('Objettrav').lower()
-            is_cu2 = self.getData('COLLEGE_DECISION') or 'cu2' in subject or 'cu 2' in subject
-            if is_cu2:
-                portal_type = 'UrbanCertificateTwo'
-
-        if not portal_type:
-            raise NoObjectToCreateException
-        return portal_type
+        return 'Inspection'
 
 
 class ReferenceMapper(PostCreationMapper):
