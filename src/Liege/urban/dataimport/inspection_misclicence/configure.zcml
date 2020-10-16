@@ -1,0 +1,33 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="Liege.urban.dataimport">
+
+    <adapter
+       for="Liege.urban.dataimport.inspection_misclicence.importer.InspectionMisclicenceImporter"
+        factory=".splitter.LiegeImportSplitter"
+        provides="imio.urban.dataimport.interfaces.IImportSplitter"
+        />
+
+    <adapter
+        for="Liege.urban.dataimport.inspection_misclicence.importer.InspectionMisclicenceImporter"
+        factory=".importer.LicencesValuesMapping"
+        provides="imio.urban.dataimport.interfaces.IValuesMapping"
+        name="values mapping"
+        />
+
+    <adapter
+        for="Liege.urban.dataimport.interfaces.ILiegeInspectionMisclicenceImporter"
+        factory=".importer.LiegeMapping"
+        provides="imio.urban.dataimport.interfaces.IObjectsMapping"
+        name="objects mapping"
+        />
+
+    <adapter
+        for="imio.urban.dataimport.interfaces.IImportSettingsForm"
+        factory=".settings.InspectionMisclicenceImporterFromImportSettings"
+        provides="imio.urban.dataimport.csv.interfaces.ICSVImporter"
+        name="liege inspection_misclicence"
+        />
+
+</configure>
