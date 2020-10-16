@@ -14,7 +14,9 @@ class InspectionMisclicenceImporter(CSVImporter):
 
     implements(ILiegeInspectionMisclicenceImporter)
 
-    delimiter = ';'
+    delimiter = '#'
+    quotechar = '"'
+    escapechar = '\\'
 
     def __init__(self, csv_filename='T Aff Diverses', key_column='DOSSIER', **kwargs):
         super(InspectionMisclicenceImporter, self).__init__(csv_filename, key_column, **kwargs)
