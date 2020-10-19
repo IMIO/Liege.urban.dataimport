@@ -102,7 +102,18 @@ FIELDS_MAPPINGS = {
             mappers.AddressPointMapper: {
                 'from': 'gidptadresse',
                 'to': (),
-            }
+            },
+
+            mappers.InspectionAddressPointTableMapper: {
+                'table': 'INSPBATI_PlusieursPtadresses',
+                'KEYS': ('N°', 'N'),
+                'mappers': {
+                    mappers.AdditionalAddressPointMapper: {
+                        'from': 'gidnum',
+                        'to': (),
+                    },
+                }
+            },
         },
     },
 

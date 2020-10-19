@@ -266,6 +266,25 @@ class AddressPointMapper(Mapper):
 
         raise NoObjectToCreateException
 
+
+class InspectionAddressPointTableMapper(SecondaryTableMapper):
+    """ """
+
+
+class AdditionalAddressPointMapper(Mapper):
+
+    def map(self, line):
+        """
+        """
+        gid = self.getData('gidnum', line)
+        session = address_service.new_session()
+        address_record = session.query_address_by_gid(gid)
+        session.close()
+        if address_record:
+            return address_record._asdict()
+
+        raise NoObjectToCreateException
+
 #
 # PERSON/CORPORATION CONTACT
 #

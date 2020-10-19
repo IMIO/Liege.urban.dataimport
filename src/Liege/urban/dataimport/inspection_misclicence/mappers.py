@@ -50,7 +50,7 @@ class IdMapper(Mapper):
     """ """
 
     def mapId(self, line):
-        return str(int(float(self.getData('DOSSIER').replace(',', '.'))))
+        return str(int((self.getData('DOSSIER') or 0).replace(',', '.')))
 
 
 class PortalTypeMapper(Mapper):
