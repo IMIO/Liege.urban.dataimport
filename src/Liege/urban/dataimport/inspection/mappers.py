@@ -264,10 +264,8 @@ class AddressPointMapper(Mapper):
         if address_record:
             return address_record._asdict()
 
-        raise NoObjectToCreateException
 
-
-class InspectionAddressPointTableMapper(SecondaryTableMapper):
+class InspectionAddressPointTableMapper(MultiLinesSecondaryTableMapper):
     """ """
 
 
