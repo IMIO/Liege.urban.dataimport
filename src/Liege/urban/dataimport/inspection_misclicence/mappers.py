@@ -428,7 +428,7 @@ class AdditionalAddressPointMapper(Mapper):
     def map(self, line):
         """
         """
-        gid = self.getData('gidnum', line)
+        gid = self.getData('gidptadresse', line)
         session = address_service.new_session()
         address_record = session.query_address_by_gid(gid)
         session.close()

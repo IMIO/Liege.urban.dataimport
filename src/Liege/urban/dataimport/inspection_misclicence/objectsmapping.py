@@ -134,7 +134,7 @@ FIELDS_MAPPINGS = {
                 'KEYS': ('DOSSIER', 'DOSSIER'),
                 'mappers': {
                     mappers.AdditionalAddressPointMapper: {
-                        'from': 'gidnum',
+                        'from': 'gidptadresse',
                         'to': (),
                     },
                 }
