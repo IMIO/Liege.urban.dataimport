@@ -63,6 +63,7 @@ class LicenceFactory(BaseFactory, Mapper):
                 continue
             existing_inspection = self.inspections_by_capakeys.get(address_record.capakey, None)
             if existing_inspection:
+                session.close()
                 inspection = existing_inspection[0].getObject()
                 urban_event = inspection.createUrbanEvent(self.eventtype_uid)
 
@@ -89,6 +90,7 @@ class LicenceFactory(BaseFactory, Mapper):
                 urban_event.reindexObject()
                 return None
 
+        session.close()
         return super(LicenceFactory, self).create(kwargs, container=container, line=line)
 
     def getCreationPlace(self, factory_args):
@@ -388,6 +390,7 @@ class AddressPointMapper(Mapper):
         if gid and gid != '0':
             session = address_service.new_session()
             address_record = session.query_address_by_gid(gid)
+            session.close()
             if address_record:
                 return address_record._asdict()
 
