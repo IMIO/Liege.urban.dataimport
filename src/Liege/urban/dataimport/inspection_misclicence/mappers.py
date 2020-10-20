@@ -434,7 +434,7 @@ class AdditionalAddressPointMapper(Mapper):
         session.close()
         if address_record:
             return address_record._asdict()
-        return None
+        return {}
 
 #
 # UrbanEvent base
