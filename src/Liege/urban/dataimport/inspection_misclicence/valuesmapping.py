@@ -25,6 +25,18 @@ VALUES_MAPS = {
     'Défavorable': 'refused',
 },
 
+'inspection_context': {
+    'DIV': 'division-dimmeuble',
+    'DIM': 'division-dimmeuble',
+    'MED': '',
+    'DEM': '',
+    'PLA': 'plainte',
+    'plainte': 'plainte',
+    'Plainte': 'plainte',
+    'AMN': 'amnistie',
+    'amnistie': 'amnistie',
+},
+
 'eventtype_id_map': table({
     'header'               : ['decision_event',       'deposit_event'],
     'UrbanCertificateTwo'  : ['copy_of_octroi-cu2',   'depot-de-la-demande'],
@@ -32,6 +44,7 @@ VALUES_MAPS = {
     'PreliminaryNotice'    : ['',                     'copy_of_depot-de-la-demande'],
     'Declaration'          : ['',                     'depot-de-la-demande'],
     'PatrimonyCertificate' : ['',                     'convocation'],
+    'Inspection'           : ['',                     'rapport'],
 }),
 
 'person_title_map': {

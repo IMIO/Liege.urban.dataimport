@@ -25,7 +25,18 @@ FIELDS_MAPPINGS = {
                     'from': 'Objettrav',
                     'to': 'licenceSubject',
                 },
+                {
+                    'from': 'gidptadresse',
+                    'to': 'pt_address',
+                },
             ),
+
+            mappers.MiscInspectionAddressPointTableMapper: {
+                'table': 'TaffairesDiverses_PlusieursAdresses',
+                'KEYS': ('DOSSIER', 'DOSSIER'),
+                'from': ('gidptadresse',),
+                'to': 'additional_ptadress',
+            },
 
             mappers.IdMapper: {
                 'from': 'DOSSIER',
@@ -33,13 +44,18 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.PortalTypeMapper: {
-                'from': ('Type_trav', 'Objettrav', 'COLLEGE_DECISION'),
+                'from': (),
                 'to': 'portal_type',
             },
 
             mappers.ReferenceMapper: {
-                'from': ('DOSSIER', 'Type_trav', 'COLLEGE_DECISION'),
+                'from': ('DOSSIER',),
                 'to': 'reference',
+            },
+
+            mappers.InspectionContextMapper: {
+                'from': 'Type_trav',
+                'to': 'inspection_context',
             },
 
             mappers.OldAddressMapper: {
@@ -111,6 +127,17 @@ FIELDS_MAPPINGS = {
             mappers.AddressPointMapper: {
                 'from': ('gidptadresse', 'capakey', 'Numero', 'Correspondance_rue'),
                 'to': (),
+            },
+
+            mappers.InspectionAddressPointTableMapper: {
+                'table': 'TaffairesDiverses_PlusieursAdresses',
+                'KEYS': ('DOSSIER', 'DOSSIER'),
+                'mappers': {
+                    mappers.AdditionalAddressPointMapper: {
+                        'from': 'gidnum',
+                        'to': (),
+                    },
+                }
             },
         },
     },

@@ -6,6 +6,7 @@ from imio.urban.dataimport.csv.mapper import CSVFinalMapper as FinalMapper
 from imio.urban.dataimport.csv.mapper import CSVMapper as Mapper
 from imio.urban.dataimport.csv.mapper import CSVPostCreationMapper as PostCreationMapper
 from imio.urban.dataimport.csv.mapper import MultiLinesSecondaryTableMapper
+from imio.urban.dataimport.csv.mapper import MultivaluedFieldSecondaryTableMapper
 from imio.urban.dataimport.csv.mapper import SecondaryTableMapper
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
 from imio.urban.dataimport.factory import BaseFactory
@@ -29,14 +30,58 @@ import re
 # factory
 
 
-class LicenceFactory(BaseFactory):
+class LicenceFactory(BaseFactory, Mapper):
     """
     Override the factory to create either an inspection licence or an urbanevent if the inspection licence
     already exists.
     """
+    def __init__(self, *args, **kwargs):
+        super(LicenceFactory, self).__init__(*args, **kwargs)
+        urban_tool = api.portal.get_tool('portal_urban')
+        config = urban_tool.inspection
+        eventtype_id = 'followup-access'
+        self.eventtype_uid = getattr(config.urbaneventtypes, eventtype_id).UID()
+        self.sources = []
+        self.destinations = []
+
     def create(self, kwargs, container=None, line=None):
-        portal_type = 'Inspection'
-        return portal_type
+        self.line = line
+        catalog = api.portal.get_tool('portal_catalog')
+        session = address_service.new_session()
+        all_pt_adresses = [kwargs['pt_address']] + kwargs.get('additional_ptadress', [])
+        for pt_address in all_pt_adresses:
+            address_record = session.query_address_by_gid(pt_address)
+            if not address_record:
+                continue
+            existing_inspection = catalog(parcelInfosIndex=address_record.capakey, portal_type='Inspection')
+            if existing_inspection:
+                inspection = existing_inspection[0].getObject()
+                urban_event = inspection.createUrbanEvent(self.eventtype_uid)
+
+                type_trav = self.getData('Type_trav')
+                subject = self.getData('Objettrav')
+                num = self.getData('DOSSIER')
+                title = '{} - {} - {}'.format(num, type_trav, subject)
+                urban_event.setTitle(title)
+
+                date = self.getData('DEPOT')
+                date = date and DateTime(parse_date(date)) or None
+                urban_event.setEventDate(date)
+
+                persontitle = self.getData('QUALITE')
+                applicant = self.getData('NOM DU DEMANDEUR')
+                tel = self.getData('TELDEMANDEUR')
+                address = self.getData('ADRESSE DEMANDEUR')
+                zipcode = self.getData('CODE POSTAL22')
+                locality = self.getData('LOCALITE22')
+                description = '{} {}\n{} {} {}\n{}'.format(
+                    persontitle, applicant, address, zipcode, locality, tel
+                )
+                urban_event.setMisc_description(description)
+                urban_event.reindexObject()
+                return None
+
+        return super(LicenceFactory, self).create(kwargs, container=container, line=line)
 
     def getCreationPlace(self, factory_args):
         foldername = factory_args['portal_type'].lower()
@@ -50,7 +95,7 @@ class IdMapper(Mapper):
     """ """
 
     def mapId(self, line):
-        return str(int((self.getData('DOSSIER') or 0).replace(',', '.')))
+        return str(int((self.getData('DOSSIER') or '0').replace(',', '.')))
 
 
 class PortalTypeMapper(Mapper):
@@ -67,6 +112,16 @@ class ReferenceMapper(PostCreationMapper):
         abbr = 'IB'
         ref = '{}/{}'.format(abbr, str(int(float(self.getData('DOSSIER').replace(',', '.')))))
         return ref
+
+
+class InspectionContextMapper(Mapper):
+    """ """
+
+    def mapInspection_context(self, line):
+        trav_type = self.getData('Type_trav')
+        context_mapping = self.getValueMapping('inspection_context')
+        inspection_context = context_mapping.get(trav_type, None)
+        return inspection_context
 
 
 class OldAddressMapper(SecondaryTableMapper):
@@ -345,8 +400,33 @@ class AddressPointMapper(Mapper):
                     address_args['street_code'] = street.getStreetCode()
 
             return address_args
+        return None
 
-        raise NoObjectToCreateException
+
+class MiscInspectionAddressPointTableMapper(MultivaluedFieldSecondaryTableMapper):
+    """ """
+
+    def mapAdditional_ptadress(self, line):
+        self.csv_filename = self.secondary_table
+        return [self.getData('gidptadresse', line)]
+
+
+class InspectionAddressPointTableMapper(MultiLinesSecondaryTableMapper):
+    """ """
+
+
+class AdditionalAddressPointMapper(Mapper):
+
+    def map(self, line):
+        """
+        """
+        gid = self.getData('gidnum', line)
+        session = address_service.new_session()
+        address_record = session.query_address_by_gid(gid)
+        session.close()
+        if address_record:
+            return address_record._asdict()
+        return None
 
 #
 # UrbanEvent base
@@ -456,7 +536,7 @@ class TaskDescriptionMapper(Mapper):
     def mapTask_description(self, line):
         foldermanager = self.getData('Gestionnaire')
         foldermanager = foldermanager and '<p>Agent traitant: %s</p>' % foldermanager or ''
-        observations = self.getData('Remarques')
+        observations = self.getData('remarques')
         observations = observations and '<p>Remarques: %s</p>' % observations or ''
         from_ = self.getData('Expéditeur')
         from_ = from_ and '<p>Expéditeur: %s</p>' % from_ or ''

@@ -21,10 +21,10 @@ class LiegeImportSplitter(object):
         allowed_divider = False
         if folder_id:
             folder_number = int(float(folder_id.replace(',', '.')))
-            allowed_divider = folder_number > 3 and folder_number % self.divider == self.target
+            allowed_divider = folder_number or True
 
         allowed_type = self.importer.getData('Type_trav', line) in [
-            'DIV', 'DIM', 'MED', 'plainte', 'DEM', 'AMN', 'amnistie'
+            'DIV', 'DIM', 'MED', 'PLA', 'plainte', 'Plainte', 'DEM', 'amn', 'AMN', 'amnistie'
         ]
 
         return allowed_divider and allowed_type
