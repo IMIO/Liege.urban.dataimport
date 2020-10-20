@@ -43,17 +43,25 @@ class LicenceFactory(BaseFactory, Mapper):
         self.eventtype_uid = getattr(config.urbaneventtypes, eventtype_id).UID()
         self.sources = []
         self.destinations = []
+        catalog = api.portal.get_tool('portal_catalog')
+        all_inspections = catalog(portal_type='Inspection')
+        self.inspections_by_capakeys = {}
+        for inspection_brain in all_inspections:
+            for capakey in inspection_brain.parcelInfosIndex:
+                if capakey in self.inspections_by_capakeys:
+                    self.inspections_by_capakeys[capakey].append(inspection_brain)
+                else:
+                    self.inspections_by_capakeys[capakey] = [inspection_brain]
 
     def create(self, kwargs, container=None, line=None):
         self.line = line
-        catalog = api.portal.get_tool('portal_catalog')
         session = address_service.new_session()
         all_pt_adresses = [kwargs['pt_address']] + kwargs.get('additional_ptadress', [])
         for pt_address in all_pt_adresses:
             address_record = session.query_address_by_gid(pt_address)
             if not address_record:
                 continue
-            existing_inspection = catalog(parcelInfosIndex=address_record.capakey, portal_type='Inspection')
+            existing_inspection = self.inspections_by_capakeys.get(address_record.capakey, None)
             if existing_inspection:
                 inspection = existing_inspection[0].getObject()
                 urban_event = inspection.createUrbanEvent(self.eventtype_uid)
