@@ -24,7 +24,7 @@ class LiegeImportSplitter(object):
             allowed_divider = folder_number or True
 
         allowed_type = self.importer.getData('Type_trav', line) in [
-            'DIV', 'DIM', 'MED', 'PLA', 'plainte', 'Plainte', 'DEM', 'amn', 'AMN', 'amnistie'
+            'DIV', 'DIM', 'MED', 'PLA', 'plainte', 'Plainte', 'DEM', 'amn', 'AMN', 'amnistie', 'AT'
         ]
 
         return allowed_divider and allowed_type

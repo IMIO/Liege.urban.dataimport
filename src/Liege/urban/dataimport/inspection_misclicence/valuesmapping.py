@@ -28,13 +28,14 @@ VALUES_MAPS = {
 'inspection_context': {
     'DIV': 'division-dimmeuble',
     'DIM': 'division-dimmeuble',
-    'MED': '',
-    'DEM': '',
+    'MED': 'observation',
+    'DEM': 'observation',
     'PLA': 'plainte',
     'plainte': 'plainte',
     'Plainte': 'plainte',
     'AMN': 'amnistie',
     'amnistie': 'amnistie',
+    'AT': 'observation',
 },
 
 'eventtype_id_map': table({
