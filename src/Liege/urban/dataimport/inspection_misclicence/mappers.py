@@ -65,6 +65,7 @@ class LicenceFactory(BaseFactory, Mapper):
             if existing_inspection:
                 session.close()
                 inspection = existing_inspection[0].getObject()
+                self.importer.recursiveImportObjects('TASKS', [], self.line, [inspection])
                 urban_event = inspection.createUrbanEvent(self.eventtype_uid)
 
                 type_trav = self.getData('Type_trav')
@@ -527,6 +528,15 @@ class TaskFactory(BaseFactory):
 
 class TaskTableMapper(MultiLinesSecondaryTableMapper):
     """ """
+
+
+class TaskTitleMapper(Mapper):
+    """ """
+
+    def mapTitle(self, line):
+        ref = self.getData('dossier')
+        subject = self.getData('Objet')
+        return '{} - {}'.format(ref, subject)
 
 
 class TaskIdMapper(Mapper):

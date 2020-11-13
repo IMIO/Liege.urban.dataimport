@@ -173,15 +173,13 @@ FIELDS_MAPPINGS = {
                 'table': 'courrier',
                 'KEYS': ('DOSSIER', 'dossier'),
                 'mappers': {
-                    SimpleMapper: (
-                        {
-                            'from': 'Objet',
-                            'to': 'title',
-                        },
-                    ),
                     mappers.TaskIdMapper: {
                         'from': 'numpiece',
                         'to': 'id',
+                    },
+                    mappers.TaskTitleMapper: {
+                        'from': ('dossier', 'Objet'),
+                        'to': 'title',
                     },
                     mappers.TaskDescriptionMapper: {
                         'from': ('remarques', 'Destinataire', 'Expéditeur', 'Expédition', 'Gestionnaire'),

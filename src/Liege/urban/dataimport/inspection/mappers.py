@@ -48,7 +48,9 @@ class ReferenceMapper(PostCreationMapper):
     """ """
 
     def mapReference(self, line, plone_object):
-        return self.getData('numerorapport')
+        abbr = 'IB'
+        ref = '{}/{}'.format(abbr, str(int(float(self.getData('numerorapport').replace(',', '.')))))
+        return ref
 
 
 class FoldermanagersMapper(PostCreationMapper):
