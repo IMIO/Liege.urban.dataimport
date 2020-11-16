@@ -240,6 +240,7 @@ class AddressFactory(BaseFactory):
     def create(self, kwargs, container, line):
         if not kwargs:
             return None
+        kwargs['id'] = normalizeString(self.site.portal_urban.generateUniqueId(kwargs['capakey']))
         address_factory = container.restrictedTraverse('@@create_address')
         try:
             address = address_factory.create_address(**kwargs)
@@ -282,8 +283,8 @@ class AdditionalAddressPointMapper(Mapper):
         session.close()
         if address_record:
             return address_record._asdict()
+        return {}
 
-        raise NoObjectToCreateException
 
 #
 # PERSON/CORPORATION CONTACT

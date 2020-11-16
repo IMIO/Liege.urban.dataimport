@@ -369,6 +369,7 @@ class AddressFactory(BaseFactory):
         if not kwargs:
             return None
         address_factory = container.restrictedTraverse('@@create_address')
+        kwargs['id'] = normalizeString(self.site.portal_urban.generateUniqueId(kwargs['capakey']))
         try:
             address = address_factory.create_address(**kwargs)
         except Exception:
