@@ -543,12 +543,9 @@ class TaskIdMapper(Mapper):
     """ """
 
     def mapId(self, line):
-        licence = self.importer.current_containers_stack[-1]
+        licence_id = self.getData('dossier')
         raw_task_id = self.getData('numpiece') or '0.0'
-        raw_task_id = raw_task_id.replace(',', '.')
-        while str(int(float(raw_task_id))) in licence.objectIds():
-            raw_task_id = float(raw_task_id) + 1.0
-        return str(int(float(raw_task_id)))
+        return '{}_{}'.format(licence_id, raw_task_id)
 
 
 class TaskDescriptionMapper(Mapper):

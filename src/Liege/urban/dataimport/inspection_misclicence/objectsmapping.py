@@ -174,7 +174,7 @@ FIELDS_MAPPINGS = {
                 'KEYS': ('DOSSIER', 'dossier'),
                 'mappers': {
                     mappers.TaskIdMapper: {
-                        'from': 'numpiece',
+                        'from': ('dossier', 'numpiece'),
                         'to': 'id',
                     },
                     mappers.TaskTitleMapper: {
