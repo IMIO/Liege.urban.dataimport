@@ -49,7 +49,7 @@ class ReferenceMapper(PostCreationMapper):
 
     def mapReference(self, line, plone_object):
         abbr = 'IB'
-        ref = '{}/{}'.format(abbr, str(int(float(self.getData('numerorapport').replace(',', '.')))))
+        ref = '{}/{}'.format(abbr, str(int(float(self.getData('numerorapport').replace(',', '.') or '0.0'))))
         return ref
 
 
