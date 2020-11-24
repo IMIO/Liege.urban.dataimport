@@ -92,6 +92,7 @@ class LicenceFactory(BaseFactory, Mapper):
                 old_AD_refs = inspection.getFormal_notice_old_reference()
                 new_AD_refs = old_AD_refs and '{} - {}'.format(old_AD_refs, num) or num
                 inspection.setFormal_notice_old_reference(new_AD_refs)
+                inspection.updateTitle()
                 urban_event.reindexObject()
                 return None
 
