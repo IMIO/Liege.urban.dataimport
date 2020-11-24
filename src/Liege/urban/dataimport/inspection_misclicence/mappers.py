@@ -61,10 +61,11 @@ class LicenceFactory(BaseFactory, Mapper):
             address_record = session.query_address_by_gid(pt_address)
             if not address_record:
                 continue
-            existing_inspection = self.inspections_by_capakeys.get(address_record.capakey, None)
-            if existing_inspection:
+            existing_inspections = self.inspections_by_capakeys.get(address_record.capakey, None)
+            if existing_inspections:
                 session.close()
-                inspection = existing_inspection[0].getObject()
+                existing_inspections = sorted(existing_inspections, key=lambda x: x.getReference(), reverse=True)
+                inspection = existing_inspections[0].getObject()
                 self.importer.recursiveImportObjects('TASKS', [], self.line, [inspection])
                 urban_event = inspection.createUrbanEvent(self.eventtype_uid)
 
@@ -88,9 +89,9 @@ class LicenceFactory(BaseFactory, Mapper):
                     persontitle, applicant, address, zipcode, locality, tel
                 )
                 urban_event.setMisc_description(description)
-                old_AD_refs = existing_inspection.getFormal_notice_old_reference()
+                old_AD_refs = inspection.getFormal_notice_old_reference()
                 new_AD_refs = old_AD_refs and '{} - {}'.format(old_AD_refs, num) or num
-                existing_inspection.setFormal_notice_old_reference(new_AD_refs)
+                inspection.setFormal_notice_old_reference(new_AD_refs)
                 urban_event.reindexObject()
                 return None
 
