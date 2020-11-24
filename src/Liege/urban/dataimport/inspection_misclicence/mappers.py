@@ -88,6 +88,9 @@ class LicenceFactory(BaseFactory, Mapper):
                     persontitle, applicant, address, zipcode, locality, tel
                 )
                 urban_event.setMisc_description(description)
+                old_AD_refs = existing_inspection.getFormal_notice_old_reference()
+                new_AD_refs = old_AD_refs and '{} - {}'.format(old_AD_refs, num) or num
+                existing_inspection.setFormal_notice_old_reference(new_AD_refs)
                 urban_event.reindexObject()
                 return None
 
@@ -279,7 +282,7 @@ class ErrorsMapper(FinalMapper):
 
 class ContactFactory(BaseFactory):
     def getPortalType(self, container, **kwargs):
-        return 'Applicant'
+        return 'Proprietary'
 
     def objectAlreadyExists(self, object_args, container):
         contact = [obj for obj in container.objectValues() if obj.portal_type == 'Applicant']
