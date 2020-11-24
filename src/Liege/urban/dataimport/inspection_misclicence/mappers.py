@@ -64,7 +64,7 @@ class LicenceFactory(BaseFactory, Mapper):
             existing_inspections = self.inspections_by_capakeys.get(address_record.capakey, None)
             if existing_inspections:
                 session.close()
-                existing_inspections = sorted(existing_inspections, key=lambda x: x.getReference(), reverse=True)
+                existing_inspections = sorted(existing_inspections, key=lambda x: x.getReference, reverse=True)
                 inspection = existing_inspections[0].getObject()
                 self.importer.recursiveImportObjects('TASKS', [], self.line, [inspection])
                 urban_event = inspection.createUrbanEvent(self.eventtype_uid)
