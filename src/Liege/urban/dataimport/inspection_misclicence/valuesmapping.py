@@ -45,7 +45,7 @@ VALUES_MAPS = {
     'PreliminaryNotice'    : ['',                     'copy_of_depot-de-la-demande'],
     'Declaration'          : ['',                     'depot-de-la-demande'],
     'PatrimonyCertificate' : ['',                     'convocation'],
-    'Inspection'           : ['',                     'rapport'],
+    'Inspection'           : ['',                     'depot'],
 }),
 
 'person_title_map': {
