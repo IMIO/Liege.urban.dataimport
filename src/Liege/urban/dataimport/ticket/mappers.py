@@ -270,7 +270,23 @@ class AddressPointMapper(Mapper):
         if address_record:
             return address_record._asdict()
 
-        raise NoObjectToCreateException
+
+class TicketAddressPointTableMapper(MultiLinesSecondaryTableMapper):
+    """ """
+
+
+class AdditionalAddressPointMapper(Mapper):
+
+    def map(self, line):
+        """
+        """
+        gid = self.getData('gid', line)
+        session = address_service.new_session()
+        address_record = session.query_address_by_gid(gid)
+        session.close()
+        if address_record:
+            return address_record._asdict()
+        return {}
 
 #
 # PERSON/CORPORATION CONTACT

@@ -95,7 +95,18 @@ FIELDS_MAPPINGS = {
             mappers.AddressPointMapper: {
                 'from': 'gidptadresse',
                 'to': (),
-            }
+            },
+
+            mappers.TicketAddressPointTableMapper: {
+                'table': 'PV_PlusieursPtadresses.csv',
+                'KEYS': ('NUMERO', 'numpv'),
+                'mappers': {
+                    mappers.AdditionalAddressPointMapper: {
+                        'from': 'gid',
+                        'to': (),
+                    },
+                }
+            },
         },
     },
 
