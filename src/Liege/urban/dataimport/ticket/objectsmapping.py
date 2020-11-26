@@ -66,13 +66,13 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.BoundInspectionMapper: {
-                'from': ('Mise en demeure'),
+                'from': 'Mise en demeure',
                 'to': 'bound_inspection',
             },
 
             mappers.BoundLicencesMapper: {
-                'from': ('Dossiers'),
-                'to': 'bound_inspections',
+                'from': 'Dossiers',
+                'to': 'bound_licences',
             },
 
             mappers.CompletionStateMapper: {
