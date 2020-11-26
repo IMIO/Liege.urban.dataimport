@@ -26,14 +26,6 @@ FIELDS_MAPPINGS = {
         'mappers': {
             SimpleMapper: (
                 {
-                    'from': 'NUMERO',
-                    'to': 'id',
-                },
-                {
-                    'from': 'NUMERO',
-                    'to': 'reference',
-                },
-                {
                     'from': 'NUM_PARQUET',
                     'to': 'referenceProsecution',
                 },
@@ -46,6 +38,16 @@ FIELDS_MAPPINGS = {
                     'to': 'licenceSubject',
                 },
             ),
+
+            mappers.IdMapper: {
+                'from': 'NUMERO',
+                'to': 'id',
+            },
+
+            mappers.ReferenceMapper: {
+                'from': 'NUMERO',
+                'to': 'reference',
+            },
 
             mappers.OldAddressMapper: {
                 'table': 'Rues_inspection',

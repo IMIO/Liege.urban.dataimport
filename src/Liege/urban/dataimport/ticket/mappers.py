@@ -40,6 +40,22 @@ class TicketFactory(BaseFactory):
 # mappers
 
 
+class IdMapper(Mapper):
+    """ """
+
+    def mapReference(self, line, plone_object):
+        ref = self.getData('NUMERO').replace(' ', '')
+        return ref
+
+
+class ReferenceMapper(PostCreationMapper):
+    """ """
+
+    def mapReference(self, line, plone_object):
+        ref = self.getData('NUMERO').replace(' ', '')
+        return ref
+
+
 class OldAddressMapper(SecondaryTableMapper):
     """ """
 
