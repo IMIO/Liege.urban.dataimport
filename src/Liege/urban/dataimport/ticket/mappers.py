@@ -17,6 +17,7 @@ from plone import api
 
 from Products.CMFPlone.utils import normalizeString
 from Products.urban.interfaces import IGenericLicence
+from Products.urban.interfaces import IInspection
 
 from unidecode import unidecode
 
@@ -43,7 +44,7 @@ class TicketFactory(BaseFactory):
 class IdMapper(Mapper):
     """ """
 
-    def mapReference(self, line, plone_object):
+    def mapId(self, line, plone_object):
         ref = self.getData('NUMERO').replace(' ', '')
         return ref
 
@@ -155,6 +156,25 @@ class OldAddressNumberMapper(PostCreationMapper):
         return [new_addr]
 
 
+class BoundInspectionMapper(PostCreationMapper):
+    """ """
+
+    def mapBound_inspection(self, line, plone_object):
+        self.line = line
+        refs_not_found = []
+        catalog = api.portal.get_tool('portal_catalog')
+        miscdemand_ref = self.getData('Mise en demeure')
+        miscdemand_ref = miscdemand_ref and int(float(miscdemand_ref.replace(',', '.')))
+        if miscdemand_ref:
+            miscdemand_ref = str(miscdemand_ref)
+            brains = catalog(Title=miscdemand_ref, object_provides=IInspection.__identifier__)
+            if len(brains) == 1:
+                return brains[0].UID
+            else:
+                refs_not_found.append(miscdemand_ref)
+        self.logError(self, line, 'bound_licences', {'refs': refs_not_found})
+
+
 class BoundLicencesMapper(PostCreationMapper):
     """ """
 
@@ -165,22 +185,14 @@ class BoundLicencesMapper(PostCreationMapper):
         catalog = api.portal.get_tool('portal_catalog')
         licence_ref = self.getData('Dossiers')
         licence_ref = licence_ref and int(float(licence_ref.replace(',', '.')))
-        miscdemand_ref = self.getData('Mise en demeure')
-        miscdemand_ref = miscdemand_ref and int(float(miscdemand_ref.replace(',', '.')))
         if licence_ref:
             licence_ref = str(licence_ref)
             brains = catalog(getReference=licence_ref, object_provides=IGenericLicence.__identifier__)
+            brains = [b for b in brains if b.portal_type != 'Inspection']
             if len(brains) == 1:
                 bound_licences.append(brains[0].UID)
             else:
                 refs_not_found.append(licence_ref)
-        if miscdemand_ref:
-            miscdemand_ref = str(miscdemand_ref)
-            brains = catalog(getReference=miscdemand_ref, object_provides=IGenericLicence.__identifier__)
-            if len(brains) == 1:
-                bound_licences.append(brains[0].UID)
-            else:
-                refs_not_found.append(miscdemand_ref)
         self.logError(self, line, 'bound_licences', {'refs': refs_not_found})
         return bound_licences
 

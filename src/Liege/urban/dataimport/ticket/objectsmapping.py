@@ -65,9 +65,14 @@ FIELDS_MAPPINGS = {
                 'to': 'workLocations',
             },
 
-            mappers.BoundLicencesMapper: {
-                'from': ('Dossiers', 'Mise en demeure'),
+            mappers.BoundInspectionsMapper: {
+                'from': ('Mise en demeure'),
                 'to': 'bound_licences',
+            },
+
+            mappers.BoundLicencesMapper: {
+                'from': ('Dossiers'),
+                'to': 'bound_inspections',
             },
 
             mappers.CompletionStateMapper: {
