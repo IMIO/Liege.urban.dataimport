@@ -44,7 +44,7 @@ class TicketFactory(BaseFactory):
 class IdMapper(Mapper):
     """ """
 
-    def mapId(self, line, plone_object):
+    def mapId(self, line):
         ref = self.getData('NUMERO').replace(' ', '')
         return ref
 
