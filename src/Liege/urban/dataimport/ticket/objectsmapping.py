@@ -98,7 +98,7 @@ FIELDS_MAPPINGS = {
             },
 
             mappers.TicketAddressPointTableMapper: {
-                'table': 'PV_PlusieursPtadresses.csv',
+                'table': 'PV_PlusieursPtadresses',
                 'KEYS': ('NUMERO', 'numpv'),
                 'mappers': {
                     mappers.AdditionalAddressPointMapper: {
