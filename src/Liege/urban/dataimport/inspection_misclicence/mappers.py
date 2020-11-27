@@ -234,14 +234,11 @@ class CompletionStateMapper(PostCreationMapper):
     def map(self, line, plone_object):
         self.line = line
         workflow_tool = api.portal.get_tool('portal_workflow')
-        raw_state = self.getData('COLLEGE_DECISION')
-        state_mapping = self.getValueMapping('state_map')
-        state = state_mapping.get(raw_state, 'accepted')
 
         workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
         workflow_id = workflow_def.getId()
         workflow_state = workflow_tool.getStatusOf(workflow_id, plone_object)
-        workflow_state['review_state'] = state
+        workflow_state['review_state'] = 'ended'
         workflow_tool.setStatusOf(workflow_id, plone_object, workflow_state.copy())
 
 
