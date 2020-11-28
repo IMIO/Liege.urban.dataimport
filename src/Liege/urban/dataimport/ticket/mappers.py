@@ -172,7 +172,7 @@ class BoundInspectionMapper(PostCreationMapper):
                 return brains[0].UID
             else:
                 refs_not_found.append(miscdemand_ref)
-        self.logError(self, line, 'bound_licences', {'refs': refs_not_found})
+        self.logError(self, line, 'bound_inspection', {'refs': refs_not_found})
 
 
 class BoundLicencesMapper(PostCreationMapper):
@@ -226,6 +226,9 @@ class ErrorsMapper(FinalMapper):
                 if 'bound_licences' in error.message:
                     for ref in data['refs']:
                         error_trace.append('<p>dossier lié non trouvé : %s</p>' % ref)
+                if 'bound_inspection' in error.message:
+                    for ref in data['refs']:
+                        error_trace.append('<p>IB lié non trouvé : %s</p>' % ref)
             error_trace.append('<br />')
         error_trace = ''.join(error_trace)
 
